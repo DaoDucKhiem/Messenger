@@ -1,0 +1,186 @@
+.container {
+    position: relative;
+    height: 100%;
+}
+
+.tab-menu {
+    left: 24px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #ffffff;
+    height: 32px;
+    width: 270px;
+    background-color: rgba(255, 255, 255, .2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tab-1, .tab-2 {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    width: 135px;
+    height: 32px;
+    overflow: hidden;
+}
+
+.tab-1 {
+    background-color: #2196f3;
+}
+
+.search {
+    padding-top: 24px;
+    margin-left: 24px;
+    margin-bottom: 15px;
+    height: 32px;
+}
+
+.input-search {
+    display: flex;
+    float: left;
+    align-items: center;
+    width: 223px;
+    height: 100%;
+    border-bottom: 2px solid #36455e;
+}
+
+.input-search input {
+    background-color: #0a1d3b;
+    color: #ffffff;
+    border: 0;
+}
+
+.input-search input:focus {
+    outline: 0;
+}
+
+.btn-add {
+    display: flex;
+    float: right;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #2196f3;
+    border-radius: 4px;
+    margin-right: 24px;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+}
+
+.btn-add img {
+    width: 16px;
+    height: 16px;
+}
+
+.conversation {
+    margin: 7px 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.conversation:hover {
+    background-color: #2f3f58;
+}
+
+.space {
+    flex: 0.08;
+    height: 99%;
+}
+
+p {
+    margin: 0;
+    padding: 1.5px;
+}
+
+.avatar {
+    flex: 1;
+}
+
+.content {
+    flex: 5;
+}
+
+.avatar div {
+    position: relative;
+    margin-left: 18px;
+}
+
+.avatar div > img{
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+}
+
+.avatar div > span {
+    position: absolute;
+    left: 17px;
+    bottom: 1px;
+}
+
+.green-sphere {
+    height: 12px;
+    width: 12px;
+}
+
+.name, .last-message {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+
+.name-conversation, .message-last {
+    font-size: 13px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.username-seen {
+    color: #c8ccd3;
+}
+
+.seen {
+    color: #49576d;
+}
+
+.time, .new-message {
+    font-size: 11px;
+    margin-left: auto;
+    margin-right: 24px;
+    order: 2;
+}
+
+.time {
+    color: #49576d;
+}
+
+.last-message span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, .3);
+    border-radius: 4px;
+    width: 16px;
+    height: 16px;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+//======selected=====->
+.selected {
+    background-color: #2f3f58;
+}
+
+.border-selected {
+    background-color: #2196f3;
+}

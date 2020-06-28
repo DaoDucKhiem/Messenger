@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "Messenger"
+    }
+  },
+  "defaultProject": "Messenger",
+  "cli": {
+    "analytics": "49598453-bd4e-4bbc-a238-212cdc57a6b2"
+  }
 }

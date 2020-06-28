@@ -1,0 +1,29 @@
+.nav {
+    height: 10vh;
+    background-color: #ffffff;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    float: left;
+}
+
+.nav-left div {
+    margin-left: 24px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    float: right;
+}
+
+.nav-right img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    margin-right: 23px;
+}
