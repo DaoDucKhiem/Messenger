@@ -11,18 +11,32 @@
         </div>
         <div class="head-right">
             <div><img src="../../../assets/icons/IconboxChat/8.svg" alt="search-icon"></div>
-            <div (click)="showAbout()"><img [src]="showAb ? '../../../assets/icons/IconAppChat/5.svg' : '../../../assets/icons/IconAppChat/6.svg'" alt="about-icon"></div>
+            <div (click)="showAbout()"><img
+                    [src]="showAb ? '../../../assets/icons/IconAppChat/5.svg' : '../../../assets/icons/IconAppChat/6.svg'"
+                    alt="about-icon"></div>
             <div><img src="../../../assets/icons/IconAppChat/2.svg" alt="more-icon"></div>
         </div>
     </div>
     <div class="content-message-list">
         <div class="list-message" [style]='showAb ? ("width: 75%") : ("width: 100%")'>
-            <div class="message">
-                <div class="avatar">
-                    <img src="../../../assets/images/Avatar/3.jpg" alt="avatar">
+            <div class="message" *ngFor="let message of messages">
+                <div class="bubbleWrapper" *ngIf="message.receiverId === currentUserId">
+                    <div class="inlineContainer">
+                        <img class="inlineIcon"
+                            [src]="cs.contactAvatar">
+                        <div class="otherBubble other">
+                            {{message.content}}
+                        </div>
+                    </div>
                 </div>
-                <div class="content-message">
-                    <p class="list-message">hello</p>
+                <div class="bubbleWrapper" *ngIf="message.senderId === currentUserId">
+                    <div class="inlineContainer own">
+                        <img class="inlineIcon"
+                            src="../../../assets/images/Avatar/2.jpg">
+                        <div class="ownBubble own">
+                            {{message.content}}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="send-container">
@@ -51,11 +65,14 @@
                 <div class="tittle">
                     <p>TỆP ĐÃ CHIA SẺ</p>
                     <span class="icon-dropdown" (click)="showAllFile()">
-                        <img [src]="showFile ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'" alt="dropdown">
+                        <img [src]="showFile ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
+                            alt="dropdown">
                     </span>
                 </div>
                 <div class="file" *ngIf="showFile">
-                    <p *ngFor="let file of fileShared"><a href="#"><span><img src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span> {{file.name}}</a></p>
+                    <p *ngFor="let file of fileShared"><a href="#"><span><img
+                                    src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
+                            {{file.name}}</a></p>
                 </div>
                 <p class="line"></p>
             </div>
@@ -63,11 +80,13 @@
                 <div class="tittle">
                     <p>ẢNH ĐÃ CHIA SẺ</p>
                     <span class="icon-dropdown" (click)="showAllImg()">
-                        <img [src]="showImg ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'" alt="dropdown">
+                        <img [src]="showImg ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
+                            alt="dropdown">
                     </span>
                 </div>
                 <div *ngIf="showImg" class="img-share">
-                    <div class="item1" *ngFor="let image of imageShared"><img [src]="image.img" alt="image"></div>
+                    <div class="item1" *ngFor="let image of imageShared"><img [src]="image.img" alt="image">
+                    </div>
                 </div>
             </div>
         </div>

@@ -5,6 +5,8 @@ import { ConversationService } from '../../../service/conversation.service';
 
 import { Conversation } from '../../../model/conversation';
 
+import { listMessage } from '../../../model/mock-message';
+
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
@@ -35,6 +37,8 @@ export class MessagesComponent implements OnInit {
   }]
 
   cs: Conversation;
+  messages = listMessage;
+  currentUserId = 1;
 
   showAb = true;
   showImg = true;

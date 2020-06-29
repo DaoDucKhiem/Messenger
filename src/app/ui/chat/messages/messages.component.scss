@@ -79,16 +79,59 @@ p {
 
 //=====message===========->
 
-.message {
-    display: flex;
-    padding: 24px;
+.bubbleWrapper {
+    padding: 10px 10px;
+	display: flex;
+	justify-content: flex-end;
+	flex-direction: column;
+	align-self: flex-end;
+    color: #fff;
 }
 
-.avatar img {
+.inlineContainer {
+    display: inline-flex;
+    align-items: center;
+}
+
+.inlineContainer.own {
+    flex-direction: row-reverse;
+}
+
+.inlineIcon {
     width: 24px;
     height: 24px;
     border-radius: 50%;
+    object-fit: contain;
 }
+
+.ownBubble {
+	min-width: 60px;
+	max-width: 700px;
+	padding: 14px 18px;
+	margin: 6px 8px;
+	background-color: #5b5377;
+	border-radius: 16px;
+	border: 1px solid #443f56;
+}
+
+.otherBubble {
+	min-width: 60px;
+	max-width: 700px;
+	padding: 14px 18px;
+	margin: 6px 8px;
+	background-color: #6C8EA4;
+	border-radius: 16px;
+	border: 1px solid #54788e;
+}
+
+.own {
+	align-self: flex-end;
+}
+
+.other {
+	align-self: flex-start;
+}
+
 
 //======Send input==============->
 
