@@ -31,7 +31,7 @@
             <div class="last-message">
                 <p class="message-last" [class.seen]="conversation.messageStatus === 'seen'">
                     {{conversation.lastMessage}}</p>
-                <span class="new-message">
+                <span class="new-message" *ngIf="conversation.messageStatus === 'not seen'">
                     <p class="amount">{{conversation.amountNewMessage}}</p>
                 </span>
             </div>

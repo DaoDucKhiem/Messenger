@@ -4,7 +4,7 @@ export interface Conversation {
     contactName: string;
     status: string;
     time: string;
-    amountNewMessage: number;
+    amountNewMessage?: number;
     lastMessage: string;
     messageStatus: string;
  }

@@ -17,7 +17,6 @@ export const Conversations: Conversation[] = [
         contactName: "Hoàng Cao Phi",
         status: "online",
         time: "7:20",
-        amountNewMessage: 0,
         lastMessage: "hello",
         messageStatus: "seen"
     }, 
@@ -27,7 +26,6 @@ export const Conversations: Conversation[] = [
         contactName: "Trần Hải Dương",
         status: "offline",
         time: "10:27",
-        amountNewMessage: 0,
         lastMessage: "nay đi đá bóng không?",
         messageStatus: "seen"
     }, 

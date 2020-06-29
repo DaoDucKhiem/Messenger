@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MessagedetailService } from '../../../service/messagedetail.service';
@@ -10,10 +10,11 @@ import { MessageDetail } from '../../../model/message-detail';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit {
 
+export class MessagesComponent implements OnInit {
   message: MessageDetail;
   currentUserId = 10;
+  messageSend: any;
 
   showAb = true;
   showImg = true;
@@ -45,5 +46,16 @@ export class MessagesComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id');
     this.messagedetail.getMessageDetail(id)
       .subscribe(ms => this.message = ms);
+  }
+
+  @ViewChild('box') box: ElementRef;
+
+  clear() {
+    this.box.nativeElement.value = "";
+  }
+
+  onEnter(val: any): void {
+    this.messageSend = val;
+    this.clear();
   }
 }
