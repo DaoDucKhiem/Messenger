@@ -2,7 +2,7 @@ import { Conversation } from './conversation';
 
 export const Conversations: Conversation[] = [
     {
-        contactId: "1",
+        contactId: 1,
         contactAvatar: "./assets/images/Avatar/1.jpg",
         contactName: "Trung Trần",
         status: "online",
@@ -12,7 +12,7 @@ export const Conversations: Conversation[] = [
         messageStatus: "not seen"
     }, 
     {
-        contactId: "2",
+        contactId: 2,
         contactAvatar: "../assets/images/Avatar/2.jpg",
         contactName: "Hoàng Cao Phi",
         status: "online",
@@ -22,7 +22,7 @@ export const Conversations: Conversation[] = [
         messageStatus: "seen"
     }, 
     {
-        contactId: "3",
+        contactId: 3,
         contactAvatar: "./assets/images/Avatar/3.jpg",
         contactName: "Trần Hải Dương",
         status: "offline",
@@ -32,7 +32,7 @@ export const Conversations: Conversation[] = [
         messageStatus: "seen"
     }, 
     {
-        contactId: "4",
+        contactId: 4,
         contactAvatar: "./assets/images/Avatar/4.jpg",
         contactName: "Đỗ Xuân Dũng",
         status: "offline",
@@ -42,7 +42,7 @@ export const Conversations: Conversation[] = [
         messageStatus: "not seen"
     }, 
     {
-        contactId: "5",
+        contactId: 5,
         contactAvatar: "./assets/images/Avatar/1.jpg",
         contactName: "Nguyễn Văn Minh",
         status: "online",

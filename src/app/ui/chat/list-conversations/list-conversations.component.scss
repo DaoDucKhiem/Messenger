@@ -92,6 +92,10 @@
     background-color: #2f3f58;
 }
 
+.conversation:focus {
+    outline: 0;
+}
+
 .space {
     flex: 0.08;
     height: 99%;

@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { ConversationService } from '../../../service/conversation.service';
+
+import { Conversation } from '../../../model/conversation';
 
 @Component({
   selector: 'app-messages',
@@ -29,13 +34,20 @@ export class MessagesComponent implements OnInit {
     img: "../../../assets/images/Avatar/1.jpg"
   }]
 
+  cs: Conversation;
+
   showAb = true;
   showImg = true;
   showFile = true;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute, private conversationService: ConversationService, private location: Location) {
+    route.params.subscribe(val=> {
+      this.getConversation();
+    })
+   }
 
   ngOnInit(): void {
+    this.getConversation();
   }
 
   showAbout() {
@@ -48,6 +60,12 @@ export class MessagesComponent implements OnInit {
 
   showAllFile() {
     this.showFile = !this.showFile;
+  }
+
+  getConversation(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.conversationService.getConversation(id)
+      .subscribe(cs => this.cs = cs);
   }
 
 }

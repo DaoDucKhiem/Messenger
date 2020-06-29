@@ -2,10 +2,10 @@
     <div class="header">
         <div class="head-left">
             <div class="avatar">
-                <img src="../../../assets/images/Avatar/3.jpg" alt="avatar">
+                <img [src]="cs.contactAvatar" alt="avatar">
             </div>
             <div class="info">
-                <p class="username">Đỗ Xuân Dũng</p>
+                <p class="username">{{cs.contactName}}</p>
                 <p class="active">hoạt động 12 phút trước</p>
             </div>
         </div>
@@ -40,9 +40,9 @@
         <div class="about-container" *ngIf="showAb">
             <div class="profile">
                 <div class="img-avatar">
-                    <img src="../../../assets/images/Avatar/3.jpg" alt="avatar">
+                    <img [src]="cs.contactAvatar" alt="avatar">
                 </div>
-                <h2>Đỗ Xuân Dũng</h2>
+                <h2>{{cs.contactName}}</h2>
                 <p>0323 654 897</p>
                 <p>dung1234@gmail.com</p>
                 <p class="line"></p>

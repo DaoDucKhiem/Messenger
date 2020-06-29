@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Conversation } from '../../../model/conversation';
-import { Conversations } from '../../../model/mock-conversation';
 import { ConversationService } from '../../../service/conversation.service';
-import { from} from 'rxjs';
 
 @Component({
   selector: 'app-list-conversations',
@@ -12,7 +10,9 @@ import { from} from 'rxjs';
 export class ListConversationsComponent implements OnInit {
 
   conversations: Conversation[];
+  conversationsCopy: Conversation[];
   onSelectConversation: Conversation;
+  searchTerm: any;
 
   constructor(private conversationService: ConversationService) { }
 
@@ -25,8 +25,15 @@ export class ListConversationsComponent implements OnInit {
   }
 
   getConversations(): void {
-    this.conversationService.getConversation()
+    this.conversationService.getConversations()
     .subscribe(conversations => this.conversations = conversations);
+    this.conversationsCopy = this.conversations;
   }
 
+  search(): void {
+    let term = this.searchTerm;
+    this.conversations = this.conversationsCopy.filter(function(tag) {
+        return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+    }); 
+}
 }

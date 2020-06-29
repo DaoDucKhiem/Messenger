@@ -10,7 +10,11 @@ export class ConversationService {
 
   constructor() { }
   
-  getConversation(): Observable<Conversation[]> {
+  getConversations(): Observable<Conversation[]> {
     return of(Conversations);
+  }
+
+  getConversation(id: number): Observable<Conversation> {
+    return of(Conversations.find(conversation => conversation.contactId === id));
   }
 }

@@ -2,16 +2,16 @@
     <div class="search">
         <div class="input-search">
             <img src="../../../assets/icons/IconAppChat/11.svg" style="margin-right: 5px;" alt="search-icon">
-            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" />
+            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" [(ngModel)] = "searchTerm" (ngModelChange) = "search()" />
         </div>
         <div class="btn-add">
             <img src="../../../assets/icons/IconboxChat/23.svg" alt="add conversation">
         </div>
     </div>
     <div class="conversation" *ngFor="let conversation of conversations"
-        [class.selected]="conversation === onSelectConversation" (click)="onSelect(conversation)">
+        [class.selected]="conversation === onSelectConversation" (click)="onSelect(conversation)"
+        routerLink="message/{{conversation.contactId}}">
         <div [class.border-selected]="conversation === onSelectConversation" class="space">
-            <div></div>
         </div>
         <div class="avatar">
             <div>
