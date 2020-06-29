@@ -2,10 +2,10 @@
     <div class="header">
         <div class="head-left">
             <div class="avatar">
-                <img [src]="cs.contactAvatar" alt="avatar">
+                <img [src]="message.userAvatar" alt="avatar">
             </div>
             <div class="info">
-                <p class="username">{{cs.contactName}}</p>
+                <p class="username">{{message.userName}}</p>
                 <p class="active">hoạt động 12 phút trước</p>
             </div>
         </div>
@@ -19,22 +19,22 @@
     </div>
     <div class="content-message-list">
         <div class="list-message" [style]='showAb ? ("width: 75%") : ("width: 100%")'>
-            <div class="message" *ngFor="let message of messages">
-                <div class="bubbleWrapper" *ngIf="message.receiverId === currentUserId">
+            <div class="message" *ngFor="let mess of message.listMessage">
+                <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
                     <div class="inlineContainer">
                         <img class="inlineIcon"
-                            [src]="cs.contactAvatar">
+                            [src]="message.userAvatar">
                         <div class="otherBubble other">
-                            {{message.content}}
+                            {{mess.content}}
                         </div>
                     </div>
                 </div>
-                <div class="bubbleWrapper" *ngIf="message.senderId === currentUserId">
+                <div class="bubbleWrapper" *ngIf="mess.senderId === currentUserId">
                     <div class="inlineContainer own">
                         <img class="inlineIcon"
                             src="../../../assets/images/Avatar/2.jpg">
                         <div class="ownBubble own">
-                            {{message.content}}
+                            {{mess.content}}
                         </div>
                     </div>
                 </div>
@@ -54,11 +54,11 @@
         <div class="about-container" *ngIf="showAb">
             <div class="profile">
                 <div class="img-avatar">
-                    <img [src]="cs.contactAvatar" alt="avatar">
+                    <img [src]="message.userAvatar" alt="avatar">
                 </div>
-                <h2>{{cs.contactName}}</h2>
-                <p>0323 654 897</p>
-                <p>dung1234@gmail.com</p>
+                <h2>{{message.userName}}</h2>
+                <p>{{message.phone}}</p>
+                <p>{{message.email}}</p>
                 <p class="line"></p>
             </div>
             <div class="share-file">
@@ -70,9 +70,9 @@
                     </span>
                 </div>
                 <div class="file" *ngIf="showFile">
-                    <p *ngFor="let file of fileShared"><a href="#"><span><img
+                    <p *ngFor="let file of message.fileShared"><a href="#"><span><img
                                     src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
-                            {{file.name}}</a></p>
+                            {{file.fileName}}</a></p>
                 </div>
                 <p class="line"></p>
             </div>
@@ -85,7 +85,7 @@
                     </span>
                 </div>
                 <div *ngIf="showImg" class="img-share">
-                    <div class="item1" *ngFor="let image of imageShared"><img [src]="image.img" alt="image">
+                    <div class="item1" *ngFor="let image of message.imageShared"><img [src]="image.url" alt="image">
                     </div>
                 </div>
             </div>

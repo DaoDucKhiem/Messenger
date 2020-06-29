@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { ConversationService } from '../../../service/conversation.service';
+import { MessagedetailService } from '../../../service/messagedetail.service';
 
-import { Conversation } from '../../../model/conversation';
-
-import { listMessage } from '../../../model/mock-message';
+import { MessageDetail } from '../../../model/message-detail';
 
 @Component({
   selector: 'app-messages',
@@ -14,41 +12,18 @@ import { listMessage } from '../../../model/mock-message';
 })
 export class MessagesComponent implements OnInit {
 
-  public fileShared = [{
-    name: "Nội dung hội nghị.pdf",
-    url: ""
-  }, {
-    name: "Quy trình cho nhân viên.pdf",
-    url: ""
-  }]
-
-  public imageShared = [{
-    img: "../../../assets/images/Avatar/1.jpg"
-  }, {
-    img: "../../../assets/images/Avatar/2.jpg"
-  }, {
-    img: "../../../assets/images/Avatar/3.jpg"
-  }, {
-    img: "../../../assets/images/Avatar/4.jpg"
-  }, {
-    img: "../../../assets/images/Avatar/2.jpg"
-  }, {
-    img: "../../../assets/images/Avatar/1.jpg"
-  }]
-
-  cs: Conversation;
-  messages = listMessage;
-  currentUserId = 1;
+  message: MessageDetail;
+  currentUserId = 10;
 
   showAb = true;
   showImg = true;
   showFile = true;
 
-  constructor(private route: ActivatedRoute, private conversationService: ConversationService, private location: Location) {
-    route.params.subscribe(val=> {
+  constructor(private route: ActivatedRoute, private messagedetail: MessagedetailService, private location: Location) {
+    route.params.subscribe(val => {
       this.getConversation();
     })
-   }
+  }
 
   ngOnInit(): void {
     this.getConversation();
@@ -68,8 +43,7 @@ export class MessagesComponent implements OnInit {
 
   getConversation(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.conversationService.getConversation(id)
-      .subscribe(cs => this.cs = cs);
+    this.messagedetail.getMessageDetail(id)
+      .subscribe(ms => this.message = ms);
   }
-
 }
