@@ -11,9 +11,9 @@
     </div>
     <div class="list-conversation">
         <div class="conversation" *ngFor="let conversation of conversations"
-            [class.selected]="conversation === onSelectConversation" (click)="onSelect(conversation)"
+            [class.selected]="conversation.conversationId === onSelectConversationId" (click)="onSelect(conversation.conversationId)"
             routerLink='message/{{conversation.contactId}}'>
-            <div [class.border-selected]="conversation === onSelectConversation" class="space">
+            <div [class.border-selected]="conversation.conversationId === onSelectConversationId" class="space">
             </div>
             <div class="avatar">
                 <div>

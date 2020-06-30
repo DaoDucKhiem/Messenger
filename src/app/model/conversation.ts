@@ -1,4 +1,5 @@
 export interface Conversation {
+    conversationId: number;
     contactId: number;
     contactAvatar: string;
     contactName: string;
