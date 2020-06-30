@@ -1,0 +1,16 @@
+.content {
+    position: relative;
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+app-list-conversations {
+    width: auto;
+    background-color: #0a1d3b;
+}
+
+.content div {
+    position: relative;
+    width: auto;
+    flex-grow: 1;
+}

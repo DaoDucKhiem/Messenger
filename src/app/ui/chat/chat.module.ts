@@ -2,15 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListConversationsComponent } from './list-conversations/list-conversations.component';
 import { MessagesComponent } from './messages/messages.component';
-import { AppRoutingModule } from '../../app-routing.module';
 import { FormsModule } from '@angular/forms';
+import { TestRoutingModule } from '../test/test-routing.module';
+
 
 
 @NgModule({
   declarations: [ListConversationsComponent, MessagesComponent],
   imports: [
+    TestRoutingModule,
     CommonModule,
-    AppRoutingModule,
     FormsModule
   ],
   exports: [ListConversationsComponent, MessagesComponent]

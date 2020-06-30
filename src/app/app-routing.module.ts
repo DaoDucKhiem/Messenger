@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule} from '@angular/router';
-import { MessagesComponent } from './ui/chat/messages/messages.component';
+import { SigninComponent } from './ui/test/signin/signin.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/message/1', pathMatch: 'full' },
-  { path: 'message/:id', component: MessagesComponent },
+
+  { path: 'signin', component: SigninComponent},
+  { path: 'home', loadChildren: () => import('./ui/test/test.module').then(m => m.TestModule) },
+  { path: '', redirectTo: '/signin', pathMatch: 'full' }
+
 ];
 
 @NgModule({

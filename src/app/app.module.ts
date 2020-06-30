@@ -4,8 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './ui/core/core.module';
-import { ShareModule } from './ui/share/share.module';
-import { ChatModule } from './ui/chat/chat.module';
+import { TestModule } from './ui/test/test.module';
 
 @NgModule({
   declarations: [
@@ -15,8 +14,7 @@ import { ChatModule } from './ui/chat/chat.module';
     BrowserModule,
     AppRoutingModule,
     CoreModule,
-    ShareModule,
-    ChatModule
+    TestModule
   ],
   providers: [],
   bootstrap: [AppComponent]

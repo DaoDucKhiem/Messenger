@@ -10,7 +10,7 @@
     </div>
     <div class="conversation" *ngFor="let conversation of conversations"
         [class.selected]="conversation === onSelectConversation" (click)="onSelect(conversation)"
-        routerLink="message/{{conversation.contactId}}">
+        routerLink='message/{{conversation.contactId}}'>
         <div [class.border-selected]="conversation === onSelectConversation" class="space">
         </div>
         <div class="avatar">
