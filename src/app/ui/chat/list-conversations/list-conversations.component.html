@@ -1,48 +1,53 @@
 <div class="container">
     <div class="search">
         <div class="input-search">
-            <img src="../../../assets/icons/IconAppChat/11.svg" style="margin-right: 5px;" alt="search-icon">
-            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" [(ngModel)] = "searchTerm" (ngModelChange) = "search()" />
+            <img src="../../../assets/icons/IconAppChat/11.svg" alt="search-icon">
+            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" [(ngModel)]="searchTerm"
+                (ngModelChange)="search()" />
         </div>
         <div class="btn-add">
             <img src="../../../assets/icons/IconboxChat/23.svg" alt="add conversation">
         </div>
     </div>
-    <div class="conversation" *ngFor="let conversation of conversations"
-        [class.selected]="conversation === onSelectConversation" (click)="onSelect(conversation)"
-        routerLink='message/{{conversation.contactId}}'>
-        <div [class.border-selected]="conversation === onSelectConversation" class="space">
-        </div>
-        <div class="avatar">
-            <div>
-                <img [src]="conversation.contactAvatar" alt="avatar">
-                <span *ngIf="conversation.status === 'online'">
-                    <img class="green-sphere" src="../../../assets/icons/IconAppChat/green_sphere.svg"
-                        alt="avatar-conversation">
-                </span>
+    <div class="list-conversation">
+        <div class="conversation" *ngFor="let conversation of conversations"
+            [class.selected]="conversation === onSelectConversation" (click)="onSelect(conversation)"
+            routerLink='message/{{conversation.contactId}}'>
+            <div [class.border-selected]="conversation === onSelectConversation" class="space">
             </div>
-        </div>
-        <div class="content">
-            <div class="name">
-                <p class="name-conversation" [class.username-seen]="conversation.messageStatus === 'seen'">
-                    {{conversation.contactName}}</p>
-                <p class="time">{{conversation.time}}</p>
+            <div class="avatar">
+                <div>
+                    <img [src]="conversation.contactAvatar" alt="avatar">
+                    <span *ngIf="conversation.status === 'online'">
+                        <img class="green-sphere" src="../../../assets/icons/IconAppChat/green_sphere.svg"
+                            alt="avatar-conversation">
+                    </span>
+                </div>
             </div>
-            <div class="last-message">
-                <p class="message-last" [class.seen]="conversation.messageStatus === 'seen'">
-                    {{conversation.lastMessage}}</p>
-                <span class="new-message" *ngIf="conversation.messageStatus === 'not seen'">
-                    <p class="amount">{{conversation.amountNewMessage}}</p>
-                </span>
+            <div class="content">
+                <div class="name">
+                    <p class="name-conversation" [class.username-seen]="conversation.messageStatus === 'seen'">
+                        {{conversation.contactName}}</p>
+                    <p class="time">{{conversation.time}}</p>
+                </div>
+                <div class="last-message">
+                    <p class="message-last" [class.seen]="conversation.messageStatus === 'seen'">
+                        {{conversation.lastMessage}}</p>
+                    <span class="new-message" *ngIf="conversation.messageStatus === 'not seen'">
+                        <p class="amount">{{conversation.amountNewMessage}}</p>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
     <div class="tab-menu">
-        <div class="tab-1">
-            <p>Cuộc trò chuyện</p>
-        </div>
-        <div class="tab-2">
-            <p>Danh bạ</p>
+        <div class="option">
+            <div class="tab-1">
+                <p>Cuộc trò chuyện</p>
+            </div>
+            <div class="tab-2">
+                <p>Danh bạ</p>
+            </div>
         </div>
     </div>
 </div>

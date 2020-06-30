@@ -1,31 +1,28 @@
 .container {
     position: relative;
     height: 100%;
-    min-width: 318px;
-    overflow-y: scroll;
 }
 
-.container::-webkit-scrollbar {
-    width: 8px;
-    background: transparent;
-}
-
-.container::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-}
+//=============== tab menu ============->
 
 .tab-menu {
-    left: 24px;
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     bottom: 20px;
     font-size: 13px;
     font-weight: 500;
     color: #ffffff;
     height: 32px;
-    width: 270px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.option {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: rgba(255, 255, 255, .2);
     border-radius: 4px;
     overflow: hidden;
@@ -37,7 +34,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    width: 135px;
     height: 32px;
     overflow: hidden;
 }
@@ -45,6 +41,8 @@
 .tab-1 {
     background-color: #2196f3;
 }
+
+//======== search conversation ======->
 
 .search {
     padding-top: 24px;
@@ -72,6 +70,10 @@
     outline: 0;
 }
 
+.input-search img {
+    margin-right: 5px;
+}
+
 .btn-add {
     display: flex;
     float: right;
@@ -91,10 +93,25 @@
     height: 16px;
 }
 
+//========= list conversation =======->
+
+.list-conversation {
+    height: calc(100% - 123px);
+    overflow: auto;
+}
+
+.list-conversation::-webkit-scrollbar {
+    width: 8px;
+    background: #a9bede;
+}
+
+.list-conversation::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 .conversation {
     margin: 7px 0;
     height: 50px;
-    width: auto;
     display: flex;
     align-items: center;
 }
@@ -129,6 +146,10 @@ p {
 @media only screen and (max-width: 1240px) {
     .content, .space, .search, .tab-menu {
       display: none;
+    }
+
+    .list-conversation {
+        height: 100%;
     }
 
     .avatar {

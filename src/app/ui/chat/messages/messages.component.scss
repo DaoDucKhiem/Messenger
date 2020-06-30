@@ -23,7 +23,7 @@
     min-width: 260px;
     margin-left: 1px;
     height: calc(100vh - 120px);
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .about-container::-webkit-scrollbar {
@@ -90,7 +90,7 @@ p {
 
 .message {
     position: relative;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 100%;
     height: calc(100vh - 120px);
 }
