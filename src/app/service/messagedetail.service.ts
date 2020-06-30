@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MessageDetail } from '../model/message-detail';
-import { messageDetail } from '../model/mock-message-detail';
+import { Message } from '../model/message';
+import { listMessage } from '../model/mock-message';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class MessagedetailService {
 
   constructor() { }
 
-  getMessageDetail(id: number): Observable<MessageDetail> {
-    return of(messageDetail.find(messagedetail => messagedetail.userId === id));
+  getMessages(id: number): Observable<Message[]> {
+    return of(listMessage.filter(mess => ((mess.senderId === id) || (mess.receiverId === id))));
   }
 }

@@ -1,9 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { MessagedetailService } from '../../../service/messagedetail.service';
 
-import { MessageDetail } from '../../../model/message-detail';
+import { UserProfileService } from '../../../service/user-profile.service';
+import { User } from '../../../model/user';
+
+import { MessagedetailService } from '../../../service/messagedetail.service';
+import { Message } from '../../../model/message';
+
 
 @Component({
   selector: 'app-messages',
@@ -12,7 +16,8 @@ import { MessageDetail } from '../../../model/message-detail';
 })
 
 export class MessagesComponent implements OnInit {
-  message: MessageDetail;
+  userContact: User;
+  Messages: Message[];
   currentUserId = 10;
   messageSend: any;
 
@@ -20,7 +25,7 @@ export class MessagesComponent implements OnInit {
   showImg = true;
   showFile = true;
 
-  constructor(private route: ActivatedRoute, private messagedetail: MessagedetailService, private location: Location) {
+  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private location: Location) {
     route.params.subscribe(val => {
       this.getConversation();
     })
@@ -44,8 +49,24 @@ export class MessagesComponent implements OnInit {
 
   getConversation(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.messagedetail.getMessageDetail(id)
-      .subscribe(ms => this.message = ms);
+
+    this.userService.getUser(id)
+    .subscribe(user => this.userContact = user);
+
+    this.messagedetail.getMessages(id)
+      .subscribe(ms => this.Messages = ms);
+  }
+
+  getMessageText() {
+    return this.Messages.filter(mess => mess.type === 'text');
+  }
+  
+  getMessageFile() {
+    return this.Messages.filter(mess => ((mess.type === 'pdf') || (mess.type === 'word') || (mess.type === 'pptx')));
+  }
+
+  getMessageImage(){
+    return this.Messages.filter(mess => mess.type === 'image');
   }
 
   @ViewChild('box') box: ElementRef;
@@ -56,6 +77,17 @@ export class MessagesComponent implements OnInit {
 
   onEnter(val: any): void {
     this.messageSend = val;
+    let newMess: Message = {
+      id: this.Messages.length + 1,
+      senderId: this.currentUserId,
+      receiverId: this.userContact.userId,
+      type: 'text',
+      time: Date(),
+      content: this.messageSend
+    };
+
+    this.Messages.push(newMess);
+
     this.clear();
   }
 }

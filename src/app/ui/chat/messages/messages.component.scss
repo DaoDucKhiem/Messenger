@@ -1,35 +1,43 @@
 .message-view {
-    width: 77vw;
-    height: 100%;
+    position: relative;
+    width: auto;
+    flex-grow: 1;
     background-color: #ffffff;
     box-shadow: 0px 3px 5px #ececec inset;
 }
 
 .content-message-list {
     display: flex;
-    height: 83.5vh;
+    position: relative;
 }
 
 
 .list-message {
     position: relative;
-    width: 75%;
-    height: 100%;
 }
 
 .about-container {
+    position: relative;
     background-color: #f8f8f8;
-    width: 25%;
+    width: 300px;
     margin-left: 1px;
-    height: 100%;
+    height: calc(100vh - 120px);
+    overflow-y: scroll;
+}
+
+.about-container::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+
+.about-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 //=============header============->
 
 .header {
-    height: 5vh;
-    padding-top: 0.8vh;
-    padding-bottom: 0.7vh;
+    height: 60px;
 }
 
 p {
@@ -78,6 +86,22 @@ p {
 }
 
 //=====message===========->
+
+.message {
+    position: relative;
+    overflow-y: scroll;
+    width: 100%;
+    height: calc(100vh - 120px);
+}
+
+.message::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+
+.message::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+}
 
 .bubbleWrapper {
     padding: 10px 10px;
@@ -136,7 +160,7 @@ p {
 //======Send input==============->
 
 .send-container {
-    height: 61px;
+    height: 60px;
     display: flex;
     align-items: center;
     background-color: #f8f8f8;
