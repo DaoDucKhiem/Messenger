@@ -24,20 +24,20 @@
                     <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
                         <div class="inlineContainer">
                             <img class="inlineIcon" [src]="userContact.userAvatar">
-                            <div class="otherBubble other">
+                            <div class="otherBubble other" [ngClass] = "{'message-image' : mess.type === 'image'}">
                                 <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
                                 <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}">{{mess.content}}</a></div>
-                                <div class="message-image" *ngIf="mess.type === 'image'"><img [src]="mess.url" alt="img message"></div>
+                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message">
                             </div>
                         </div>
                     </div>
                     <div class="bubbleWrapper" *ngIf="mess.senderId === currentUserId">
                         <div class="inlineContainer own">
                             <img class="inlineIcon" src="../../../assets/images/Avatar/2.jpg">
-                            <div class="ownBubble own">
+                            <div class="ownBubble own" [ngClass] = "{'message-image' : mess.type === 'image'}">
                                 <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
                                 <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}">{{mess.content}}</a></div>
-                                <div class="message-image" *ngIf="mess.type === 'image'"><img [src]="mess.url" alt="img message"></div>
+                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message">
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,6 @@
                     <span class="buzz">
                         <p>Buzz!</p>
                     </span>
-                    <input type="file">
                 </label>
                 <div class="send input-message">
                     <input type="text" #box (keyup.enter)="onEnter(box.value)"

@@ -56,10 +56,6 @@ export class MessagesComponent implements OnInit {
     this.messagedetail.getMessages(id)
       .subscribe(ms => this.Messages = ms);
   }
-
-  getMessageText() {
-    return this.Messages.filter(mess => mess.type === 'text');
-  }
   
   getMessageFile() {
     return this.Messages.filter(mess => ((mess.type === 'pdf') || (mess.type === 'word') || (mess.type === 'pptx')));
