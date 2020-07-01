@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="content-message-list">
-        <div class="list-message" [style]='showAb ? ("width: calc(100% - 300px)") : ("width: 100%")'>
+        <div class="list-message" [ngStyle]="{'width' : showAb ?  'calc(100% - 300px)' : '100%'}">
             <div class="message">
                 <div *ngFor="let mess of getMessageText()">
                     <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
@@ -40,11 +40,20 @@
                 </div>
             </div>
             <div class="send-container">
-                <div class="send"><img src="../../../assets/icons/IconAppChat/10.svg" alt="send file"></div>
-                <div class="send"><img src="../../../assets/icons/IconAppChat/9.svg" alt="send file"></div>
-                <div class="send"><span class="buzz">
+                <label class="send">
+                    <img src="../../../assets/icons/IconAppChat/10.svg" alt="send file">
+                    <input type="file">
+                </label>
+                <label class="send">
+                    <img src="../../../assets/icons/IconAppChat/9.svg" alt="send file">
+                    <input type="file" accept="image/*" >
+                </label>
+                <label class="send">
+                    <span class="buzz">
                         <p>Buzz!</p>
-                    </span></div>
+                    </span>
+                    <input type="file">
+                </label>
                 <div class="send input-message">
                     <input type="text" #box (keyup.enter)="onEnter(box.value)"
                         placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên">
@@ -63,9 +72,9 @@
                 <p class="line"></p>
             </div>
             <div class="share-file">
-                <div class="tittle">
+                <div class="tittle" (click)="showAllFile()">
                     <p>TỆP ĐÃ CHIA SẺ</p>
-                    <span class="icon-dropdown" (click)="showAllFile()">
+                    <span class="icon-dropdown">
                         <img [src]="showFile ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
                             alt="dropdown">
                     </span>
@@ -78,9 +87,9 @@
                 <p class="line"></p>
             </div>
             <div class="share-img">
-                <div class="tittle">
+                <div class="tittle" (click)="showAllImg()">
                     <p>ẢNH ĐÃ CHIA SẺ</p>
-                    <span class="icon-dropdown" (click)="showAllImg()">
+                    <span class="icon-dropdown">
                         <img [src]="showImg ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
                             alt="dropdown">
                     </span>

@@ -90,4 +90,9 @@ export class MessagesComponent implements OnInit {
 
     this.clear();
   }
+
+  //send image
+  processFile(ImageInput: any) {
+
+  }
 }

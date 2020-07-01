@@ -84,6 +84,7 @@ p {
 
 .head-right div {
     margin-right: 24px;
+    cursor: pointer;
 }
 
 //=====message===========->
@@ -171,6 +172,11 @@ p {
 
 .send {
     margin-left: 24px;
+    cursor: pointer;
+}
+
+label input {
+    display: none;
 }
 
 .buzz {
@@ -272,6 +278,7 @@ h2, p {
 .tittle {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .tittle p, .file {

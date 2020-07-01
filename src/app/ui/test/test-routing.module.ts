@@ -10,7 +10,7 @@ const routes: Routes = [
     component: HomeComponent,
     children: [
       {
-        path: 'message/:id',
+        path: 'conversation/:id',
         component: MessagesComponent
       }
     ]

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Conversation } from '../../../model/conversation';
 import { ConversationService } from '../../../service/conversation.service';
+
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -16,11 +17,12 @@ export class ListConversationsComponent implements OnInit {
   searchTerm: any;
 
   constructor(private conversationService: ConversationService, private route: ActivatedRoute) {
-    console.log(this.route.snapshot.data);
   }
 
   ngOnInit(): void {
     this.getConversations();
+    let id = +this.route.snapshot.firstChild.paramMap.get('id');
+    this.onSelectConversationId = id;
   }
 
   onSelect(conversationId: number): void {
