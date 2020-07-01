@@ -20,12 +20,14 @@
     <div class="content-message-list">
         <div class="list-message" [ngStyle]="{'width' : showAb ?  'calc(100% - 300px)' : '100%'}">
             <div class="message">
-                <div *ngFor="let mess of getMessageText()">
+                <div *ngFor="let mess of Messages">
                     <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
                         <div class="inlineContainer">
                             <img class="inlineIcon" [src]="userContact.userAvatar">
                             <div class="otherBubble other">
-                                {{mess.content}}
+                                <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
+                                <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}">{{mess.content}}</a></div>
+                                <div class="message-image" *ngIf="mess.type === 'image'"><img [src]="mess.url" alt="img message"></div>
                             </div>
                         </div>
                     </div>
@@ -33,7 +35,9 @@
                         <div class="inlineContainer own">
                             <img class="inlineIcon" src="../../../assets/images/Avatar/2.jpg">
                             <div class="ownBubble own">
-                                {{mess.content}}
+                                <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
+                                <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}">{{mess.content}}</a></div>
+                                <div class="message-image" *ngIf="mess.type === 'image'"><img [src]="mess.url" alt="img message"></div>
                             </div>
                         </div>
                     </div>
@@ -95,7 +99,8 @@
                     </span>
                 </div>
                 <div *ngIf="showImg" class="img-share">
-                    <div class="item1" *ngFor="let image of getMessageImage()"><img [src]="image.url" alt="image">
+                    <div class="item1" *ngFor="let image of getMessageImage()">
+                        <img [src]="image.url" alt="image">
                     </div>
                 </div>
             </div>

@@ -93,7 +93,7 @@ p {
     position: relative;
     overflow-y: auto;
     width: 100%;
-    height: calc(100vh - 120px);
+    height: calc(100vh - 180px);
 }
 
 .message::-webkit-scrollbar {
@@ -156,6 +156,12 @@ p {
 .other {
 	align-self: flex-start;
 }
+
+.message-file a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
 
 
 //======Send input==============->
@@ -301,10 +307,14 @@ h2, p {
     padding: 6px 5px;
 }
 
-.file a{
-    text-decoration: none;
+.file a {
     display: flex;
     align-items: center;
+    color: #357ed3;
+}
+
+.file a:hover {
+    text-decoration: underline;
 }
 
 .file img {
