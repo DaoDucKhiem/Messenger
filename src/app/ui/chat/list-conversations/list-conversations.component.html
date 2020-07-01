@@ -33,7 +33,7 @@
                         {{conversation.lastMessage}}
                     </p>
                 </div>
-                <div class="time-and-new-mess">
+                <div class="time-and-new-mess" *ngIf="!checkMessageStatus(conversation.messageStatus)">
                     <div class="time">
                         <p>{{conversation.time}}</p>
                     </div>
@@ -41,6 +41,11 @@
                         <span>
                             <p class="amount">{{conversation.amountNewMessage}}</p>
                         </span>
+                    </div>
+                </div>
+                <div class="time-and-new-mess status-seen" *ngIf="checkMessageStatus(conversation.messageStatus)">
+                    <div class="time">
+                        <p>{{conversation.time}}</p>
                     </div>
                 </div>
             </div>

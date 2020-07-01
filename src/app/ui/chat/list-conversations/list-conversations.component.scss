@@ -195,6 +195,12 @@ p {
     flex-grow: 1;
 }
 
+.status-seen {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
 .time-and-new-mess {
     width: auto;
     font-size: 11px;
