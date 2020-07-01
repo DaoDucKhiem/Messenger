@@ -87,8 +87,15 @@ export class MessagesComponent implements OnInit {
     this.clear();
   }
 
+  //show modal image
+  showModal(id: string) {
+    let modal = document.getElementById(id);
+    modal.style.display = 'block';
+  }
+
   //send image
   processFile(ImageInput: any) {
 
   }
+
 }

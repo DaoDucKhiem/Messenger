@@ -99,7 +99,13 @@
                 </div>
                 <div *ngIf="showImg" class="img-share">
                     <div class="item1" *ngFor="let image of getMessageImage()">
-                        <img [src]="image.url" alt="image">
+                        <img [src]="image.url" alt="image" (click)="showModal(image.id)">
+                        <div id="image.id" class="modal">
+                            <div class="modal-image">
+                                <span class="close">&times;</span>
+                                <img [src]="image.url" alt="image">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

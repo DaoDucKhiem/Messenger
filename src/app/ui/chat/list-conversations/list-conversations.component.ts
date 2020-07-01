@@ -24,15 +24,18 @@ export class ListConversationsComponent implements OnInit {
     let id = +this.route.snapshot.firstChild.paramMap.get('id');
     this.onSelectConversationId = id;
 
+    //update message status
     const found = this.conversations.find(item => item.conversationId === id);
-    found.messageStatus = 'seen';
-
+    let index = this.conversations.indexOf(found);
+    this.conversations[index].messageStatus = 'seen';
   }
 
   onSelect(conversation: Conversation): void {
     this.onSelectConversationId = conversation.contactId;
 
-    conversation.messageStatus = 'seen';
+    //update message status
+    let index = this.conversations.indexOf(conversation);
+    this.conversations[index].messageStatus = 'seen';
 
   }
 
