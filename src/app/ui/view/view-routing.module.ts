@@ -12,7 +12,13 @@ const routes: Routes = [
       {
         path: 'conversation/:id',
         component: MessagesComponent
-      }
+      },
+      {
+        path: '', redirectTo: 'conversation/1', pathMatch: 'full'
+      },
+      {
+        path: 'conversation', redirectTo: 'conversation/1', pathMatch: 'full'
+      },
     ]
   },
 ];

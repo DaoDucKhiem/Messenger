@@ -144,6 +144,7 @@ p {
 
 .content {
     flex: 5;
+    display: flex;
 }
 
 @media only screen and (max-width: 1240px) {
@@ -188,39 +189,54 @@ p {
     width: 12px;
 }
 
-.name, .last-message {
+.name-and-last-mess, .time-and-new-mess {
     display: flex;
-    align-items: center;
-    width: 100%;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
+.time-and-new-mess {
+    width: auto;
+    font-size: 11px;
+}
+
+.time, .new-message {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 24px;
+}
+
+.message-last, .new-message {
+    margin-top: 2px;
+}
 
 .name-conversation, .message-last {
     font-size: 13px;
     font-weight: 500;
-    color: #ffffff;
+    color: #808a9a;
 }
 
-.username-seen {
+.user-online {
     color: #c8ccd3;
 }
 
-.seen {
-    color: #49576d;
+.title-selected {
+    color: #ffffff;
 }
 
-.time, .new-message {
-    font-size: 11px;
-    margin-left: auto;
-    margin-right: 24px;
-    order: 2;
+.time, .seen {
+    color: #808a9a;
 }
 
-.time {
-    color: #49576d;
+.not-seen {
+    color: #c8ccd3;
 }
 
-.last-message span {
+.online-and-not-seen {
+    color: #ffffff;
+}
+
+.new-message span {
     display: flex;
     align-items: center;
     justify-content: center;
