@@ -24,14 +24,18 @@
                     <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
                         <div class="inlineContainer">
                             <img class="inlineIcon" [src]="userContact.userAvatar">
-                            <div class="otherBubble other" [ngClass] = "{'message-image' : mess.type === 'image'}">
+                            <div class="otherBubble other" [ngClass]="{'message-image' : mess.type === 'image'}">
                                 <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
-                                <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}">{{mess.content}}</a></div>
-                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message" (click)="showModal(mess.id)">
+                                <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}"
+                                        target="_blank">{{mess.content}}</a></div>
+                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message"
+                                    (click)="showModal(mess.id)">
                                 <div *ngIf="mess.type === 'image'" [id]="mess.id" class="modal">
                                     <div class="modal-image">
-                                        <span class="close" (click)="hideModal(mess.id)">&times;</span>
-                                        <img [src]="mess.url" alt="image">
+                                        <div>
+                                            <img [src]="mess.url" alt="image">
+                                            <span class="close" (click)="hideModal(mess.id)">&times;</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -40,10 +44,20 @@
                     <div class="bubbleWrapper" *ngIf="mess.senderId === currentUserId">
                         <div class="inlineContainer own">
                             <img class="inlineIcon" src="../../../assets/images/Avatar/2.jpg">
-                            <div class="ownBubble own" [ngClass] = "{'message-image' : mess.type === 'image'}">
+                            <div class="ownBubble own" [ngClass]="{'message-image' : mess.type === 'image'}">
                                 <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
-                                <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}">{{mess.content}}</a></div>
-                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message">
+                                <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}"
+                                        target="_blank">{{mess.content}}</a></div>
+                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message"
+                                    (click)="showModal(mess.id)">
+                                <div *ngIf="mess.type === 'image'" [id]="mess.id" class="modal">
+                                    <div class="modal-image">
+                                        <div>
+                                            <img [src]="mess.url" alt="image">
+                                            <span class="close" (click)="hideModal(mess.id)">&times;</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -52,11 +66,11 @@
             <div class="send-container">
                 <label class="send">
                     <img src="../../../assets/icons/IconAppChat/10.svg" alt="send file">
-                    <input type="file">
+                    <input #imageInput type="file" (change)="processFile(imageInput)">
                 </label>
                 <label class="send">
                     <img src="../../../assets/icons/IconAppChat/9.svg" alt="send file">
-                    <input type="file" accept="image/*" >
+                    <input type="file" accept="image/*">
                 </label>
                 <label class="send">
                     <span class="buzz">
@@ -108,8 +122,10 @@
                         <img [src]="image.url" alt="image" (click)="showModal('i_s' + image.id)">
                         <div [id]="'i_s'+ image.id" class="modal">
                             <div class="modal-image">
-                                <span class="close" (click)="hideModal('i_s' + image.id)">&times;</span>
-                                <img [src]="image.url" alt="image">
+                                <div>
+                                    <img [src]="image.url" alt="image">
+                                    <span class="close" (click)="hideModal('i_s' + image.id)">&times;</span>
+                                </div>
                             </div>
                         </div>
                     </div>

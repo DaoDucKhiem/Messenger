@@ -1,12 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 
 import { UserProfileService } from '../../../service/user-profile.service';
 import { User } from '../../../model/user';
 
 import { MessagedetailService } from '../../../service/messagedetail.service';
 import { Message } from '../../../model/message';
+import { FileService } from 'src/app/service/file.service';
+
+class ImageSnippet {
+  constructor(public src: string, public file: File) {
+  }
+}
 
 
 @Component({
@@ -15,10 +20,10 @@ import { Message } from '../../../model/message';
   styleUrls: ['./messages.component.scss']
 })
 
-
 export class MessagesComponent implements OnInit {
   userContact: User;
   Messages: Message[];
+  MessageFile: Message[];
   currentUserId = 10;
   messageSend: any;
 
@@ -27,7 +32,7 @@ export class MessagesComponent implements OnInit {
   showFile = true;
   modalImageSource = false;
 
-  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private location: Location) {
+  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private filesShared: FileService) {
     route.params.subscribe(val => {
       this.getConversation();
     })
@@ -57,14 +62,17 @@ export class MessagesComponent implements OnInit {
 
     this.messagedetail.getMessages(id)
       .subscribe(ms => this.Messages = ms);
+
+    this.filesShared.getListMessageFile(id)
+      .subscribe(msf => this.MessageFile = msf);
   }
   
   getMessageFile() {
-    return this.Messages.filter(mess => ((mess.type === 'pdf') || (mess.type === 'word') || (mess.type === 'pptx')));
+    return this.MessageFile.filter(mess => ((mess.type === 'pdf') || (mess.type === 'word') || (mess.type === 'pptx')));
   }
 
   getMessageImage(){
-    return this.Messages.filter(mess => mess.type === 'image');
+    return this.MessageFile.filter(mess => mess.type === 'image');
   }
 
   @ViewChild('box') box: ElementRef;
@@ -91,7 +99,6 @@ export class MessagesComponent implements OnInit {
 
   //show modal image
   showModal(id: string) {
-    console.log(id);
     document.getElementById(id).style.display = 'block';
   }
 
@@ -100,9 +107,33 @@ export class MessagesComponent implements OnInit {
     document.getElementById(id).style.display = 'none';
   }
 
-  //send image
-  processFile(ImageInput: any) {
+  selectedFile: ImageSnippet;
 
+  //send image
+  processFile(imageInput: any) {
+    const file: File = imageInput.files[0];
+    const read = new FileReader();
+
+    read.addEventListener('load', (event: any)=> {
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+    });
+
+    read.readAsDataURL(file);
+
+    if(this.selectedFile != undefined) {
+      let newMess: Message = {
+        id: this.MessageFile.length + 1,
+        senderId: this.currentUserId,
+        receiverId: this.userContact.userId,
+        type: 'image',
+        time: Date(),
+        url: this.selectedFile.src.toString()
+      };
+  
+      this.Messages.push(newMess);
+      this.MessageFile.push(newMess);
+      console.log(this.MessageFile);
+    }
   }
 
 }
