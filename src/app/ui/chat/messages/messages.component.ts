@@ -15,6 +15,7 @@ import { Message } from '../../../model/message';
   styleUrls: ['./messages.component.scss']
 })
 
+
 export class MessagesComponent implements OnInit {
   userContact: User;
   Messages: Message[];
@@ -24,6 +25,7 @@ export class MessagesComponent implements OnInit {
   showAb = true;
   showImg = true;
   showFile = true;
+  modalImageSource = false;
 
   constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private location: Location) {
     route.params.subscribe(val => {
@@ -89,8 +91,13 @@ export class MessagesComponent implements OnInit {
 
   //show modal image
   showModal(id: string) {
-    let modal = document.getElementById(id);
-    modal.style.display = 'block';
+    console.log(id);
+    document.getElementById(id).style.display = 'block';
+  }
+
+  //hide modal image
+  hideModal(id: string) {
+    document.getElementById(id).style.display = 'none';
   }
 
   //send image

@@ -27,7 +27,13 @@
                             <div class="otherBubble other" [ngClass] = "{'message-image' : mess.type === 'image'}">
                                 <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
                                 <div class="message-file" *ngIf="mess.type === 'pdf'"><a href="{{mess.url}}">{{mess.content}}</a></div>
-                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message">
+                                <img *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message" (click)="showModal(mess.id)">
+                                <div *ngIf="mess.type === 'image'" [id]="mess.id" class="modal">
+                                    <div class="modal-image">
+                                        <span class="close" (click)="hideModal(mess.id)">&times;</span>
+                                        <img [src]="mess.url" alt="image">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -99,10 +105,10 @@
                 </div>
                 <div *ngIf="showImg" class="img-share">
                     <div class="item1" *ngFor="let image of getMessageImage()">
-                        <img [src]="image.url" alt="image" (click)="showModal(image.id)">
-                        <div id="image.id" class="modal">
+                        <img [src]="image.url" alt="image" (click)="showModal('i_s' + image.id)">
+                        <div [id]="'i_s'+ image.id" class="modal">
                             <div class="modal-image">
-                                <span class="close">&times;</span>
+                                <span class="close" (click)="hideModal('i_s' + image.id)">&times;</span>
                                 <img [src]="image.url" alt="image">
                             </div>
                         </div>
