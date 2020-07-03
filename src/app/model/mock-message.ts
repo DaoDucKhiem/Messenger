@@ -181,7 +181,8 @@ export const listMessage: Message[] = [
         id: 23,
         senderId: 10,
         receiverId: 1,
-        type: 'pdf',
+        type: 'file',
+        typeofFile: 'pdf',
         time: '5/10/2020 9:45:10',
         content: 'Nội dung hội nghị.pdf',
         url: ""
@@ -190,7 +191,120 @@ export const listMessage: Message[] = [
         id: 24,
         senderId: 10,
         receiverId: 1,
-        type: 'pdf',
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Quy trình cho nhân viên.pdf',
+        url: ""
+    },
+    {
+        id: 22,
+        senderId: 10,
+        receiverId: 5,
+        type: 'text',
+        time: '10/10/2020 9:45:10',
+        content: 'ok'
+    },
+    {
+        id: 23,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Nội dung hội nghị.pdf',
+        url: ""
+    },
+    {
+        id: 24,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Quy trình cho nhân viên.pdf',
+        url: ""
+    },
+    {
+        id: 22,
+        senderId: 10,
+        receiverId: 5,
+        type: 'text',
+        time: '10/10/2020 9:45:10',
+        content: 'ok'
+    },
+    {
+        id: 23,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Nội dung hội nghị.pdf',
+        url: ""
+    },
+    {
+        id: 24,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Quy trình cho nhân viên.pdf',
+        url: ""
+    },
+    {
+        id: 22,
+        senderId: 10,
+        receiverId: 5,
+        type: 'text',
+        time: '10/10/2020 9:45:10',
+        content: 'ok'
+    },
+    {
+        id: 23,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Nội dung hội nghị.pdf',
+        url: ""
+    },
+    {
+        id: 24,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Quy trình cho nhân viên.pdf',
+        url: ""
+    },
+    {
+        id: 22,
+        senderId: 10,
+        receiverId: 5,
+        type: 'text',
+        time: '10/10/2020 9:45:10',
+        content: 'ok'
+    },
+    {
+        id: 23,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
+        time: '5/10/2020 9:45:10',
+        content: 'Nội dung hội nghị.pdf',
+        url: ""
+    },
+    {
+        id: 24,
+        senderId: 10,
+        receiverId: 1,
+        type: 'file',
+        typeofFile: 'pdf',
         time: '5/10/2020 9:45:10',
         content: 'Quy trình cho nhân viên.pdf',
         url: ""
@@ -223,7 +337,8 @@ export const listMessage: Message[] = [
         id: 28,
         senderId: 10,
         receiverId: 2,
-        type: 'pdf',
+        type: 'file',
+        typeofFile: 'pdf',
         time: '5/10/2020 9:50:10',
         content: 'Quy trình cho nhân viên.pdf',
         url: ""

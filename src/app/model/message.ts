@@ -3,6 +3,7 @@ export interface Message {
     senderId: number;
     receiverId: number;
     type: string;
+    typeofFile?: string;
     time: string;
     content?: string;
     url?: string;

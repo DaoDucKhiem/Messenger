@@ -5,7 +5,8 @@ export const listFileShared: Message[] = [
         id: 23,
         senderId: 10,
         receiverId: 1,
-        type: 'pdf',
+        type: 'file',
+        typeofFile: 'pdf',
         time: '5/10/2020 9:45:10',
         content: 'Nội dung hội nghị.pdf',
         url: ""
@@ -14,7 +15,8 @@ export const listFileShared: Message[] = [
         id: 24,
         senderId: 10,
         receiverId: 1,
-        type: 'pdf',
+        type: 'file',
+        typeofFile: 'pdf',
         time: '5/10/2020 9:45:10',
         content: 'Quy trình cho nhân viên.pdf',
         url: ""
@@ -47,7 +49,8 @@ export const listFileShared: Message[] = [
         id: 28,
         senderId: 10,
         receiverId: 2,
-        type: 'pdf',
+        type: 'file',
+        typeofFile: 'pdf',
         time: '5/10/2020 9:50:10',
         content: 'Quy trình cho nhân viên.pdf',
         url: ""

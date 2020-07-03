@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { UserProfileService } from '../../../service/user-profile.service';
@@ -20,7 +20,7 @@ class ImageSnippet {
   styleUrls: ['./messages.component.scss']
 })
 
-export class MessagesComponent implements OnInit {
+export class MessagesComponent implements OnInit{
   userContact: User;
   Messages: Message[];
   MessageFile: Message[];
@@ -42,6 +42,35 @@ export class MessagesComponent implements OnInit {
     this.getConversation();
   }
 
+  //auto scroll
+  @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
+  @ViewChildren('item') itemElements: QueryList<any>;
+  
+  private scrollContainer: any;
+  private items = [];
+
+  ngAfterViewInit() {
+    this.scrollContainer = this.scrollFrame.nativeElement;  
+    this.itemElements.changes.subscribe(_ => this.scrollToBottom());    
+
+    // Add a new item every 2 seconds
+    setInterval(() => {
+      this.items.push({});
+    }, 2000);
+  }
+  
+  private scrollToBottom(): void {
+    this.scrollContainer.scroll({
+      top: this.scrollContainer.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+
+
+  
+
   showAbout() {
     this.showAb = !this.showAb;
   }
@@ -58,7 +87,7 @@ export class MessagesComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id');
 
     this.userService.getUser(id)
-    .subscribe(user => this.userContact = user);
+      .subscribe(user => this.userContact = user);
 
     this.messagedetail.getMessages(id)
       .subscribe(ms => this.Messages = ms);
@@ -66,12 +95,12 @@ export class MessagesComponent implements OnInit {
     this.filesShared.getListMessageFile(id)
       .subscribe(msf => this.MessageFile = msf);
   }
-  
+
   getMessageFile() {
-    return this.MessageFile.filter(mess => ((mess.type === 'pdf') || (mess.type === 'word') || (mess.type === 'pptx')));
+    return this.MessageFile.filter(mess => ((mess.type === 'file')));
   }
 
-  getMessageImage(){
+  getMessageImage() {
     return this.MessageFile.filter(mess => mess.type === 'image');
   }
 
@@ -99,7 +128,7 @@ export class MessagesComponent implements OnInit {
 
   //show modal image
   showModal(id: string) {
-    document.getElementById(id).style.display = 'block';
+    document.getElementById(id).style.display = 'flex';
   }
 
   //hide modal image
@@ -112,28 +141,69 @@ export class MessagesComponent implements OnInit {
   //send image
   processFile(imageInput: any) {
     const file: File = imageInput.files[0];
+    let fileName = imageInput.files[0].name;
+    let fileType: string;
+    let type_of_file: string = '';
+
+    switch (imageInput.files[0].name.split(".").pop()) {
+      case 'png': case 'jpg': case 'gif': {
+        fileType = 'image';
+        break;
+      }
+
+      case 'doc': {
+        fileType = 'file';
+        type_of_file = 'docx';
+        break;
+      }
+
+      case 'docx': {
+        fileType = 'file';
+        type_of_file = 'docx';
+        break;
+      }
+
+      case 'pdf': {
+        fileType = 'file';
+        type_of_file = 'pdf';
+        break;
+      }
+
+      case 'ppt': case 'pptx': {
+        fileType = 'file';
+        type_of_file = 'pptx';
+        break;
+      }
+
+      default: {
+        fileType = 'file';
+        type_of_file = 'pptx';
+        break;
+      }
+    }
+
     const read = new FileReader();
 
-    read.addEventListener('load', (event: any)=> {
+    read.addEventListener('load', (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
+      if (this.selectedFile) {
+        let newMess: Message = {
+          id: this.MessageFile.length + 1,
+          senderId: this.currentUserId,
+          receiverId: this.userContact.userId,
+          content: fileName,
+          type: fileType,
+          typeofFile: type_of_file,
+          time: Date(),
+          url: this.selectedFile.src.toString()
+        };
+
+        this.Messages.push(newMess);
+        this.MessageFile.push(newMess);
+      }
     });
 
     read.readAsDataURL(file);
-
-    if(this.selectedFile != undefined) {
-      let newMess: Message = {
-        id: this.MessageFile.length + 1,
-        senderId: this.currentUserId,
-        receiverId: this.userContact.userId,
-        type: 'image',
-        time: Date(),
-        url: this.selectedFile.src.toString()
-      };
-  
-      this.Messages.push(newMess);
-      this.MessageFile.push(newMess);
-      console.log(this.MessageFile);
-    }
   }
 
 }
