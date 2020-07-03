@@ -34,7 +34,7 @@
                                 <div *ngIf="mess.type === 'image'" [id]="mess.id" class="modal"
                                     (click)="hideModal(mess.id)">
                                     <div class="modal-image">
-                                        <img class="img-mess" [src]="mess.url" alt="image">
+                                        <img [src]="mess.url" alt="image">
                                     </div>
                                 </div>
                             </div>
@@ -103,9 +103,12 @@
                 <div class="file" *ngIf="showFile">
                     <p *ngFor="let file of getMessageFile()">
                         <a href="file.url" target="_blank">
-                            <span *ngIf="file.typeofFile === 'pdf'"><img src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
-                            <span *ngIf="file.typeofFile === 'docx'"><img src="../../../assets/icons/IconAppChat/docx-icon.svg" alt="DOCX"></span>
-                            <span *ngIf="file.typeofFile === 'pptx'"><img src="../../../assets/icons/IconAppChat/pptx-icon.svg" alt="PowerPoint"></span>
+                            <span *ngIf="file.typeofFile === 'pdf'"><img
+                                    src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
+                            <span *ngIf="file.typeofFile === 'docx'"><img
+                                    src="../../../assets/icons/IconAppChat/docx-icon.svg" alt="DOCX"></span>
+                            <span *ngIf="file.typeofFile === 'pptx'"><img
+                                    src="../../../assets/icons/IconAppChat/pptx-icon.svg" alt="PowerPoint"></span>
                             {{file.content}}
                         </a>
                     </p>

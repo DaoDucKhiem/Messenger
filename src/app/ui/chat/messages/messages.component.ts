@@ -34,12 +34,17 @@ export class MessagesComponent implements OnInit{
 
   constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private filesShared: FileService) {
     route.params.subscribe(val => {
+      this.ChangData(val['id']);
       this.getConversation();
     })
   }
 
   ngOnInit(): void {
     this.getConversation();
+  }
+
+  ChangData(id: number){
+    this.messagedetail.changeConversation(id);
   }
 
   //auto scroll
