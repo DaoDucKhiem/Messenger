@@ -21,17 +21,16 @@ export class ListConversationsComponent implements OnInit {
   sub: Subscription;
 
   constructor(private conversationService: ConversationService, private messagedetail: MessagedetailService, private route: ActivatedRoute) {
+    this.getConversationId();
   }
 
   ngOnInit(): void {
     this.getConversations();
 
-    this.getConversationId();
-
-    //update message status
-    // const found = this.conversations.find(item => item.conversationId === this.onSelectConversationId);
-    // let index = this.conversations.indexOf(found);
-    // this.conversations[index].messageStatus = 'seen';
+    // update message status
+    const found = this.conversations.find(item => item.conversationId == this.onSelectConversationId);
+    let index = this.conversations.indexOf(found);
+    this.conversations[index].messageStatus = 'seen';
   }
 
   getConversationId() {
@@ -41,11 +40,9 @@ export class ListConversationsComponent implements OnInit {
   }
 
   onSelect(conversation: Conversation): void {
-    this.getConversationId();
     //update message status
     let index = this.conversations.indexOf(conversation);
     this.conversations[index].messageStatus = 'seen';
-
   }
 
   getConversations(): void {
@@ -63,7 +60,7 @@ export class ListConversationsComponent implements OnInit {
 
   //check selected
   checkSelected(id: number) {
-    return id === this.onSelectConversationId;
+    return id == this.onSelectConversationId;
   }
 
   //check user online

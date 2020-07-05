@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ListConversationsComponent } from './list-conversations/list-conversations.component';
 import { MessagesComponent } from './messages/messages.component';
 import { FormsModule } from '@angular/forms';
-import { ViewRoutingModule } from '../view/view-routing.module';
+import { HomeRoutingModule } from '../view/home/home-routing.module';
 
 
 
 @NgModule({
   declarations: [ListConversationsComponent, MessagesComponent],
   imports: [
-    ViewRoutingModule,
+    HomeRoutingModule,
     CommonModule,
     FormsModule
   ],

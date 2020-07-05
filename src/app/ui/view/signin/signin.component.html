@@ -1,25 +1,35 @@
-<div class="modal">
-    <form class="modal-content" action="" method="post">
-        <div class="imgcontainer">
-            <img src="../../../../assets/images/Avatar/1.jpg" alt="Avatar" class="avatar">
+<div class="container-fluid">
+    <div class="form">
+        <div class="tab">
+            <h2 class="tablinks" (click)="SelectedSignIn()" routerLink="/signin" routerLinkActive="active">SIGN IN</h2>
+            <h2 class="tablinks" (click)="SelectedSignUp()" routerLink="/signup" routerLinkActive="active">SIGN UP</h2>
         </div>
+        <div id="signin" *ngIf="!signup">
+            <div class="container">
+                <div><input type="text" placeholder="Enter Username" name="uname" required></div>
 
-        <div class="container">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
+                <div><input type="password" placeholder="Enter Password" name="psw" required></div>
 
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
+                <label for="check">
+                    <span class="icon"></span> 
+                    <input id="check" type="checkbox" class="check" checked> Keep me Signed in
+                </label>
 
-            <button type="button" routerLink="/home">Login</button>
-            <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
+                <button type="submit">Login</button>
+            </div>
         </div>
+        <div id="signup" *ngIf="signup">
+            <div class="container">
+                <div><input type="text" placeholder="Enter Username" name="uname" required></div>
 
-        <div class="container" style="background-color:#f1f1f1">
-            <button type="button" class="cancelbtn">Cancel</button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
+                <div><input type="email" placeholder="Enter Email" name="email" required></div>
+
+                <div><input type="password" placeholder="Enter Password" name="psw" required></div>
+
+                <div><input type="password" placeholder="Repeat Password" name="re-psw" required></div>
+
+                <button type="submit">Register</button>
+            </div>
         </div>
-    </form>
+    </div>
 </div>

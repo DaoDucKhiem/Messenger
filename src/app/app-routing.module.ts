@@ -6,6 +6,7 @@ import { SigninComponent } from './ui/view/signin/signin.component';
 const routes: Routes = [
 
   { path: 'signin', component: SigninComponent},
+  { path: 'signup', component: SigninComponent},
   { path: 'home', loadChildren: () => import('./ui/view/view.module').then(m => m.ViewModule) },
   { path: '', redirectTo: '/signin', pathMatch: 'full' }
 

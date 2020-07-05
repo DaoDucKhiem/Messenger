@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SigninComponent implements OnInit {
 
+  signup: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  SelectedSignIn() {
+    this.signup = false;
+  }
+
+  SelectedSignUp() {
+    this.signup = true;
+  }
 }
