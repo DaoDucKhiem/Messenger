@@ -58,11 +58,6 @@ export class ListConversationsComponent implements OnInit {
     });
   }
 
-  //check selected
-  checkSelected(id: number) {
-    return id == this.onSelectConversationId;
-  }
-
   //check user online
   checkOnline(status: string) {
     return status == 'online';
@@ -74,7 +69,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   addClassToContactName(contactStatus: string, messageStatus: string, conversationSelected: number): string {
-    if (this.checkSelected(conversationSelected))
+    if (conversationSelected === this.onSelectConversationId)
       return "title-selected";
     else if (this.checkOnline(contactStatus) && !this.checkMessageStatus(messageStatus))
       return "online-and-not-seen";

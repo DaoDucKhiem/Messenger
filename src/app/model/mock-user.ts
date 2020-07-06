@@ -8,7 +8,7 @@ export const listUser: User[] = [
         email: 'trungtt@gmail.com',
         phone: '0965 452 125',
         status: 'online',
-        time: "10/10/2020 13:21:56",
+        time: new Date('2020/7/02 12:40:43'),
     },
     {
         userId: 2,
@@ -16,8 +16,8 @@ export const listUser: User[] = [
         userAvatar: './assets/images/Avatar/2.jpg',
         email: 'phihc@gmail.com',
         phone: '0883 123 456',
-        status: 'online',
-        time: "9/10/2020 9:21:56",
+        status: 'offline',
+        time: new Date('2020/7/06 12:40:43'),
     },
     {
         userId: 3,
@@ -26,7 +26,7 @@ export const listUser: User[] = [
         email: 'duonght@gmail.com',
         phone: '0123 456 789',
         status: 'offline',
-        time: "10/10/2020 7:51:56",
+        time: new Date('2020/7/02 12:40:43'),
     }, 
     {
         userId: 4,
@@ -35,7 +35,7 @@ export const listUser: User[] = [
         email: 'dungdx@gmail.com',
         phone: '0942 789 101',
         status: 'offline',
-        time: "10/10/2020 12:31:02",
+        time: new Date('2020/6/28 1:40:43'),
     },
     {
         userId: 5,
@@ -44,6 +44,6 @@ export const listUser: User[] = [
         email: 'minhnv@gmail.com',
         phone: '0965 389 456',
         status: 'online',
-        time: "10/10/2020 5:56:18",
+        time: new Date('2020/7/02 12:40:43'),
     },
 ]

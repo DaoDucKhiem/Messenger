@@ -11,9 +11,9 @@
     </div>
     <div class="list-conversation">
         <div class="conversation" *ngFor="let conversation of conversations"
-            [ngClass]="{'selected': checkSelected(conversation.conversationId)}"
+            [ngClass]="{'selected': conversation.conversationId == onSelectConversationId}"
             (click)="onSelect(conversation)" routerLink='conversation/{{conversation.contactId}}'>
-            <div [ngClass]="{'border-selected' : checkSelected(conversation.conversationId)}" class="space">
+            <div [ngClass]="{'border-selected' : conversation.conversationId == onSelectConversationId}" class="space">
             </div>
             <div class="avatar">
                 <div>
@@ -26,7 +26,7 @@
             </div>
             <div class="content">
                 <div class="name-and-last-mess">
-                    <p class="name-conversation" 
+                    <p class="name-conversation"
                         [ngClass]="addClassToContactName(conversation.status, conversation.messageStatus, conversation.conversationId)">
                         {{conversation.contactName}}</p>
                     <p class="message-last" [ngClass]="addClassToLastMess(conversation.status, conversation.messageStatus)">

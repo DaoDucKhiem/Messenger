@@ -17,7 +17,7 @@ export const Conversations: Conversation[] = [
         contactId: 2,
         contactAvatar: "../assets/images/Avatar/2.jpg",
         contactName: "Hoàng Cao Phi",
-        status: "online",
+        status: "offline",
         time: new Date('2020/7/03 12:40:43'),
         lastMessage: "hello",
         messageStatus: "seen"

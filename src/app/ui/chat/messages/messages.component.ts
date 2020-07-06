@@ -26,6 +26,7 @@ export class MessagesComponent implements OnInit{
   MessageFile: Message[];
   currentUserId = 10;
   messageSend: any;
+  userStatus: string;
 
   showAb = true;
   showImg = true;
@@ -36,11 +37,13 @@ export class MessagesComponent implements OnInit{
     route.params.subscribe(val => {
       this.ChangData(val['id']);
       this.getConversation();
+      this.contactStatus();
     })
   }
 
   ngOnInit(): void {
     this.getConversation();
+    this.contactStatus();
   }
 
   ChangData(id: number){
@@ -209,6 +212,28 @@ export class MessagesComponent implements OnInit{
     });
 
     read.readAsDataURL(file);
+  }
+
+  contactStatus() {
+    if(this.userContact.status == 'online') {
+      this.userStatus = 'Đang hoạt động';
+    }
+    else {
+      let date = new Date();
+      let timeUserActive = new Date(this.userContact.time);
+
+      let diff = Math.floor((date.getTime() - timeUserActive.getTime())/60000);
+
+      if(diff < 60) {
+        this.userStatus = 'Hoạt động '+diff+' phút trước';
+      }
+      else if(diff/60 < 24) {
+        this.userStatus = 'Hoạt động '+Math.floor(diff/60)+' giờ trước';
+      }
+      else {
+        this.userStatus = 'Hoạt động '+Math.floor(diff/1440)+' ngày trước';
+      }
+    }
   }
 
 }

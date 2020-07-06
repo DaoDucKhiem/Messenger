@@ -22,4 +22,8 @@ export class SigninComponent implements OnInit {
   SelectedSignUp() {
     this.signup = true;
   }
+
+  checkLogin() {
+    
+  }
 }
