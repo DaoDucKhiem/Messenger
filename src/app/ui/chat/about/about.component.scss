@@ -1,0 +1,107 @@
+//===========about============->
+
+h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+.profile, .share-file, .share-img {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.profile h2 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #212121;
+}
+
+.profile p {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 13px;
+    letter-spacing: -.13px;
+    color: #666666;
+}
+
+.img-avatar {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.line {
+    margin: 10px auto !important;
+    background-color: #ffffff;
+    width: 100%;
+    height: 1px;
+}
+
+.tittle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tittle p, .file {
+    font-size: 13px;
+    letter-spacing: -.13px;
+    color: #666666;
+}
+
+.icon-dropdown {
+    margin-left: auto;
+    order: 2;
+}
+
+.tittle img {
+    width: 16px;
+    height: 16px;
+}
+
+.file p {
+    padding: 6px 5px;
+}
+
+.file a {
+    display: flex;
+    align-items: center;
+    color: #357ed3;
+}
+
+.file a:hover {
+    text-decoration: underline;
+}
+
+.file img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.img-share {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 70px 70px 70px;
+    grid-gap: 10px;
+}
+
+.item1 {
+    width: 100%;
+    height: 70px;
+    .img-grid {
+        border-radius: 3px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        cursor: pointer;
+    }
+}

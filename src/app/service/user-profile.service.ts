@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { User } from '../model/user';
 import { Observable, of } from 'rxjs';
 import { listUser } from '../model/mock-user';
@@ -13,5 +13,4 @@ export class UserProfileService {
   getUser(id: number): Observable<User> {
     return of(listUser.find(user => user.userId === id));
   }
-
 }

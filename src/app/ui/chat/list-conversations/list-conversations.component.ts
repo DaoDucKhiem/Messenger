@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Conversation } from '../../../model/conversation';
 import { ConversationService } from '../../../service/conversation.service';
 
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { MessagedetailService } from 'src/app/service/messagedetail.service';
 
 @Component({
@@ -16,11 +14,8 @@ export class ListConversationsComponent implements OnInit {
   conversations: Conversation[];
   conversationsCopy: Conversation[];
   onSelectConversationId: number;
-  searchTerm: any;
 
-  sub: Subscription;
-
-  constructor(private conversationService: ConversationService, private messagedetail: MessagedetailService, private route: ActivatedRoute) {
+  constructor(private conversationService: ConversationService, private messagedetail: MessagedetailService) {
     this.getConversationId();
   }
 
@@ -28,28 +23,50 @@ export class ListConversationsComponent implements OnInit {
     this.getConversations();
 
     // update message status
-    const found = this.conversations.find(item => item.conversationId == this.onSelectConversationId);
-    let index = this.conversations.indexOf(found);
-    this.conversations[index].messageStatus = 'seen';
+    this.updateLastMessageStatus();
   }
 
+  /**
+   * lấy id của route để add focus conversation
+   * cập nhật khi id thay đổi
+   */
   getConversationId() {
-    this.messagedetail.conversationId.subscribe(data => {
-      this.onSelectConversationId = data;
+    this.messagedetail.conversationId.subscribe( (data: number)=> {
+      this.onSelectConversationId = +data;
     })
   }
 
-  onSelect(conversation: Conversation): void {
-    //update message status
-    let index = this.conversations.indexOf(conversation);
-    this.conversations[index].messageStatus = 'seen';
+  /**
+   * update last message status lhi load vào lần đầu
+   */
+  updateLastMessageStatus() {
+    const found = this.conversations.find(item => item.contactId == this.onSelectConversationId);
+    let index = this.conversations.indexOf(found);
+    this.conversations[index].lastMessageStatus = 1;
   }
 
+  /**
+   * update last message của conversation khi click
+   * @param conversation 
+   */
+  onSelect(conversation: Conversation): void {
+    let index = this.conversations.indexOf(conversation);
+    this.conversations[index].lastMessageStatus = 1;
+  }
+
+  /**
+   * lấy danh sách các conversation từ service
+   */
   getConversations(): void {
     this.conversationService.getConversations()
       .subscribe(conversations => this.conversations = conversations);
     this.conversationsCopy = this.conversations;
   }
+
+  /**
+   * tìm kiếm conversation
+   */
+  searchTerm: any;
 
   search(): void {
     let term = this.searchTerm;
@@ -58,17 +75,24 @@ export class ListConversationsComponent implements OnInit {
     });
   }
 
-  //check user online
-  checkOnline(status: string) {
-    return status == 'online';
+  /**
+   * kiểm tra trạng thái contact user online hay offline
+   * status: 0-offline, 1-online
+   * @param status 
+   */
+  checkOnline(status: number) {
+    return status === 1;
   }
 
-  //check message seen ?
-  checkMessageStatus(statusMessage: string) {
-    return statusMessage === 'seen';
+  /**
+   * check status của last message
+   * @param statusMessage 
+   */
+  checkMessageStatus(statusMessage: number) {
+    return statusMessage === 1;
   }
 
-  addClassToContactName(contactStatus: string, messageStatus: string, conversationSelected: number): string {
+  addClassToContactName(contactStatus: number, messageStatus: number, conversationSelected: number): string {
     if (conversationSelected === this.onSelectConversationId)
       return "title-selected";
     else if (this.checkOnline(contactStatus) && !this.checkMessageStatus(messageStatus))
@@ -77,7 +101,7 @@ export class ListConversationsComponent implements OnInit {
       return "user-online";
   }
 
-  addClassToLastMess(contactStatus: string, messageStatus: string): string {
+  addClassToLastMess(contactStatus: number, messageStatus: number): string {
     if (this.checkOnline(contactStatus) && !this.checkMessageStatus(messageStatus))
       return "online-and-not-seen";
     else if (this.checkMessageStatus(messageStatus))
@@ -85,13 +109,21 @@ export class ListConversationsComponent implements OnInit {
     else return "not-seen";
   }
 
-  calculateDiff(data) {
+  /**
+   * tính lượng thời gian chênh lệch so với hiện tại
+   * @param data 
+   */
+  calculateDiff(data: Date) {
     let currentDate = new Date();
     data = new Date(data);
     return Math.floor((Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) - Date.UTC(data.getFullYear(), data.getMonth(), data.getDate())) / (1000 * 60 * 60 * 24));
   }
 
-  forMatTime(data) {
+  /**
+   * trả về loại định dạng thời gian để hiển thị
+   * @param data 
+   */
+  forMatTime(data: Date) {
     let diff = this.calculateDiff(data);
     if (diff <= 1) {
       return 0;

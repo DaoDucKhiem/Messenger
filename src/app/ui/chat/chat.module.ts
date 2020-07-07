@@ -4,11 +4,12 @@ import { ListConversationsComponent } from './list-conversations/list-conversati
 import { MessagesComponent } from './messages/messages.component';
 import { FormsModule } from '@angular/forms';
 import { HomeRoutingModule } from '../view/home/home-routing.module';
+import { AboutComponent } from './about/about.component';
 
 
 
 @NgModule({
-  declarations: [ListConversationsComponent, MessagesComponent],
+  declarations: [ListConversationsComponent, MessagesComponent, AboutComponent],
   imports: [
     HomeRoutingModule,
     CommonModule,

@@ -1,0 +1,53 @@
+<div class="about-container">
+    <div class="profile">
+        <div class="img-avatar">
+            <img [src]="userContact.userAvatar" alt="avatar">
+        </div>
+        <h2>{{userContact.userName}}</h2>
+        <p>{{userContact.phone}}</p>
+        <p>{{userContact.email}}</p>
+        <p class="line"></p>
+    </div>
+    <div class="share-file">
+        <div class="tittle" (click)="showAllFile()">
+            <p>TỆP ĐÃ CHIA SẺ</p>
+            <span class="icon-dropdown">
+                <img [src]="showFile ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
+                    alt="dropdown">
+            </span>
+        </div>
+        <div class="file" *ngIf="showFile">
+            <p *ngFor="let file of messageFile">
+                <a href="file.url" target="_blank">
+                    <span *ngIf="file.typeofFile === 0"><img
+                            src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
+                    <span *ngIf="file.typeofFile === 1"><img
+                            src="../../../assets/icons/IconAppChat/docx-icon.svg" alt="DOCX"></span>
+                    <span *ngIf="file.typeofFile === 2"><img
+                            src="../../../assets/icons/IconAppChat/pptx-icon.svg" alt="PowerPoint"></span>
+                    {{file.content}}
+                </a>
+            </p>
+        </div>
+        <p class="line"></p>
+    </div>
+    <div class="share-img">
+        <div class="tittle" (click)="showAllImg()">
+            <p>ẢNH ĐÃ CHIA SẺ</p>
+            <span class="icon-dropdown">
+                <img [src]="showImg ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
+                    alt="dropdown">
+            </span>
+        </div>
+        <div *ngIf="showImg" class="img-share">
+            <div class="item1" *ngFor="let image of messageImage">
+                <img class="img-grid" [src]="image.url" alt="image" (click)="showModal(image.id)">
+                <div [id]="image.id" class="modal" (click)="hideModal(image.id)">
+                    <div class="modal-image">
+                        <img [src]="image.url" alt="image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

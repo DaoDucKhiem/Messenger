@@ -6,7 +6,6 @@ import { User } from '../../../model/user';
 
 import { MessagedetailService } from '../../../service/messagedetail.service';
 import { Message } from '../../../model/message';
-import { FileService } from 'src/app/service/file.service';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -23,19 +22,17 @@ class ImageSnippet {
 export class MessagesComponent implements OnInit{
   userContact: User;
   Messages: Message[];
-  MessageFile: Message[];
   currentUserId = 10;
   messageSend: any;
   userStatus: string;
-
+  messageFile: Message;
+  
   showAb = true;
-  showImg = true;
-  showFile = true;
   modalImageSource = false;
 
-  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private filesShared: FileService) {
+  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService) {
     route.params.subscribe(val => {
-      this.ChangData(val['id']);
+      this.messagedetail.changeConversation(val['id']);
       this.getConversation();
       this.contactStatus();
     })
@@ -44,10 +41,6 @@ export class MessagesComponent implements OnInit{
   ngOnInit(): void {
     this.getConversation();
     this.contactStatus();
-  }
-
-  ChangData(id: number){
-    this.messagedetail.changeConversation(id);
   }
 
   //auto scroll
@@ -75,20 +68,8 @@ export class MessagesComponent implements OnInit{
     });
   }
 
-
-
-  
-
   showAbout() {
     this.showAb = !this.showAb;
-  }
-
-  showAllImg() {
-    this.showImg = !this.showImg;
-  }
-
-  showAllFile() {
-    this.showFile = !this.showFile;
   }
 
   getConversation(): void {
@@ -99,33 +80,29 @@ export class MessagesComponent implements OnInit{
 
     this.messagedetail.getMessages(id)
       .subscribe(ms => this.Messages = ms);
-
-    this.filesShared.getListMessageFile(id)
-      .subscribe(msf => this.MessageFile = msf);
-  }
-
-  getMessageFile() {
-    return this.MessageFile.filter(mess => ((mess.type === 'file')));
-  }
-
-  getMessageImage() {
-    return this.MessageFile.filter(mess => mess.type === 'image');
   }
 
   @ViewChild('box') box: ElementRef;
 
+  /**
+   * clear input gửi message
+   */
   clear() {
     this.box.nativeElement.value = "";
   }
 
+  /**
+   * gửi message text bắt sự kiện nhấn enter
+   * @param val 
+   */
   onEnter(val: any): void {
     this.messageSend = val;
     let newMess: Message = {
       id: this.Messages.length + 1,
       senderId: this.currentUserId,
       receiverId: this.userContact.userId,
-      type: 'text',
-      time: Date(),
+      type: 0,
+      time: new Date(),
       content: this.messageSend
     };
 
@@ -134,58 +111,51 @@ export class MessagesComponent implements OnInit{
     this.clear();
   }
 
-  //show modal image
-  showModal(id: string) {
-    document.getElementById(id).style.display = 'flex';
-  }
-
-  //hide modal image
-  hideModal(id: string) {
-    document.getElementById(id).style.display = 'none';
-  }
-
+  /**
+   * gửi all file
+   * @param imageInput 
+   */
   selectedFile: ImageSnippet;
 
-  //send image
   processFile(imageInput: any) {
     const file: File = imageInput.files[0];
     let fileName = imageInput.files[0].name;
-    let fileType: string;
-    let type_of_file: string = '';
+    let fileType: number;
+    let type_of_file: number;
 
     switch (imageInput.files[0].name.split(".").pop()) {
       case 'png': case 'jpg': case 'gif': {
-        fileType = 'image';
+        fileType = 2;
         break;
       }
 
       case 'doc': {
-        fileType = 'file';
-        type_of_file = 'docx';
+        fileType = 1;
+        type_of_file = 1;
         break;
       }
 
       case 'docx': {
-        fileType = 'file';
-        type_of_file = 'docx';
+        fileType = 1;
+        type_of_file = 1;
         break;
       }
 
       case 'pdf': {
-        fileType = 'file';
-        type_of_file = 'pdf';
+        fileType = 1;
+        type_of_file = 0;
         break;
       }
 
       case 'ppt': case 'pptx': {
-        fileType = 'file';
-        type_of_file = 'pptx';
+        fileType = 1;
+        type_of_file = 2;
         break;
       }
 
       default: {
-        fileType = 'file';
-        type_of_file = 'pptx';
+        fileType = 1;
+        type_of_file = 2;
         break;
       }
     }
@@ -196,26 +166,29 @@ export class MessagesComponent implements OnInit{
       this.selectedFile = new ImageSnippet(event.target.result, file);
       if (this.selectedFile) {
         let newMess: Message = {
-          id: this.MessageFile.length + 1,
+          id: this.Messages.length + 1,
           senderId: this.currentUserId,
           receiverId: this.userContact.userId,
           content: fileName,
           type: fileType,
           typeofFile: type_of_file,
-          time: Date(),
+          time: new Date(),
           url: this.selectedFile.src.toString()
         };
 
         this.Messages.push(newMess);
-        this.MessageFile.push(newMess);
+        this.messageFile = newMess;
       }
     });
 
     read.readAsDataURL(file);
   }
 
+  /**
+   * hiển thị trạng thái của người đang trò chuyện
+   */
   contactStatus() {
-    if(this.userContact.status == 'online') {
+    if(this.userContact.status === 1) {
       this.userStatus = 'Đang hoạt động';
     }
     else {
@@ -234,6 +207,22 @@ export class MessagesComponent implements OnInit{
         this.userStatus = 'Hoạt động '+Math.floor(diff/1440)+' ngày trước';
       }
     }
+  }
+
+  /**
+   * hiện modal
+   * @param id 
+   */
+  showModal(id: string) {
+    document.getElementById(id).style.display = 'flex';
+  }
+
+  /**
+   * ẩn modal
+   * @param id 
+   */
+  hideModal(id: string) {
+    document.getElementById(id).style.display = 'none';
   }
 
 }

@@ -24,14 +24,14 @@
                     <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
                         <div class="inlineContainer">
                             <img class="inlineIcon" [src]="userContact.userAvatar">
-                            <div class="otherBubble other" [ngClass]="{'message-image' : mess.type === 'image'}">
-                                <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
-                                <div class="message-file" *ngIf="mess.type === 'file'">
+                            <div class="otherBubble other" [ngClass]="{'message-image' : mess.type === 2}">
+                                <div *ngIf="mess.type === 0">{{mess.content}}</div>
+                                <div class="message-file" *ngIf="mess.type === 1">
                                     <a href="mess.url" target="_blank">{{mess.content}}</a>
                                 </div>
-                                <img class="img-mess" *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message"
+                                <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.url" alt="img message"
                                     (click)="showModal(mess.id)">
-                                <div *ngIf="mess.type === 'image'" [id]="mess.id" class="modal"
+                                <div *ngIf="mess.type === 2" [id]="mess.id" class="modal"
                                     (click)="hideModal(mess.id)">
                                     <div class="modal-image">
                                         <img [src]="mess.url" alt="image">
@@ -43,14 +43,14 @@
                     <div class="bubbleWrapper" *ngIf="mess.senderId === currentUserId">
                         <div class="inlineContainer own">
                             <img class="inlineIcon" src="../../../assets/images/Avatar/2.jpg">
-                            <div class="ownBubble own" [ngClass]="{'message-image' : mess.type === 'image'}">
-                                <div *ngIf="mess.type === 'text'">{{mess.content}}</div>
-                                <div class="message-file" *ngIf="mess.type === 'file'">
+                            <div class="ownBubble own" [ngClass]="{'message-image' : mess.type === 2}">
+                                <div *ngIf="mess.type === 0">{{mess.content}}</div>
+                                <div class="message-file" *ngIf="mess.type === 1">
                                     <a href="mess.url" target="_blank">{{mess.content}}</a>
                                 </div>
-                                <img class="img-mess" *ngIf="mess.type === 'image'" [src]="mess.url" alt="img message"
+                                <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.url" alt="img message"
                                     (click)="showModal(mess.id)">
-                                <div *ngIf="mess.type === 'image'" [id]="mess.id" class="modal"
+                                <div *ngIf="mess.type === 2" [id]="mess.id" class="modal"
                                     (click)="hideModal(mess.id)">
                                     <div class="modal-image">
                                         <img [src]="mess.url" alt="image">
@@ -82,58 +82,6 @@
                 </div>
             </div>
         </div>
-        <div class="about-container" *ngIf="showAb">
-            <div class="profile">
-                <div class="img-avatar">
-                    <img [src]="userContact.userAvatar" alt="avatar">
-                </div>
-                <h2>{{userContact.userName}}</h2>
-                <p>{{userContact.phone}}</p>
-                <p>{{userContact.email}}</p>
-                <p class="line"></p>
-            </div>
-            <div class="share-file">
-                <div class="tittle" (click)="showAllFile()">
-                    <p>TỆP ĐÃ CHIA SẺ</p>
-                    <span class="icon-dropdown">
-                        <img [src]="showFile ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
-                            alt="dropdown">
-                    </span>
-                </div>
-                <div class="file" *ngIf="showFile">
-                    <p *ngFor="let file of getMessageFile()">
-                        <a href="file.url" target="_blank">
-                            <span *ngIf="file.typeofFile === 'pdf'"><img
-                                    src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
-                            <span *ngIf="file.typeofFile === 'docx'"><img
-                                    src="../../../assets/icons/IconAppChat/docx-icon.svg" alt="DOCX"></span>
-                            <span *ngIf="file.typeofFile === 'pptx'"><img
-                                    src="../../../assets/icons/IconAppChat/pptx-icon.svg" alt="PowerPoint"></span>
-                            {{file.content}}
-                        </a>
-                    </p>
-                </div>
-                <p class="line"></p>
-            </div>
-            <div class="share-img">
-                <div class="tittle" (click)="showAllImg()">
-                    <p>ẢNH ĐÃ CHIA SẺ</p>
-                    <span class="icon-dropdown">
-                        <img [src]="showImg ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
-                            alt="dropdown">
-                    </span>
-                </div>
-                <div *ngIf="showImg" class="img-share">
-                    <div class="item1" *ngFor="let image of getMessageImage()">
-                        <img class="img-grid" [src]="image.url" alt="image" (click)="showModal('i_s' + image.id)">
-                        <div [id]="'i_s'+ image.id" class="modal" (click)="hideModal('i_s' + image.id)">
-                            <div class="modal-image">
-                                <img [src]="image.url" alt="image">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <app-about class="about-container" [userContact]='userContact' [newMessageFile] = 'messageFile' *ngIf="showAb"></app-about>
     </div>
 </div>
