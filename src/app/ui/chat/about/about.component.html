@@ -1,4 +1,5 @@
 <div class="about-container">
+    <!-- user contact profile -->
     <div class="profile">
         <div class="img-avatar">
             <img [src]="userContact.userAvatar" alt="avatar">
@@ -8,6 +9,9 @@
         <p>{{userContact.email}}</p>
         <p class="line"></p>
     </div>
+    <!-- user contact profile -->
+
+    <!-- list file shared -->
     <div class="share-file">
         <div class="tittle" (click)="showAllFile()">
             <p>TỆP ĐÃ CHIA SẺ</p>
@@ -18,20 +22,22 @@
         </div>
         <div class="file" *ngIf="showFile">
             <p *ngFor="let file of messageFile">
+                <!-- 1:icon pdf, 2:icon docx, 3:icon pptx -->
                 <a href="file.url" target="_blank">
-                    <span *ngIf="file.typeofFile === 0"><img
-                            src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
-                    <span *ngIf="file.typeofFile === 1"><img
-                            src="../../../assets/icons/IconAppChat/docx-icon.svg" alt="DOCX"></span>
-                    <span *ngIf="file.typeofFile === 2"><img
-                            src="../../../assets/icons/IconAppChat/pptx-icon.svg" alt="PowerPoint"></span>
+                    <span *ngIf="file.typeofFile === 0"><img src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
+                    <span *ngIf="file.typeofFile === 1"><img src="../../../assets/icons/IconAppChat/docx-icon.svg" alt="DOCX"></span>
+                    <span *ngIf="file.typeofFile === 2"><img src="../../../assets/icons/IconAppChat/pptx-icon.svg" alt="PowerPoint"></span>
                     {{file.content}}
                 </a>
             </p>
         </div>
         <p class="line"></p>
     </div>
+    <!-- list file shared -->
+
+    <!-- list image shared -->
     <div class="share-img">
+
         <div class="tittle" (click)="showAllImg()">
             <p>ẢNH ĐÃ CHIA SẺ</p>
             <span class="icon-dropdown">
@@ -39,15 +45,21 @@
                     alt="dropdown">
             </span>
         </div>
+
         <div *ngIf="showImg" class="img-share">
             <div class="item1" *ngFor="let image of messageImage">
+
                 <img class="img-grid" [src]="image.url" alt="image" (click)="showModal(image.id)">
+
+                 <!-- display modal image when click -->
                 <div [id]="image.id" class="modal" (click)="hideModal(image.id)">
                     <div class="modal-image">
                         <img [src]="image.url" alt="image">
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+     <!-- list image shared -->
 </div>

@@ -40,7 +40,7 @@ export const listUser: User[] = [
     {
         userId: 5,
         userName: 'Nguyễn Văn Minh',
-        userAvatar: './assets/images/Avatar/2.jpg',
+        userAvatar: './assets/images/Avatar/1.jpg',
         email: 'minhnv@gmail.com',
         phone: '0965 389 456',
         status: 1,

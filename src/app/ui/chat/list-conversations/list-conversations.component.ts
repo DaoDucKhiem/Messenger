@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { Conversation } from '../../../model/conversation';
 import { ConversationService } from '../../../service/conversation.service';
-
 import { MessagedetailService } from 'src/app/service/messagedetail.service';
 
 @Component({

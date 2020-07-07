@@ -1,87 +1,142 @@
 <div class="message-view">
+
+    <!-- header conversation detail -->
     <div class="header">
+
+         <!-- user contact avatar, name and status -->
         <div class="head-left">
+
             <div class="avatar">
                 <img [src]="userContact.userAvatar" alt="avatar">
             </div>
+
             <div class="info">
                 <p class="username">{{userContact.userName}}</p>
                 <p class="active">{{userStatus}}</p>
             </div>
         </div>
+         <!-- user contact avatar, name and status -->
+
+        <!-- header icon -->
         <div class="head-right">
             <div><img src="../../../assets/icons/IconboxChat/8.svg" alt="search-icon"></div>
-            <div (click)="showAbout()"><img
-                    [src]="showAb ? '../../../assets/icons/IconAppChat/5.svg' : '../../../assets/icons/IconAppChat/6.svg'"
-                    alt="about-icon"></div>
+
+            <div (click)="showAbout()">
+                <img [src]="showAb ? '../../../assets/icons/IconAppChat/5.svg' : '../../../assets/icons/IconAppChat/6.svg'" alt="about-icon">
+            </div>
+
             <div><img src="../../../assets/icons/IconAppChat/2.svg" alt="more-icon"></div>
         </div>
+        <!-- header icon -->
+
     </div>
+    <!-- header conversation detail -->
+
+    <!-- content conversation detail -->
     <div class="content-message-list">
         <div class="list-message" [ngStyle]="{'width' : showAb ?  'calc(100% - 300px)' : '100%'}">
             <div class="message" #scrollframe>
                 <div *ngFor="let mess of Messages" #item>
+
+                     <!-- display message of user contact -->
                     <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
                         <div class="inlineContainer">
+                             <!-- display avatar user contact -->
                             <img class="inlineIcon" [src]="userContact.userAvatar">
+
+                            <!-- display content message of user contact -->
                             <div class="otherBubble other" [ngClass]="{'message-image' : mess.type === 2}">
+                                
                                 <div *ngIf="mess.type === 0">{{mess.content}}</div>
+
                                 <div class="message-file" *ngIf="mess.type === 1">
                                     <a href="mess.url" target="_blank">{{mess.content}}</a>
                                 </div>
+
                                 <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.url" alt="img message"
                                     (click)="showModal(mess.id)">
+                                <!-- display modal if type is image -->
                                 <div *ngIf="mess.type === 2" [id]="mess.id" class="modal"
                                     (click)="hideModal(mess.id)">
                                     <div class="modal-image">
                                         <img [src]="mess.url" alt="image">
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
+                    <!-- display message of user contact -->
+
+                    <!-- display message of current user -->
                     <div class="bubbleWrapper" *ngIf="mess.senderId === currentUserId">
                         <div class="inlineContainer own">
+                            <!-- display avatar current user -->
                             <img class="inlineIcon" src="../../../assets/images/Avatar/2.jpg">
+
+                            <!-- display content message of current user -->
                             <div class="ownBubble own" [ngClass]="{'message-image' : mess.type === 2}">
+
                                 <div *ngIf="mess.type === 0">{{mess.content}}</div>
+
                                 <div class="message-file" *ngIf="mess.type === 1">
                                     <a href="mess.url" target="_blank">{{mess.content}}</a>
                                 </div>
+
                                 <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.url" alt="img message"
                                     (click)="showModal(mess.id)">
+                                <!-- display modal if type is image -->
                                 <div *ngIf="mess.type === 2" [id]="mess.id" class="modal"
                                     (click)="hideModal(mess.id)">
                                     <div class="modal-image">
                                         <img [src]="mess.url" alt="image">
                                     </div>
                                 </div>
+
                             </div>
+                             <!-- display content message of current user -->
                         </div>
                     </div>
+                    <!-- display message of current user -->
                 </div>
             </div>
             <div class="send-container">
+
+                <!-- icon send file -->
                 <label class="send">
                     <img src="../../../assets/icons/IconAppChat/10.svg" alt="send file">
                     <input #imageInput type="file" (change)="processFile(imageInput)">
                 </label>
+
+                <!-- icon send picture -->
                 <label class="send">
                     <img src="../../../assets/icons/IconAppChat/9.svg" alt="send file">
                     <input type="file" accept="image/*">
                 </label>
+
+                <!-- icon send buzz! -->
                 <label class="send">
                     <span class="buzz">
                         <p>Buzz!</p>
                     </span>
                 </label>
+
+                <!-- input text message -->
                 <div class="send input-message">
-                    <input type="text" #box (keyup.enter)="onEnter(box.value)"
-                        placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên">
+                    <input type="text" #box (keyup.enter)="onEnter(box.value)" placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên">
+                    
+                    <!-- icon sticker -->
                     <img src="../../../assets/icons/IconAppChat/7.svg" alt="icon">
                 </div>
+                <!-- input text message -->
+
             </div>
         </div>
+
+        <!-- about infor user contact -->
         <app-about class="about-container" [userContact]='userContact' [newMessageFile] = 'messageFile' *ngIf="showAb"></app-about>
+        <!-- about infor user contact -->
+
     </div>
+    <!-- content conversation detail -->
 </div>

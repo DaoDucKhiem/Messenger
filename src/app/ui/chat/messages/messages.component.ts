@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { UserProfileService } from '../../../service/user-profile.service';
 import { User } from '../../../model/user';
-
 import { MessagedetailService } from '../../../service/messagedetail.service';
 import { Message } from '../../../model/message';
 
@@ -19,47 +18,64 @@ class ImageSnippet {
   styleUrls: ['./messages.component.scss']
 })
 
-export class MessagesComponent implements OnInit{
+export class MessagesComponent implements OnInit {
   userContact: User;
   Messages: Message[];
   currentUserId = 10;
   messageSend: any;
   userStatus: string;
   messageFile: Message;
-  
+  userContactId: number;
+
   showAb = true;
   modalImageSource = false;
 
   constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService) {
-    route.params.subscribe(val => {
-      this.messagedetail.changeConversation(val['id']);
+    this.onCreate();
+  }
+
+  /**
+   * khởi tạo dữ liệu id user contact khi bắt đầu điều hướng tới component này
+   * id lấy trên route
+   */
+  onCreate() {
+    this.getConversation();
+    this.messagedetail.changeConversation(this.userContactId);
+    this.contactStatus();
+  }
+
+  ngOnInit(): void {
+    this.onRouteChange();
+  }
+
+  /**
+   * nghe sự thay đổi id trên route để lấy dữ liệu tương ứng
+   */
+  onRouteChange(): void {
+    this.route.params.subscribe(val => {
+      this.messagedetail.changeConversation(val['id']); // gửi id contact (id conversation)
       this.getConversation();
       this.contactStatus();
     })
   }
 
-  ngOnInit(): void {
-    this.getConversation();
-    this.contactStatus();
-  }
-
   //auto scroll
-  @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
+  @ViewChild('scrollframe', { static: false }) scrollFrame: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
-  
+
   private scrollContainer: any;
   private items = [];
 
   ngAfterViewInit() {
-    this.scrollContainer = this.scrollFrame.nativeElement;  
-    this.itemElements.changes.subscribe(_ => this.scrollToBottom());    
+    this.scrollContainer = this.scrollFrame.nativeElement;
+    this.itemElements.changes.subscribe(_ => this.scrollToBottom());
 
     // Add a new item every 2 seconds
     setInterval(() => {
       this.items.push({});
     }, 2000);
   }
-  
+
   private scrollToBottom(): void {
     this.scrollContainer.scroll({
       top: this.scrollContainer.scrollHeight,
@@ -68,25 +84,56 @@ export class MessagesComponent implements OnInit{
     });
   }
 
+  /**
+   * hiển thị hoặc ẩn about component
+   */
   showAbout() {
     this.showAb = !this.showAb;
   }
 
+  /**
+   * lấy id trên route lấy dữ liệu service tương ứng
+   */
   getConversation(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
+    this.userContactId = +this.route.snapshot.paramMap.get('id');
 
-    this.userService.getUser(id)
+    this.userService.getUser(this.userContactId)
       .subscribe(user => this.userContact = user);
 
-    this.messagedetail.getMessages(id)
+    this.messagedetail.getMessages(this.userContactId)
       .subscribe(ms => this.Messages = ms);
   }
 
-  @ViewChild('box') box: ElementRef;
+  /**
+   * hiển thị trạng thái của người đang trò chuyện
+   */
+  contactStatus() {
+    if (this.userContact.status === 1) {
+      this.userStatus = 'Đang hoạt động';
+    }
+    else {
+      let date = new Date();
+      let timeUserActive = new Date(this.userContact.time);
+
+      let diff = Math.floor((date.getTime() - timeUserActive.getTime()) / 60000);
+
+      if (diff < 60) {
+        this.userStatus = 'Hoạt động ' + diff + ' phút trước';
+      }
+      else if (diff / 60 < 24) {
+        this.userStatus = 'Hoạt động ' + Math.floor(diff / 60) + ' giờ trước';
+      }
+      else {
+        this.userStatus = 'Hoạt động ' + Math.floor(diff / 1440) + ' ngày trước';
+      }
+    }
+  }
 
   /**
    * clear input gửi message
    */
+  @ViewChild('box') box: ElementRef;
+
   clear() {
     this.box.nativeElement.value = "";
   }
@@ -182,31 +229,6 @@ export class MessagesComponent implements OnInit{
     });
 
     read.readAsDataURL(file);
-  }
-
-  /**
-   * hiển thị trạng thái của người đang trò chuyện
-   */
-  contactStatus() {
-    if(this.userContact.status === 1) {
-      this.userStatus = 'Đang hoạt động';
-    }
-    else {
-      let date = new Date();
-      let timeUserActive = new Date(this.userContact.time);
-
-      let diff = Math.floor((date.getTime() - timeUserActive.getTime())/60000);
-
-      if(diff < 60) {
-        this.userStatus = 'Hoạt động '+diff+' phút trước';
-      }
-      else if(diff/60 < 24) {
-        this.userStatus = 'Hoạt động '+Math.floor(diff/60)+' giờ trước';
-      }
-      else {
-        this.userStatus = 'Hoạt động '+Math.floor(diff/1440)+' ngày trước';
-      }
-    }
   }
 
   /**

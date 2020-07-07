@@ -1,4 +1,5 @@
 <div class="container">
+    <!-- search conversation -->
     <div class="search">
         <div class="input-search">
             <img src="../../../assets/icons/IconAppChat/11.svg" alt="search-icon">
@@ -9,12 +10,17 @@
             <img src="../../../assets/icons/IconboxChat/23.svg" alt="add conversation">
         </div>
     </div>
+    <!-- search conversation -->
+
+    <!-- list conversation -->
     <div class="list-conversation">
         <div class="conversation" *ngFor="let conversation of conversations"
             [ngClass]="{'selected': conversation.contactId === onSelectConversationId}"
             (click)="onSelect(conversation)" routerLink='conversation/{{conversation.contactId}}'>
-            <div [ngClass]="{'border-selected' : conversation.contactId === onSelectConversationId}" class="space">
-            </div>
+            <!-- border when conversation is selected -->
+            <div [ngClass]="{'border-selected' : conversation.contactId === onSelectConversationId}" class="space"></div>
+
+            <!-- avatar user contact-->
             <div class="avatar">
                 <div>
                     <img [src]="conversation.contactAvatar" alt="avatar">
@@ -24,30 +30,44 @@
                     </span>
                 </div>
             </div>
+            <!-- avatar user contact-->
+
+            <!-- info conversation-->
             <div class="content">
+                <!-- usernamse and last message -->
                 <div class="name-and-last-mess">
                     <p class="name-conversation"
                         [ngClass]="addClassToContactName(conversation.status, conversation.lastMessageStatus, conversation.contactId)">
                         {{conversation.contactName}}</p>
+
                     <p class="message-last" [ngClass]="addClassToLastMess(conversation.status, conversation.lastMessageStatus)">
                         {{conversation.lastMessage}}
                     </p>
                 </div>
+                <!-- usernamse and last message -->
+
+                <!-- time and amount new message not seen -->
                 <div class="time-and-new-mess" [ngClass] = "{'status-seen': checkMessageStatus(conversation.lastMessageStatus)}">
                     <div class="time">
                         <p *ngIf="forMatTime(conversation.time) === 0">{{conversation.time | date: 'HH:MM'}}</p>
                         <p *ngIf="forMatTime(conversation.time) === 1">{{conversation.time | date: 'EEE'}}</p>
                         <p *ngIf="forMatTime(conversation.time) === 2">{{conversation.time | date: 'd MMM' }}</p>
                     </div>
+
                     <div class="new-message" *ngIf="!checkMessageStatus(conversation.lastMessageStatus)">
                         <span>
                             <p class="amount">{{conversation.amountNewMessage}}</p>
                         </span>
                     </div>
                 </div>
+                <!-- time and amount new message not seen -->
             </div>
+            <!-- info conversation-->
         </div>
     </div>
+    <!-- list conversation -->
+
+    <!-- tab menu -->
     <div class="tab-menu">
         <div class="option">
             <div class="tab-1">
@@ -58,4 +78,5 @@
             </div>
         </div>
     </div>
+    <!-- tab menu -->
 </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+
 import { Message } from 'src/app/model/message';
 import { User } from 'src/app/model/user';
 import { FileService } from 'src/app/service/file.service';
@@ -18,12 +19,14 @@ export class AboutComponent implements OnInit, OnChanges {
   showFile = true;
 
   @Input() userContact: User;
-  @Input() newMessageFile: Message;
-
+  @Input() newMessageFile: Message; //thêm tin nhắn dạng file
 
   constructor(private filesShared: FileService) {
   }
 
+  /**
+   * bắt sự kiện input thay đổi thì lấy dữ liệu file và image tương ứng
+   */
   ngOnChanges(): void {
     this.contactId = this.userContact.userId;
     this.getData();
@@ -48,18 +51,30 @@ export class AboutComponent implements OnInit, OnChanges {
     this.messageImage = this.getMessageImage();
   }
 
+  /**
+   * lọc message là file trong list message file
+   */
   getMessageFile() {
     return this.file.filter(mess => ((mess.type === 1)));
   }
 
+  /**
+   * lọc message là image trong list message file
+   */
   getMessageImage() {
     return this.file.filter(mess => ((mess.type === 2)));
   }
 
+  /**
+   * hiển thị danh sách image đã chia sẻ
+   */
   showAllImg() {
     this.showImg = !this.showImg;
   }
 
+  /**
+   * hiển thị danh sách file đã chia sẻ
+   */
   showAllFile() {
     this.showFile = !this.showFile;
   }
