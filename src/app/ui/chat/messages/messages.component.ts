@@ -142,20 +142,23 @@ export class MessagesComponent implements OnInit {
    * gửi message text bắt sự kiện nhấn enter
    * @param val 
    */
-  onEnter(val: any): void {
-    this.messageSend = val;
-    let newMess: Message = {
-      id: this.Messages.length + 1,
-      senderId: this.currentUserId,
-      receiverId: this.userContact.userId,
-      type: 0,
-      time: new Date(),
-      content: this.messageSend
-    };
+  onEnter(val: string): void {
+    if (val != '') {
+      this.messageSend = val;
+      let newMess: Message = {
+        id: this.Messages.length + 1,
+        senderId: this.currentUserId,
+        receiverId: this.userContact.userId,
+        type: 0,
+        time: new Date(),
+        content: this.messageSend
+      };
 
-    this.Messages.push(newMess);
+      this.Messages.push(newMess);
 
-    this.clear();
+      this.clear();
+    }
+    else alert('bạn phải nhập tin nhắn đã!');
   }
 
   /**

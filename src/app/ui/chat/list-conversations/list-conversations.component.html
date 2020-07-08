@@ -24,7 +24,7 @@
             <div class="avatar">
                 <div>
                     <img [src]="conversation.contactAvatar" alt="avatar">
-                    <span *ngIf="checkOnline(conversation.status)">
+                    <span *ngIf="conversation.status===1">
                         <img class="green-sphere" src="../../../assets/icons/IconAppChat/green_sphere.svg"
                             alt="avatar-conversation">
                     </span>
@@ -35,26 +35,36 @@
             <!-- info conversation-->
             <div class="content">
                 <!-- usernamse and last message -->
+                <!-- status: 0-offline, 1-online
+                    lastMessageStatus: 0-not seen, 1-seen -->
                 <div class="name-and-last-mess">
                     <p class="name-conversation"
-                        [ngClass]="addClassToContactName(conversation.status, conversation.lastMessageStatus, conversation.contactId)">
-                        {{conversation.contactName}}</p>
+                        [ngClass]="{
+                            'title-selected': conversation.contactId === onSelectConversationId, 
+                            'online-and-not-seen': conversation.status === 1 && conversation.lastMessageStatus === 0,
+                            'user-online': conversation.status === 1 && conversation.lastMessageStatus === 1}">
+                        {{conversation.contactName}}
+                    </p>
 
-                    <p class="message-last" [ngClass]="addClassToLastMess(conversation.status, conversation.lastMessageStatus)">
+                    <p class="message-last"
+                    [ngClass]="{
+                        'online-and-not-seen': conversation.status === 1 && conversation.lastMessageStatus === 0,
+                        'not-seen': conversation.lastMessageStatus === 1,
+                        'seen': conversation.lastMessageStatus === 1}">
                         {{conversation.lastMessage}}
                     </p>
                 </div>
                 <!-- usernamse and last message -->
 
                 <!-- time and amount new message not seen -->
-                <div class="time-and-new-mess" [ngClass] = "{'status-seen': checkMessageStatus(conversation.lastMessageStatus)}">
+                <div class="time-and-new-mess" [ngClass] = "{'status-seen': conversation.lastMessageStatus===1}">
                     <div class="time">
                         <p *ngIf="forMatTime(conversation.time) === 0">{{conversation.time | date: 'HH:MM'}}</p>
                         <p *ngIf="forMatTime(conversation.time) === 1">{{conversation.time | date: 'EEE'}}</p>
                         <p *ngIf="forMatTime(conversation.time) === 2">{{conversation.time | date: 'd MMM' }}</p>
                     </div>
 
-                    <div class="new-message" *ngIf="!checkMessageStatus(conversation.lastMessageStatus)">
+                    <div class="new-message" *ngIf="conversation.lastMessageStatus===0">
                         <span>
                             <p class="amount">{{conversation.amountNewMessage}}</p>
                         </span>

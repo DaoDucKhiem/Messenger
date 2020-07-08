@@ -85,31 +85,6 @@ export class ListConversationsComponent implements OnInit {
   }
 
   /**
-   * check status của last message
-   * @param statusMessage 
-   */
-  checkMessageStatus(statusMessage: number) {
-    return statusMessage === 1;
-  }
-
-  addClassToContactName(contactStatus: number, messageStatus: number, conversationSelected: number): string {
-    if (conversationSelected === this.onSelectConversationId)
-      return "title-selected";
-    else if (this.checkOnline(contactStatus) && !this.checkMessageStatus(messageStatus))
-      return "online-and-not-seen";
-    else if (this.checkOnline(contactStatus) && this.checkMessageStatus(messageStatus))
-      return "user-online";
-  }
-
-  addClassToLastMess(contactStatus: number, messageStatus: number): string {
-    if (this.checkOnline(contactStatus) && !this.checkMessageStatus(messageStatus))
-      return "online-and-not-seen";
-    else if (this.checkMessageStatus(messageStatus))
-      return "seen";
-    else return "not-seen";
-  }
-
-  /**
    * tính lượng thời gian chênh lệch so với hiện tại
    * @param data 
    */
@@ -120,7 +95,8 @@ export class ListConversationsComponent implements OnInit {
   }
 
   /**
-   * trả về loại định dạng thời gian để hiển thị
+   * trả về loại định dạng thời gian để hiển thị 
+   * 0:giờ chênh lệch, 1:ngày chênh lệch, 2: ngày 
    * @param data 
    */
   forMatTime(data: Date) {
