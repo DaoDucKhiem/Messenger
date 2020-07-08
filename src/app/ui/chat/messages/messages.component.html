@@ -123,7 +123,7 @@
 
                 <!-- input text message -->
                 <div class="send input-message">
-                    <input type="text" #box (keyup.enter)="onEnter(box.value)" placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên">
+                    <input type="text" #box (keyup.enter)="onEnter(box.value)" (keyup.alt.enter)="box.value = addNEwLine(box.value)" placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên">
                     
                     <!-- icon sticker -->
                     <img src="../../../assets/icons/IconAppChat/7.svg" alt="icon">

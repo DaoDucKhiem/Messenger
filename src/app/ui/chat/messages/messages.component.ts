@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { UserProfileService } from '../../../service/user-profile.service';
@@ -26,6 +26,7 @@ export class MessagesComponent implements OnInit {
   userStatus: string;
   messageFile: Message;
   userContactId: number;
+  imageId: string;
 
   showAb = true;
   modalImageSource = false;
@@ -234,12 +235,17 @@ export class MessagesComponent implements OnInit {
     read.readAsDataURL(file);
   }
 
+  onNewLine(val: string): string {
+    return val+'\n';
+  }
+
   /**
    * hiện modal
    * @param id 
    */
   showModal(id: string) {
     document.getElementById(id).style.display = 'flex';
+    this.imageId = id;
   }
 
   /**
@@ -248,6 +254,10 @@ export class MessagesComponent implements OnInit {
    */
   hideModal(id: string) {
     document.getElementById(id).style.display = 'none';
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    this.hideModal(this.imageId);
   }
 
 }

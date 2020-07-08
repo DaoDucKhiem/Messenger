@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 
 import { Message } from 'src/app/model/message';
 import { User } from 'src/app/model/user';
@@ -17,6 +17,7 @@ export class AboutComponent implements OnInit, OnChanges {
   messageFile: Message[];
   showImg = true;
   showFile = true;
+  imageId: string;
 
   @Input() userContact: User;
   @Input() newMessageFile: Message; //thêm tin nhắn dạng file
@@ -85,6 +86,7 @@ export class AboutComponent implements OnInit, OnChanges {
    */
   showModal(id: string) {
     document.getElementById(id).style.display = 'flex';
+    this.imageId = id;
   }
 
   /**
@@ -93,5 +95,9 @@ export class AboutComponent implements OnInit, OnChanges {
    */
   hideModal(id: string) {
     document.getElementById(id).style.display = 'none';
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    this.hideModal(this.imageId);
   }
 }
