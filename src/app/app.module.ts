@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './ui/core/core.module';
 import { ViewModule } from './ui/view/view.module';
+import { ShareModule } from './ui/share/share.module';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ViewModule } from './ui/view/view.module';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
+    ShareModule,
     CoreModule,
     ViewModule
   ],

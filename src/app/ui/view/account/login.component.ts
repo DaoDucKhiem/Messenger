@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
+import { AccountService } from 'src/app/service/account.service';
+import { AlertService } from 'src/app/service/alert.service';
 
-import { AccountService } from '../../../service/account.service';
-
-@Component({ templateUrl: 'login.component.html' })
+@Component({ templateUrl: './login.component.html', styleUrls: ['./login.component.scss'] })
 export class LoginComponent implements OnInit {
     form: FormGroup;
     loading = false;
@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
+        private alertService: AlertService
     ) { }
 
     ngOnInit() {
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit {
         });
 
         // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
     }
 
     // convenience getter for easy access to form fields
@@ -34,6 +35,9 @@ export class LoginComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
+
+        // reset alerts on submit
+        this.alertService.clear();
 
         // stop here if form is invalid
         if (this.form.invalid) {
@@ -48,6 +52,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
+                    this.alertService.error(error);
                     this.loading = false;
                 });
     }

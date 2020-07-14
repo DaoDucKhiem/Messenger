@@ -1,4 +1,4 @@
-import { UserAccount } from '../model/user-account';
+import { UserAccount } from './user-account';
 
 export const listUserAccount: UserAccount[] = [
     {
