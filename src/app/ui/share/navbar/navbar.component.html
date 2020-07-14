@@ -4,5 +4,8 @@
         <div><img src="../../../assets/icons/IconAppChat/18.svg" alt="message-icon"></div>
         <div><h3>Nhắn tin</h3></div>
     </div>
-    <div class="nav-right"><img src="../../../assets/images/Avatar/1.jpg" alt="message-icon"></div>
+    <div class="nav-right">
+        <img  class="avatar" *ngIf = "user.ImageUrl" src="user.ImageUrl" alt="message-icon">
+        <ngx-avatar class="avatar" name="user.fullName"></ngx-avatar>
+    </div>
 </div>

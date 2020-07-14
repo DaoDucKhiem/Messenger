@@ -8,6 +8,7 @@ import { CoreModule } from './ui/core/core.module';
 import { ViewModule } from './ui/view/view.module';
 import { ShareModule } from './ui/share/share.module';
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -18,7 +19,8 @@ import { ShareModule } from './ui/share/share.module';
     AppRoutingModule,
     ShareModule,
     CoreModule,
-    ViewModule
+    ViewModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -5,15 +5,15 @@ import { MessagesComponent } from './messages/messages.component';
 import { FormsModule } from '@angular/forms';
 import { HomeRoutingModule } from '../view/home/home-routing.module';
 import { AboutComponent } from './about/about.component';
-
-
+import { AvatarModule } from 'ngx-avatar';
 
 @NgModule({
   declarations: [ListConversationsComponent, MessagesComponent, AboutComponent],
   imports: [
     HomeRoutingModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    AvatarModule
   ],
   exports: [ListConversationsComponent, MessagesComponent]
 })

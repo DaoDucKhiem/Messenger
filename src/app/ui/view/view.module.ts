@@ -7,13 +7,15 @@ import { ShareModule } from '../share/share.module';
 import { ChatModule } from '../chat/chat.module';
 
 
+
+
 @NgModule({
   declarations: [HomeComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,
     ShareModule,
-    ChatModule
+    ChatModule,
   ]
 })
 export class ViewModule { }
