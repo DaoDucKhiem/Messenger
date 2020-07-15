@@ -27,6 +27,21 @@
 .avatar {
     width: 34px;
     height: 34px;
-    border-radius: 50%;
     margin-right: 23px;
+    cursor: pointer;
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+    ul {
+        padding: 0;
+        li {
+            cursor: pointer;
+            &:hover {
+                color: #ffffff;
+                background-color: #2688e6;
+            }
+        }
+    }
 }

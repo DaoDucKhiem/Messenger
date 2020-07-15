@@ -5,8 +5,8 @@ import { HttpClientModule }    from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './ui/core/core.module';
-import { ViewModule } from './ui/view/view.module';
 import { ShareModule } from './ui/share/share.module';
+import { HomeRoutingModule } from './ui/view/home/home-routing.module';
 
 
 @NgModule({
@@ -17,10 +17,9 @@ import { ShareModule } from './ui/share/share.module';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    ShareModule,
     CoreModule,
-    ViewModule,
-    
+    HomeRoutingModule,
+    ShareModule
   ],
   providers: [],
   bootstrap: [AppComponent]

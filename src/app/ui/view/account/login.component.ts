@@ -30,6 +30,11 @@ export class LoginComponent implements OnInit {
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
     }
 
+    // focus() {
+    //     var _focusForm = document.getElementsByClassName('form-control')[0];
+    //     _focusForm.focus();
+    // }
+
     // convenience getter for easy access to form fields
     get f() { return this.form.controls; }
 

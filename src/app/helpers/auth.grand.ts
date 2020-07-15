@@ -13,11 +13,11 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user = this.accountService.userValue;
         if (user) {
-            // authorised so return true
+            //nếu người dùng đã được xác thực
             return true;
         }
 
-        // not logged in so redirect to login page with the return url
+        // nếu người dùng chưa được xác thực thì trả về tuyến đăng nhập
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false;
     }

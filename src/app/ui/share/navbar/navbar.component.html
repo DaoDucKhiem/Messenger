@@ -2,10 +2,23 @@
     <div class="nav-left">
         <div><img src="../../../assets/icons/IconAppChat/20.svg" alt="more-app-icon"></div>
         <div><img src="../../../assets/icons/IconAppChat/18.svg" alt="message-icon"></div>
-        <div><h3>Nhắn tin</h3></div>
+        <div>
+            <h3>Nhắn tin</h3>
+        </div>
     </div>
     <div class="nav-right">
-        <img  class="avatar" *ngIf = "user.ImageUrl" src="user.ImageUrl" alt="message-icon">
-        <ngx-avatar class="avatar" name="user.fullName"></ngx-avatar>
+        <div class="avatar">
+            <div class="dropdown dropleft">
+                <div id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <img *ngIf="user.imageUrl" [src]="user.imageUrl" alt="message-icon">
+                    <ngx-avatar *ngIf="user.imageUrl === null" size="34" name="{{user.fullName}}"></ngx-avatar>
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li class="dropdown-item">Edit Profile</li>
+                    <li class="dropdown-item" (click)="logout()">Log Out</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
