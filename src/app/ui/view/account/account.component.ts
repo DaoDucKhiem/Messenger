@@ -13,8 +13,9 @@ export class AccountComponent {
     private router: Router,
     private accountService: AccountService
     ) {
+      //auto đăng nhập nếu người dùng đã đăng nhập
     if (this.accountService.userValue) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/home']);
     }
   }
 }
