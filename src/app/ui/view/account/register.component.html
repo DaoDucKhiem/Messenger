@@ -4,7 +4,8 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                <input type="text" formControlName="email" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                     <div *ngIf="f.email.errors.required">Email không được bỏ trống</div>
                     <div *ngIf="f.email.errors.pattern">Email không hợp lệ</div>
@@ -12,7 +13,8 @@
             </div>
             <div class="form-group">
                 <label for="fullname">Họ và Tên</label>
-                <input type="text" formControlName="fullname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fullname.errors }" />
+                <input type="text" formControlName="fullname" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.fullname.errors }" />
                 <div *ngIf="submitted && f.fullname.errors" class="invalid-feedback">
                     <div *ngIf="f.fullname.errors.required">Họ và Tên không được bỏ trống</div>
                     <div *ngIf="f.fullname.errors.pattern">Họ và Tên không hợp lệ</div>
@@ -20,7 +22,8 @@
             </div>
             <div class="form-group">
                 <label for="phone">Số điện thoại</label>
-                <input type="text" formControlName="phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
+                <input type="text" formControlName="phone" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
                 <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                     <div *ngIf="f.phone.errors.required">Số điện thoại không được bỏ trống</div>
                     <div *ngIf="f.phone.errors.pattern">Số điện thoại không hợp lệ</div>
@@ -28,18 +31,24 @@
             </div>
             <div class="form-group">
                 <label for="password">Mật khẩu</label>
-                <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                <show-hide-password size="md" btnStyle="info" [btnOutline]="false">
+                    <input type="password" formControlName="password" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.password.errors }" pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,15}$"/>
+                </show-hide-password>
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                     <div *ngIf="f.password.errors.required">Mật khẩu không được bỏ trống</div>
-                    <div *ngIf="f.password.errors.pattern">Mật khẩu phải chứa một chữ in hoa, 1 chữ số và 1 ký tự đặc biệt dài từ 8-15 ký tự</div>
+                    <div *ngIf="f.password.errors.pattern">Mật khẩu phải chứa ít nhất một chữ in hoa, một chữ thường, một số và một ký
+                        tự đặc biệt dài từ 8-15 ký tự</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="re_password">Nhắc lại mật khẩu</label>
-                <input type="password" formControlName="re_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.re_password.errors }" />
+                <input type="password" formControlName="re_password" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.re_password.errors }" />
                 <div *ngIf="submitted && f.re_password.errors" class="invalid-feedback">
                     <div *ngIf="f.re_password.errors.required">Nhắc lại mật khẩu không được bỏ trống</div>
-                    <div *ngIf="f.re_password.errors.confirmedValidator">Mật khẩu và Mật khẩu nhắc lại phải khớp nhau</div>
+                    <div *ngIf="f.re_password.errors.confirmedValidator">Mật khẩu và Mật khẩu nhắc lại phải khớp nhau
+                    </div>
                 </div>
             </div>
             <div class="form-group">

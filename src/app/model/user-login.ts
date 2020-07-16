@@ -1,7 +1,7 @@
 export class User {
     id: string;
-    email: string;
+    email?: string;
     fullName: string;
     imageUrl?: string;
-    token: string;
+    token?: string;
 }

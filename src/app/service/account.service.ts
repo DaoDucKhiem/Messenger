@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -39,22 +39,23 @@ export class AccountService {
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.router.navigate(['/login']);
+        
     }
 
     register(user: User) {
         return this.http.post(`${environment.apiUrl}/register`, user);
     }
 
-    getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users`);
+    getAll():Observable<User[]> {
+        return this.http.get<User[]>(`${environment.apiUrlUser}`);
     }
 
-    getById(id: string) {
-        return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+    getById(id: string){
+        return this.http.get<User>(`${environment.apiUrlUser}/${id}`);
     }
 
     update(id, params) {
-        return this.http.put(`${environment.apiUrl}/users/${id}`, params)
+        return this.http.put(`${environment.apiUrlUser}/${id}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id == this.userValue.id) {
@@ -70,7 +71,7 @@ export class AccountService {
     }
 
     delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/users/${id}`)
+        return this.http.delete(`${environment.apiUrl}/${id}`)
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
                 if (id == this.userValue.id) {

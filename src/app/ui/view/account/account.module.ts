@@ -6,6 +6,7 @@ import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from './account.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
+import { ShowHidePasswordModule } from 'ngx-show-hide-password';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { RegisterComponent } from './register.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    AccountRoutingModule
+    AccountRoutingModule,
+    ShowHidePasswordModule
   ]
 })
 export class AccountModule { }

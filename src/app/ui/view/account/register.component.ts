@@ -24,10 +24,10 @@ export class RegisterComponent implements OnInit {
     ngOnInit() {
         this.form = this.formBuilder.group({
             email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-            fullname: ['', [Validators.required, Validators.pattern("[a-zA-Z0-9]{2,}$")]],
+            fullname: ['', Validators.required],
             phone: ['', [Validators.required, Validators.pattern("((09|03|07|08|05)+([0-9]{8}))")]],
             imageurl: [''],
-            password: ['', [Validators.required, Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,15}$")]],
+            password: ['', Validators.required],
             re_password: ['', Validators.required]
         },
         { 

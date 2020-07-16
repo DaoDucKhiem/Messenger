@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Conversation } from '../../../model/conversation';
 import { ConversationService } from '../../../service/conversation.service';
 import { MessagedetailService } from 'src/app/service/messagedetail.service';
+import { AccountService } from 'src/app/service/account.service';
+import { User } from 'src/app/model/user-login';
 
 @Component({
   selector: 'app-list-conversations',
@@ -13,14 +15,15 @@ export class ListConversationsComponent implements OnInit {
 
   conversations: Conversation[];
   conversationsCopy: Conversation[];
-  contacts: Conversation[];
-  contactsCopy: Conversation[];
+  contacts: User[];
+  contactsCopy: User[];
   onSelectConversationId: number;
   findContact: boolean;
   placeHolderSearch: string;
 
-  constructor(private conversationService: ConversationService, private messagedetail: MessagedetailService) {
+  constructor(private conversationService: ConversationService, private accountService: AccountService, private messagedetail: MessagedetailService) {
     this.getConversationId();
+    this.getContactList();
     this.findContact = false;
   }
 
@@ -29,7 +32,6 @@ export class ListConversationsComponent implements OnInit {
     this.getPlaceHolder();
     // update message status
     this.updateLastMessageStatus();
-    
   }
 
   getPlaceHolder() {
@@ -47,7 +49,8 @@ export class ListConversationsComponent implements OnInit {
   }
 
   getContactList() {
-
+    this.accountService.getAll().subscribe(contacts => this.contacts = contacts);
+    this.contactsCopy = this.contacts;
   }
 
   /**
@@ -108,7 +111,6 @@ export class ListConversationsComponent implements OnInit {
     }
     else {
       this.contacts = this.contactsCopy.filter(function (tag) {
-        return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
       });
     }
   }
