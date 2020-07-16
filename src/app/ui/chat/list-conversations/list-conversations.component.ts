@@ -13,17 +13,27 @@ export class ListConversationsComponent implements OnInit {
 
   conversations: Conversation[];
   conversationsCopy: Conversation[];
+  contacts: Conversation[];
+  contactsCopy: Conversation[];
   onSelectConversationId: number;
+  findContact: boolean;
+  placeHolderSearch: string;
 
   constructor(private conversationService: ConversationService, private messagedetail: MessagedetailService) {
     this.getConversationId();
+    this.findContact = false;
   }
 
   ngOnInit(): void {
     this.getConversations();
-
+    this.getPlaceHolder();
     // update message status
     this.updateLastMessageStatus();
+    
+  }
+
+  getPlaceHolder() {
+    this.placeHolderSearch = this.findContact ? "Tìm kiếm danh bạ" : "Tìm kiếm cuộc trò chuyện";
   }
 
   /**
@@ -31,9 +41,13 @@ export class ListConversationsComponent implements OnInit {
    * cập nhật khi id thay đổi
    */
   getConversationId() {
-    this.messagedetail.conversationId.subscribe( (data: number)=> {
+    this.messagedetail.conversationId.subscribe((data: number) => {
       this.onSelectConversationId = +data;
     })
+  }
+
+  getContactList() {
+
   }
 
   /**
@@ -64,15 +78,39 @@ export class ListConversationsComponent implements OnInit {
   }
 
   /**
-   * tìm kiếm conversation
+   * nếu người dùng chọn lấy danh sách cuộc trò chuyện
+   */
+  selectedConversations() {
+    this.findContact = false;
+    this.getPlaceHolder();
+  }
+
+  /**
+   * nếu người dùng chọn lấy danh sách danh bạ
+   */
+  selectedContacts() {
+    this.findContact = true;
+    this.getPlaceHolder();
+  }
+
+  /**
+   * nếu ở cuộc trò chuyện => tìm kiếm conversation
+   * không thì sẽ tìm kiếm contact trong danh bạ
    */
   searchTerm: any;
 
   search(): void {
     let term = this.searchTerm;
-    this.conversations = this.conversationsCopy.filter(function (tag) {
-      return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
-    });
+    if (!this.findContact) {
+      this.conversations = this.conversationsCopy.filter(function (tag) {
+        return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+      });
+    }
+    else {
+      this.contacts = this.contactsCopy.filter(function (tag) {
+        return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+      });
+    }
   }
 
   /**

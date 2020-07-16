@@ -12,7 +12,7 @@
                 <div id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <img *ngIf="user.imageUrl" [src]="user.imageUrl" alt="message-icon">
-                    <ngx-avatar *ngIf="user.imageUrl === null" size="34" name="{{user.fullName}}"></ngx-avatar>
+                    <ngx-avatar *ngIf="user.imageUrl == ''" size="34" name="{{user.fullName}}"></ngx-avatar>
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li class="dropdown-item">Edit Profile</li>

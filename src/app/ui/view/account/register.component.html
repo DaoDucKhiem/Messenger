@@ -1,42 +1,53 @@
 <div class="card">
-    <h4 class="card-header">Register</h4>
+    <h4 class="card-header">Đăng ký</h4>
     <div class="card-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                    <div *ngIf="f.email.errors.required">Email is required</div>
+                    <div *ngIf="f.email.errors.required">Email không được bỏ trống</div>
+                    <div *ngIf="f.email.errors.pattern">Email không hợp lệ</div>
                 </div>
             </div>
             <div class="form-group">
-                <label for="fullname">Full Name</label>
+                <label for="fullname">Họ và Tên</label>
                 <input type="text" formControlName="fullname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fullname.errors }" />
                 <div *ngIf="submitted && f.fullname.errors" class="invalid-feedback">
-                    <div *ngIf="f.fullname.errors.required">Full Name is required</div>
+                    <div *ngIf="f.fullname.errors.required">Họ và Tên không được bỏ trống</div>
+                    <div *ngIf="f.fullname.errors.pattern">Họ và Tên không hợp lệ</div>
                 </div>
             </div>
             <div class="form-group">
-                <label for="phone">Phone</label>
+                <label for="phone">Số điện thoại</label>
                 <input type="text" formControlName="phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
                 <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
-                    <div *ngIf="f.phone.errors.required">Phone is required</div>
+                    <div *ngIf="f.phone.errors.required">Số điện thoại không được bỏ trống</div>
+                    <div *ngIf="f.phone.errors.pattern">Số điện thoại không hợp lệ</div>
                 </div>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Mật khẩu</label>
                 <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">Password is required</div>
-                    <div *ngIf="f.password.errors.minlength">Password must be at least 8 characters</div>
+                    <div *ngIf="f.password.errors.required">Mật khẩu không được bỏ trống</div>
+                    <div *ngIf="f.password.errors.pattern">Mật khẩu phải chứa một chữ in hoa, 1 chữ số và 1 ký tự đặc biệt dài từ 8-15 ký tự</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="re_password">Nhắc lại mật khẩu</label>
+                <input type="password" formControlName="re_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.re_password.errors }" />
+                <div *ngIf="submitted && f.re_password.errors" class="invalid-feedback">
+                    <div *ngIf="f.re_password.errors.required">Nhắc lại mật khẩu không được bỏ trống</div>
+                    <div *ngIf="f.re_password.errors.confirmedValidator">Mật khẩu và Mật khẩu nhắc lại phải khớp nhau</div>
                 </div>
             </div>
             <div class="form-group">
                 <button [disabled]="loading" class="btn btn-primary">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                    Register
+                    Đăng Ký
                 </button>
-                <a routerLink="../login" class="btn btn-link">Cancel</a>
+                <a routerLink="../login" class="btn btn-link">Hủy</a>
             </div>
         </form>
     </div>

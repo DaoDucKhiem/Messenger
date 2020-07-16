@@ -12,12 +12,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.stringeeService.connect();
-    this.stringeeService.stringeeClient.on('connect', function () {
-      console.log('++++++++++++++ connected to StringeeServer');
-    });
-    this.stringeeService.stringeeClient.on('authen', function (res: any) {
-      console.log('authen', res);
-    });
   }
 
 }
