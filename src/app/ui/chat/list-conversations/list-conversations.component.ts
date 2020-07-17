@@ -5,6 +5,7 @@ import { ConversationService } from '../../../service/conversation.service';
 import { MessagedetailService } from 'src/app/service/messagedetail.service';
 import { AccountService } from 'src/app/service/account.service';
 import { User } from 'src/app/model/user-login';
+import { StringeeService } from 'src/app/service/stringee.service';
 
 @Component({
   selector: 'app-list-conversations',
@@ -13,25 +14,30 @@ import { User } from 'src/app/model/user-login';
 })
 export class ListConversationsComponent implements OnInit {
 
-  conversations: Conversation[];
-  conversationsCopy: Conversation[];
+  conversations: any;
+  conversationsCopy: any;
   contacts: User[];
   contactsCopy: User[];
   onSelectConversationId: number;
   findContact: boolean;
   placeHolderSearch: string;
 
-  constructor(private conversationService: ConversationService, private accountService: AccountService, private messagedetail: MessagedetailService) {
+  constructor(
+    private conversationService: ConversationService,
+    private accountService: AccountService,
+    private messagedetail: MessagedetailService,
+    private stringeeService: StringeeService
+  ) {
     this.getConversationId();
-    this.getContactList();
     this.findContact = false;
   }
 
   ngOnInit(): void {
     this.getConversations();
     this.getPlaceHolder();
+
     // update message status
-    this.updateLastMessageStatus();
+    // this.updateLastMessageStatus();
   }
 
   getPlaceHolder() {
@@ -49,8 +55,7 @@ export class ListConversationsComponent implements OnInit {
   }
 
   getContactList() {
-    this.accountService.getAll().subscribe(contacts => this.contacts = contacts);
-    this.contactsCopy = this.contacts;
+    this.accountService.getAll().subscribe(contacts => { this.contacts = contacts; this.contactsCopy = contacts; })
   }
 
   /**
@@ -72,15 +77,6 @@ export class ListConversationsComponent implements OnInit {
   }
 
   /**
-   * lấy danh sách các conversation từ service
-   */
-  getConversations(): void {
-    this.conversationService.getConversations()
-      .subscribe(conversations => this.conversations = conversations);
-    this.conversationsCopy = this.conversations;
-  }
-
-  /**
    * nếu người dùng chọn lấy danh sách cuộc trò chuyện
    */
   selectedConversations() {
@@ -94,6 +90,7 @@ export class ListConversationsComponent implements OnInit {
   selectedContacts() {
     this.findContact = true;
     this.getPlaceHolder();
+    this.getContactList();
   }
 
   /**
@@ -150,5 +147,20 @@ export class ListConversationsComponent implements OnInit {
     else {
       return 2;
     }
+  }
+
+  createConversation(id: string, name: string) {
+    this.stringeeService.createConversation(id, name);
+  }
+
+  /**
+   * lấy conversation trên service stringee
+   */
+  getConversations() {
+    this.stringeeService.getConversation( (status: string, code: string, message: string, convs: any) => {
+      this.conversations = convs;
+      console.log(convs)
+      this.conversationsCopy = this.conversations;
+    });
   }
 }

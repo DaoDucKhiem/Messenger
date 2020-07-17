@@ -6,19 +6,22 @@ import { first } from 'rxjs/operators';
 import { AccountService } from '../../../service/account.service';
 import { AlertService } from 'src/app/service/alert.service';
 import { ConfirmedValidator } from 'src/app/helpers/confirmed.validator';
+import { StringeeService } from 'src/app/service/stringee.service';
 
 @Component({ templateUrl: './register.component.html', styleUrls: ['./register.component.scss'] })
 export class RegisterComponent implements OnInit {
     form: FormGroup;
     loading = false;
     submitted = false;
+    token: string;
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private stringeeService: StringeeService
     ) { }
 
     ngOnInit() {
@@ -55,6 +58,8 @@ export class RegisterComponent implements OnInit {
             .subscribe(
                 data => {
                     this.alertService.success('Registration successful', { keepAfterRouteChange: true });
+                    //update profile của người dùng trên server stringee
+                    this.stringeeService.connectStringeeToUpdate(data['token']);
                     this.router.navigate(['../login'], { relativeTo: this.route });
                 },
                 error => {

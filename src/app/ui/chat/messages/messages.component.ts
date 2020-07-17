@@ -5,6 +5,7 @@ import { UserProfileService } from '../../../service/user-profile.service';
 import { User } from '../../../model/user';
 import { MessagedetailService } from '../../../service/messagedetail.service';
 import { Message } from '../../../model/message';
+import { StringeeService } from 'src/app/service/stringee.service';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -31,7 +32,7 @@ export class MessagesComponent implements OnInit {
   showAb = true;
   modalImageSource = false;
 
-  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService) {
+  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private stringeeService: StringeeService) {
     this.onCreate();
   }
 
@@ -143,19 +144,19 @@ export class MessagesComponent implements OnInit {
    * gửi message text bắt sự kiện nhấn enter
    * @param val 
    */
-  onEnter(val: string): void {
+  onEnter(val: string): void { 
     if (val != '') {
-      this.messageSend = val;
-      let newMess: Message = {
-        id: this.Messages.length + 1,
-        senderId: this.currentUserId,
-        receiverId: this.userContact.userId,
-        type: 0,
-        time: new Date(),
-        content: this.messageSend
+      var txtMsg = {
+        type: 1,
+        convId: localStorage.getItem('ConvId'),
+        message: {
+          content: val,
+        }
       };
-
-      this.Messages.push(newMess);
+  
+      this.stringeeService.stringeeChat.sendMessage(txtMsg, function (status, code, message, msg) {
+        console.log(status + code + message + "msg result " + JSON.stringify(msg));
+      });
 
       this.clear();
     }

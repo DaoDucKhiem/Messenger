@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -39,14 +39,13 @@ export class AccountService {
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.router.navigate(['/login']);
-        
     }
 
     register(user: User) {
-        return this.http.post(`${environment.apiUrl}/register`, user);
+        return this.http.post<string>(`${environment.apiUrl}/register`, user);
     }
 
-    getAll():Observable<User[]> {
+    getAll():Observable<User[]> {    
         return this.http.get<User[]>(`${environment.apiUrlUser}`);
     }
 
