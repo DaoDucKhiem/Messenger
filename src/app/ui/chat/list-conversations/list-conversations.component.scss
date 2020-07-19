@@ -1,6 +1,7 @@
 .list-conversation-container {
     position: relative;
     height: 100%;
+    width: 310px;
 }
 
 //=============== tab menu ============->
@@ -26,9 +27,12 @@
     background-color: rgba(255, 255, 255, .2);
     border-radius: 4px;
     overflow: hidden;
+    a {
+        display: block;
+    }
 }
 
-.tab-1, .tab-2 {
+.tab-1 {
     width: 50%;
     display: flex;
     align-items: center;
@@ -93,91 +97,107 @@
 
 //========= list conversation =======->
 
-.list-conversation {
+.list-sidebar {
     height: calc(100% - 123px);
     overflow: auto;
+    &::-webkit-scrollbar {
+        width: 8px;
+        background: #a9bede;
+    };
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+    };
+    .conversation {
+        margin: 7px 0;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+            background-color: #2f3f58;
+        }
+        &:focus {
+            outline: 0;
+        }
+    }
 }
-
-.list-conversation::-webkit-scrollbar {
-    width: 8px;
-    background: #a9bede;
-}
-
-.list-conversation::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.conversation {
-    margin: 7px 0;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.conversation:hover {
-    background-color: #2f3f58;
-}
-
-.conversation:focus {
-    outline: 0;
-}
-
 .space {
-    flex: 0.08;
-    height: 99%;
+    display: inline-block;
+    height: 100%;
+    width: 5px;
 }
+
+.style-conversation {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    .conversation-content {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        .content {
+            flex: 5;
+            display: flex;
+        }
+    }
+}
+
+.avatar {
+    flex: 1;
+    margin-right: 10px;;
+    div {
+        position: relative;
+        margin-left: 18px;
+
+        > img{
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+        }
+        
+        > span {
+            position: absolute;
+            left: 17px;
+            bottom: 1px;
+        }
+    }
+}
+
 
 p {
     margin: 0;
     padding: 1.5px;
 }
 
-.avatar {
-    flex: 1;
-    margin-right: 10px;;
-}
-
-.content {
-    flex: 5;
-    display: flex;
-}
-
 @media only screen and (max-width: 1240px) {
-    .content, .space, .search, .tab-menu {
+    .list-conversation-container {
+        width: auto;
+    }
+
+    .search, .tab-menu {
       display: none;
     }
 
-    .list-conversation {
+    .space {
+        display: inline-block;
         height: 100%;
+        width: 5px;
+    }
+
+    .list-sidebar {
+        height: 100%;
+        .content {
+            display: none !important;
+        }
     }
 
     .avatar {
         align-items: center;
         padding: 10px;
+        div {
+            margin-left: 0 !important;
+        }
     }
-
-    .avatar div {
-        margin: 0 !important;
-        padding: 0;
-    }
-}
-
-.avatar div {
-    position: relative;
-    margin-left: 18px;
-}
-
-.avatar div > img{
-    height: 28px;
-    width: 28px;
-    border-radius: 50%;
-}
-
-.avatar div > span {
-    position: absolute;
-    left: 17px;
-    bottom: 1px;
 }
 
 .green-sphere {

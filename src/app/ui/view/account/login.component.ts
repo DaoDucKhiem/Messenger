@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
+
+import { ToastrService } from 'ngx-toastr';
+
 import { AccountService } from 'src/app/service/account.service';
-import { AlertService } from 'src/app/service/alert.service';
+import { StringeeService } from 'src/app/service/stringee.service';
 
 @Component({ templateUrl: './login.component.html', styleUrls: ['./login.component.scss'] })
 export class LoginComponent implements OnInit {
@@ -16,8 +19,9 @@ export class LoginComponent implements OnInit {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
+        private toastr: ToastrService,
         private accountService: AccountService,
-        private alertService: AlertService
+        private stringeeService: StringeeService
     ) { }
 
     ngOnInit() {
@@ -41,9 +45,6 @@ export class LoginComponent implements OnInit {
     onSubmit() {
         this.submitted = true;
 
-        // reset alerts on submit
-        this.alertService.clear();
-
         // stop here if form is invalid
         if (this.form.invalid) {
             return;
@@ -57,8 +58,12 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    this.alertService.error(error.error.message);
+                    this.showError(error.error.message);
                     this.loading = false;
                 });
+    }
+
+    showError(error: string) {
+        this.toastr.error(error);
     }
 }

@@ -11,6 +11,6 @@ export class HomeComponent implements OnInit {
   constructor(private stringeeService: StringeeService) { }
 
   ngOnInit(): void {
-    this.stringeeService.connect();
+    this.stringeeService.connectStringee();
   }
 }

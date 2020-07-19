@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { StringeeClient, StringeeChat } from "stringee-chat-js-sdk";
 
+import { ToastrService } from 'ngx-toastr';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,29 +11,44 @@ export class StringeeService {
   // global
   stringeeClient = new StringeeClient();
   user: any;
+  selectedConvId: string;
 
   // global
   stringeeChat: StringeeChat;
 
-  constructor() {
+  constructor(private toastr: ToastrService,) {
     this.user = JSON.parse(localStorage.getItem('user'));
     this.stringeeChat = new StringeeChat(this.stringeeClient);
+    // this.lastConvId = this.getConversations(1)[0].ConvId;
+    // console.log(this.lastConvId);
   }
 
-  connect() {
+  connectStringee() {
     //connect đến server stringee
     this.stringeeClient.connect(this.user.token);
 
-    this.connectListenner();
+    let _convId = this.connectListenner();
 
-    this.authenListenner();
-    this.disconnectListenner();
+    return _convId;
+  }
+
+  showError(error: string) {
+    this.toastr.error(error);
+  }
+
+  showSuccess(success: string) {
+    this.toastr.success(success);
   }
 
   connectListenner() {
-    this.stringeeClient.on('connect', function () {
-      console.log('++++++++++++++ connected to StringeeServer');
+    this.stringeeClient.on('connect', () => {
+      this.getConversations(1, ()=>{
+        //làm gì đó ở đây
+      });
     });
+
+    this.authenListenner();
+    this.disconnectListenner();
   }
 
   authenListenner() {
@@ -53,7 +70,7 @@ export class StringeeService {
       this.updateUserInfo(this.getCurrentIdFromAccessToken(token), token);
     });
     this.authenListenner();
-    
+
     this.disconnectListenner();
   }
 
@@ -67,20 +84,24 @@ export class StringeeService {
 
     this.stringeeChat.createConversation([id], options, (status: string, code: string, message: string, conv: any) => {
       localStorage.setItem('ConvId', conv.id);
-
+      this.showSuccess("Tạo cuộc trò chuyện thành công");
     });
   }
 
-  //lấy danh sách các cuộc trò chuyện
-  getConversation(callback: any) {
-    var count = 15;
+  /**
+   * lấy danh sách các cuộc trò chuyện
+   * @param amount số lượng cuộc trò chuyện cần lấy
+   * @param callback làm gì đó sau khi lấy xong.
+   */
+  getConversations(amount: any, callback?: any) {
+    var count = amount;
     var isAscending = false;
     this.stringeeChat.getLastConversations(count, isAscending, callback);
   }
 
   //cập nhật thông tin user trên stringee
   updateUserInfo(id: string, token: string) {
-    this.stringeeChat.getUsersInfo([id], (status, code, msg, users) => {
+    this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
       let _user = users[0];
       if (!_user) {
         let username = this.getCurrentUsernameFromAccessToken(token);
@@ -91,8 +112,9 @@ export class StringeeService {
           avatar_url: avatar,
           email: email,
         }
-        this.stringeeChat.updateUserInfo(updateUserData, function (res: any) {
-          console.log(res)
+        console.log(updateUserData);
+        this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
+          this.showSuccess("Cập nhật thông tin thành công!");
         });
       }
     })

@@ -3,8 +3,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
+import { ToastrService } from 'ngx-toastr';
+
 import { AccountService } from '../../../service/account.service';
-import { AlertService } from 'src/app/service/alert.service';
 import { ConfirmedValidator } from 'src/app/helpers/confirmed.validator';
 import { StringeeService } from 'src/app/service/stringee.service';
 
@@ -19,8 +20,8 @@ export class RegisterComponent implements OnInit {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
+        private toastr: ToastrService,
         private accountService: AccountService,
-        private alertService: AlertService,
         private stringeeService: StringeeService
     ) { }
 
@@ -44,9 +45,6 @@ export class RegisterComponent implements OnInit {
     onSubmit() {
         this.submitted = true;
 
-         // reset alerts on submit
-         this.alertService.clear();
-
         // stop here if form is invalid
         if (this.form.invalid) {
             return;
@@ -57,14 +55,22 @@ export class RegisterComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
-                    this.alertService.success('Registration successful', { keepAfterRouteChange: true });
                     //update profile của người dùng trên server stringee
                     this.stringeeService.connectStringeeToUpdate(data['token']);
+                    this.showSuccess("Đăng ký thành công!");
                     this.router.navigate(['../login'], { relativeTo: this.route });
                 },
                 error => {
-                    this.alertService.error(error.error.message);
+                    this.showError(error.error.message);
                     this.loading = false;
                 });
+    }
+
+    showError(error: string) {
+        this.toastr.error(error);
+    }
+
+    showSuccess(success: string) {
+        this.toastr.success(success);
     }
 }

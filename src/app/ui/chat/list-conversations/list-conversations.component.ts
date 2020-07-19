@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Conversation } from '../../../model/conversation';
-import { ConversationService } from '../../../service/conversation.service';
-import { MessagedetailService } from 'src/app/service/messagedetail.service';
 import { AccountService } from 'src/app/service/account.service';
 import { User } from 'src/app/model/user-login';
 import { StringeeService } from 'src/app/service/stringee.service';
@@ -15,31 +12,32 @@ import { StringeeService } from 'src/app/service/stringee.service';
 export class ListConversationsComponent implements OnInit {
 
   conversations: any;
-  conversationsCopy: any;
   contacts: User[];
-  contactsCopy: User[];
-  onSelectConversationId: number;
+
   findContact: boolean;
   placeHolderSearch: string;
 
+  currentConvId: string;
+  currentUserId: string;
+
   constructor(
-    private conversationService: ConversationService,
     private accountService: AccountService,
-    private messagedetail: MessagedetailService,
     private stringeeService: StringeeService
   ) {
-    this.getConversationId();
-    this.findContact = false;
+    this.findContact = false; //ban đầu sẽ hiển thị danh sách các cuộc hội thoại
+    this.currentUserId = this.accountService.userValue.id; //id của người đã đăng nhập lấy từ account Service
   }
 
   ngOnInit(): void {
-    this.getConversations();
     this.getPlaceHolder();
 
     // update message status
     // this.updateLastMessageStatus();
   }
 
+  /**
+   * chuyển đổi placeholder trên thanh tìm kiếm cho đúng mục đích
+   */
   getPlaceHolder() {
     this.placeHolderSearch = this.findContact ? "Tìm kiếm danh bạ" : "Tìm kiếm cuộc trò chuyện";
   }
@@ -49,31 +47,33 @@ export class ListConversationsComponent implements OnInit {
    * cập nhật khi id thay đổi
    */
   getConversationId() {
-    this.messagedetail.conversationId.subscribe((data: number) => {
-      this.onSelectConversationId = +data;
-    })
+    // this.messagedetail.conversationId.subscribe((data: number) => {
+    //    this.onSelectConversationId = +data;
+    // })
   }
 
+  /**
+   * lấy danh sách user trên server
+   */
   getContactList() {
-    this.accountService.getAll().subscribe(contacts => { this.contacts = contacts; this.contactsCopy = contacts; })
+    this.accountService.getAll().subscribe(contacts => { this.contacts = contacts; })
   }
 
   /**
    * update last message status lhi load vào lần đầu
    */
-  updateLastMessageStatus() {
-    const found = this.conversations.find(item => item.contactId == this.onSelectConversationId);
-    let index = this.conversations.indexOf(found);
-    this.conversations[index].lastMessageStatus = 1;
-  }
+  // updateLastMessageStatus() {
+  //   const found = this.conversations.find(item => item.contactId == this.onSelectConversationId);
+  //   let index = this.conversations.indexOf(found);
+  //   this.conversations[index].lastMessageStatus = 1;
+  // }
 
   /**
    * update last message của conversation khi click
    * @param conversation 
    */
-  onSelect(conversation: Conversation): void {
-    let index = this.conversations.indexOf(conversation);
-    this.conversations[index].lastMessageStatus = 1;
+  onSelect(conversationId: string): void {
+    this.currentConvId = conversationId;
   }
 
   /**
@@ -102,13 +102,12 @@ export class ListConversationsComponent implements OnInit {
   search(): void {
     let term = this.searchTerm;
     if (!this.findContact) {
-      this.conversations = this.conversationsCopy.filter(function (tag) {
-        return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
-      });
+      // this.conversations = this.conversationsCopy.filter(function (tag) {
+      //   return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+      // });
     }
     else {
-      this.contacts = this.contactsCopy.filter(function (tag) {
-      });
+      //tìm kiếm người trò chuyện
     }
   }
 
@@ -122,33 +121,10 @@ export class ListConversationsComponent implements OnInit {
   }
 
   /**
-   * tính lượng thời gian chênh lệch so với hiện tại
-   * @param data 
+   * hàm tạo cuộc trò chuyện stringee
+   * @param id id của contact đã chọn
+   * @param name tên của contact đã chọn hoặc bất kỳ
    */
-  calculateDiff(data: Date) {
-    let currentDate = new Date();
-    data = new Date(data);
-    return Math.floor((Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) - Date.UTC(data.getFullYear(), data.getMonth(), data.getDate())) / (1000 * 60 * 60 * 24));
-  }
-
-  /**
-   * trả về loại định dạng thời gian để hiển thị 
-   * 0:giờ chênh lệch, 1:ngày chênh lệch, 2: ngày 
-   * @param data 
-   */
-  forMatTime(data: Date) {
-    let diff = this.calculateDiff(data);
-    if (diff <= 1) {
-      return 0;
-    }
-    else if (diff > 1 && diff < 8) {
-      return 1;
-    }
-    else {
-      return 2;
-    }
-  }
-
   createConversation(id: string, name: string) {
     this.stringeeService.createConversation(id, name);
   }
@@ -157,10 +133,37 @@ export class ListConversationsComponent implements OnInit {
    * lấy conversation trên service stringee
    */
   getConversations() {
-    this.stringeeService.getConversation( (status: string, code: string, message: string, convs: any) => {
+    this.stringeeService.getConversations(15, (status: string, code: string, message: string, convs: any) => {
       this.conversations = convs;
-      console.log(convs)
-      this.conversationsCopy = this.conversations;
+      console.log(convs);
     });
+  }
+
+   /**
+   * trả về loại định dạng thời gian để hiển thị 
+   * 0:giờ chênh lệch, 1:ngày chênh lệch, 2: ngày 
+   * @param data thời gian tạo tin nhắn
+   */
+  forMatTime(data: number) {
+    let diff = this.calculateDiff(data);
+    if (diff < 1) {
+      return 0;
+    }
+    else if (diff >= 1 && diff < 8) {
+      return 1;
+    }
+    else {
+      return 2;
+    }
+  }
+
+  /**
+   * hàm tính toán chênh lệch 2 khoảng thời gian theo ngày
+   * @param data thời gian tạo tin nhắn đơn vị là milisecond
+   */
+  calculateDiff(data: number) {
+    let currentDate = new Date();
+    let timeSent = new Date(data);
+    return Math.floor((Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) - Date.UTC(timeSent.getFullYear(), timeSent.getMonth(), timeSent.getDate())) / (1000 * 60 * 60 * 24));
   }
 }

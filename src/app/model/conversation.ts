@@ -1,5 +1,5 @@
 export interface Conversation {
-    contactId: number;
+    contactId: string;
     contactAvatar: string;
     contactName: string;
     status: number;
