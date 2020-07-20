@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 
 import { Message } from 'src/app/model/message';
-import { User } from 'src/app/model/user';
 import { FileService } from 'src/app/service/file.service';
+import { User } from 'src/app/model/user-login';
 
 @Component({
   selector: 'app-about',
@@ -29,7 +29,7 @@ export class AboutComponent implements OnInit, OnChanges {
    * bắt sự kiện input thay đổi thì lấy dữ liệu file và image tương ứng
    */
   ngOnChanges(): void {
-    this.contactId = this.userContact.userId;
+    this.contactId = 1;
     this.getData();
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { StringeeClient, StringeeChat } from "stringee-chat-js-sdk";
 
 import { ToastrService } from 'ngx-toastr';
@@ -17,15 +17,18 @@ export class StringeeService {
   stringeeChat: StringeeChat;
 
   constructor(private toastr: ToastrService,) {
-    this.user = JSON.parse(localStorage.getItem('user'));
     this.stringeeChat = new StringeeChat(this.stringeeClient);
     // this.lastConvId = this.getConversations(1)[0].ConvId;
     // console.log(this.lastConvId);
   }
 
   connectStringee() {
+    let token = JSON.parse(localStorage.getItem('user')).token;
     //connect đến server stringee
-    this.stringeeClient.connect(this.user.token);
+    this.stringeeClient.connect(token);
+
+    this.authenListenner();
+    this.disconnectListenner();
   }
 
   disconnectStringee() {
@@ -42,7 +45,6 @@ export class StringeeService {
 
   connectListenner() {
     this.stringeeClient.on('connect', () => {
-      
     });
 
     this.authenListenner();
@@ -119,7 +121,10 @@ export class StringeeService {
         }
         console.log(updateUserData);
         this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
-          this.showSuccess("Cập nhật thông tin thành công!");
+          if (res.message == 'Success') {
+            this.showSuccess("Cập nhật thông tin thành công!");
+          }
+          else this.showError("Cập nhật thông tin thất bại!");
           this.disconnectStringee();
         });
       }
@@ -159,5 +164,17 @@ export class StringeeService {
     }).join(''));
 
     return JSON.parse(jsonPayload);
+  }
+
+  //truyền id cho bên list khi route thay đổi
+  @Output() conversationId = new EventEmitter<string>();
+  changeConversation(id: string) {
+    this.conversationId.emit(id);
+  }
+
+  //truyền contactId cho bên message khi route thay đổi
+  @Output() contactId = new EventEmitter<string>();
+  changeSelectConversation(id: string) {
+    this.contactId.emit(id);
   }
 }

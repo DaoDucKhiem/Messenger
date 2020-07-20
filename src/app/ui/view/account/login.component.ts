@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private toastr: ToastrService,
         private accountService: AccountService,
-        private stringeeService: StringeeService
-    ) { }
+    ) {
+     }
 
     ngOnInit() {
         this.form = this.formBuilder.group({

@@ -7,12 +7,13 @@
         <div class="head-left">
 
             <div class="avatar">
-                <img [src]="userContact.userAvatar" alt="avatar">
+                <img *ngIf = "(currentUserContact.imageUrl != '') || currentUserContact.imageUrl" [src]="currentUserContact.imageUrl" alt="avatar">
+                <ngx-avatar *ngIf = "currentUserContact.imageUrl == ''" [name]="currentUserContact.fullName" size="32"></ngx-avatar>
             </div>
 
             <div class="info">
-                <p class="username">{{userContact.userName}}</p>
-                <p class="active">{{userStatus}}</p>
+                <p class="username">{{currentUserContact.fullName}}</p>
+                <p class="active">hoạt động 12 phút trước</p>
             </div>
         </div>
          <!-- user contact avatar, name and status -->
@@ -42,7 +43,7 @@
                     <div class="bubbleWrapper" *ngIf="mess.receiverId === currentUserId">
                         <div class="inlineContainer">
                              <!-- display avatar user contact -->
-                            <img class="inlineIcon" [src]="userContact.userAvatar">
+                            <img class="inlineIcon" [src]="currentUserContact.imageUrl">
 
                             <!-- display content message of user contact -->
                             <div class="otherBubble other" [ngClass]="{'message-image' : mess.type === 2}">
@@ -134,7 +135,7 @@
         </div>
 
         <!-- about infor user contact -->
-        <app-about class="about-container" [userContact]='userContact' [newMessageFile] = 'messageFile' *ngIf="showAb"></app-about>
+        <app-about class="about-container" [userContact]='currentUserContact' [newMessageFile] = 'messageFile' *ngIf="showAb"></app-about>
         <!-- about infor user contact -->
 
     </div>

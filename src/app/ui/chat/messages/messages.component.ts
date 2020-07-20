@@ -2,10 +2,12 @@ import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, Host
 import { ActivatedRoute } from '@angular/router';
 
 import { UserProfileService } from '../../../service/user-profile.service';
-import { User } from '../../../model/user';
+
 import { MessagedetailService } from '../../../service/messagedetail.service';
 import { Message } from '../../../model/message';
 import { StringeeService } from 'src/app/service/stringee.service';
+import { AccountService } from 'src/app/service/account.service';
+import { User } from 'src/app/model/user-login';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -21,7 +23,7 @@ class ImageSnippet {
 
 export class MessagesComponent implements OnInit {
   userContact: User;
-  Messages: Message[];
+  Messages: [];
   currentUserId = 10;
   messageSend: any;
   userStatus: string;
@@ -29,35 +31,36 @@ export class MessagesComponent implements OnInit {
   userContactId: number;
   imageId: string;
 
+  currentConversation: any;
+  currentConvId: string;
+  currentUser: User;
+  currentContactId: string;
+  currentUserContact: User;
+
   showAb = true;
   modalImageSource = false;
 
-  constructor(private route: ActivatedRoute, private userService: UserProfileService, private messagedetail: MessagedetailService, private stringeeService: StringeeService) {
-    this.onCreate();
-  }
-
-  /**
-   * khởi tạo dữ liệu id user contact khi bắt đầu điều hướng tới component này
-   * id lấy trên route
-   */
-  onCreate() {
-    this.getConversation();
-    this.messagedetail.changeConversation(this.userContactId);
-    this.contactStatus();
+  constructor(private route: ActivatedRoute,
+    private userService: UserProfileService,
+    private messagedetail: MessagedetailService,
+    private stringeeService: StringeeService,
+    private accountService: AccountService
+  ) {
+    this.currentUser = JSON.parse(localStorage.getItem('user'));
   }
 
   ngOnInit(): void {
-    this.onRouteChange();
-  }
-
-  /**
-   * nghe sự thay đổi id trên route để lấy dữ liệu tương ứng
-   */
-  onRouteChange(): void {
     this.route.params.subscribe(val => {
-      this.messagedetail.changeConversation(val['id']); // gửi id contact (id conversation)
-      this.getConversation();
-      this.contactStatus();
+
+      this.currentConvId = val['id'];
+      this.stringeeService.changeConversation(val['id']); // gửi id contact (id conversation)
+
+      //lấy currentContactId từ bên list truyền sang
+      this.getContactUser();
+
+      this.getMessages(); //lấy messages
+
+      // this.contactStatus();
     })
   }
 
@@ -93,47 +96,49 @@ export class MessagesComponent implements OnInit {
     this.showAb = !this.showAb;
   }
 
+  //lấy conversation từ list truyền sang
+  getContactUser() {
+    this.stringeeService.contactId.subscribe((data: string) => {
+      this.accountService.getById(data).subscribe(val => {
+        this.currentUserContact = val;
+        console.log(this.currentUserContact);
+      });
+    });
+  }
+
   /**
    * lấy id trên route lấy dữ liệu service tương ứng
    */
-  getConversation(): void {
-     this.stringeeService.getMessages(this.route.snapshot.paramMap.get('id'),  (status, code, message, msgs) => {
-        console.log(msgs)
-     });
-
-     this.userContactId = 1;
-
-    this.userService.getUser(this.userContactId)
-      .subscribe(user => this.userContact = user);
-
-    this.messagedetail.getMessages(this.userContactId)
-      .subscribe(ms => this.Messages = ms);
+  getMessages(): void {
+    this.stringeeService.getMessages(this.currentConvId, (status, code, message, msgs) => {
+      console.log(msgs)
+    });
   }
 
   /**
    * hiển thị trạng thái của người đang trò chuyện
    */
-  contactStatus() {
-    if (this.userContact.status === 1) {
-      this.userStatus = 'Đang hoạt động';
-    }
-    else {
-      let date = new Date();
-      let timeUserActive = new Date(this.userContact.time);
+  // contactStatus() {
+  //   if (this.userContact.status === 1) {
+  //     this.userStatus = 'Đang hoạt động';
+  //   }
+  //   else {
+  //     let date = new Date();
+  //     let timeUserActive = new Date(this.userContact.time);
 
-      let diff = Math.floor((date.getTime() - timeUserActive.getTime()) / 60000);
+  //     let diff = Math.floor((date.getTime() - timeUserActive.getTime()) / 60000);
 
-      if (diff < 60) {
-        this.userStatus = 'Hoạt động ' + diff + ' phút trước';
-      }
-      else if (diff / 60 < 24) {
-        this.userStatus = 'Hoạt động ' + Math.floor(diff / 60) + ' giờ trước';
-      }
-      else {
-        this.userStatus = 'Hoạt động ' + Math.floor(diff / 1440) + ' ngày trước';
-      }
-    }
-  }
+  //     if (diff < 60) {
+  //       this.userStatus = 'Hoạt động ' + diff + ' phút trước';
+  //     }
+  //     else if (diff / 60 < 24) {
+  //       this.userStatus = 'Hoạt động ' + Math.floor(diff / 60) + ' giờ trước';
+  //     }
+  //     else {
+  //       this.userStatus = 'Hoạt động ' + Math.floor(diff / 1440) + ' ngày trước';
+  //     }
+  //   }
+  // }
 
   /**
    * clear input gửi message
@@ -148,16 +153,16 @@ export class MessagesComponent implements OnInit {
    * gửi message text bắt sự kiện nhấn enter
    * @param val 
    */
-  onEnter(val: string): void { 
+  onEnter(val: string): void {
     if (val != '') {
       var txtMsg = {
         type: 1,
-        convId: localStorage.getItem('ConvId'),
+        convId: this.currentConvId,
         message: {
           content: val,
         }
       };
-  
+
       this.stringeeService.stringeeChat.sendMessage(txtMsg, function (status, code, message, msg) {
         console.log(status + code + message + "msg result " + JSON.stringify(msg));
       });
@@ -224,7 +229,7 @@ export class MessagesComponent implements OnInit {
         let newMess: Message = {
           id: this.Messages.length + 1,
           senderId: this.currentUserId,
-          receiverId: this.userContact.userId,
+          receiverId: 1,
           content: fileName,
           type: fileType,
           typeofFile: type_of_file,
@@ -232,7 +237,7 @@ export class MessagesComponent implements OnInit {
           url: this.selectedFile.src.toString()
         };
 
-        this.Messages.push(newMess);
+        // this.Messages.push(newMess);
         this.messageFile = newMess;
       }
     });
@@ -241,7 +246,7 @@ export class MessagesComponent implements OnInit {
   }
 
   onNewLine(val: string): string {
-    return val+'\n';
+    return val + '\n';
   }
 
   /**

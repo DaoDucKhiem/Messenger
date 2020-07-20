@@ -14,10 +14,10 @@ const routes: Routes = [
         component: MessagesComponent
       },
       {
-        path: '', redirectTo: 'conversation/1', pathMatch: 'full'
+        path: '', redirectTo: 'conversation/conv-vn-1-NO20OWUHMD-1594421839380', pathMatch: 'full'
       },
       {
-        path: 'conversation', redirectTo: 'conversation/1', pathMatch: 'full'
+        path: 'conversation', redirectTo: 'conversation/conv-vn-1-NO20OWUHMD-1594421839380', pathMatch: 'full'
       },
     ]
   },

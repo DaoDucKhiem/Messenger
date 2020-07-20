@@ -6,7 +6,7 @@
             <input type="text" [placeholder]="placeHolderSearch" [(ngModel)]="searchTerm" (ngModelChange)="search()" />
         </div>
         <div class="btn-add">
-            <img src="../../../assets/icons/IconboxChat/23.svg" alt="add conversation" (click)="getConversations()">
+            <img src="../../../assets/icons/IconboxChat/23.svg" alt="add conversation">
         </div>
     </div>
     <!-- search conversation -->
@@ -16,7 +16,7 @@
             <!-- list conversation -->
             <div class="list-content carousel-item active">
                 <div class="conversation" *ngFor="let conversation of conversations"
-                (click)="onSelect(conversation.id)"
+                (click)="onSelect(conversation)"
                 [ngClass]="{'selected': conversation.id === currentConvId}"
                 routerLink='conversation/{{conversation.id}}'>
                     <!-- border when conversation is selected -->

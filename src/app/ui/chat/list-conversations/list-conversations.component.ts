@@ -30,7 +30,11 @@ export class ListConversationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPlaceHolder();
+
+    this.getConversationId();
+
     this.stringeeService.stringeeClient.on('connect', () => {
+      console.log("+++connected");
       this.getConversations();
     });
 
@@ -50,9 +54,9 @@ export class ListConversationsComponent implements OnInit {
    * cập nhật khi id thay đổi
    */
   getConversationId() {
-    // this.messagedetail.conversationId.subscribe((data: number) => {
-    //    this.onSelectConversationId = +data;
-    // })
+    this.stringeeService.conversationId.subscribe((data: string) => {
+       this.currentConvId = data;
+    })
   }
 
   /**
@@ -75,8 +79,14 @@ export class ListConversationsComponent implements OnInit {
    * update last message của conversation khi click
    * @param conversation 
    */
-  onSelect(conversationId: string): void {
-    this.currentConvId = conversationId;
+  onSelect(conv: any) {
+    for(let parti of conv.participants) {
+      if(parti.userId != this.currentUserId) {
+        //nếu không phải là id của contact, truyền sang cho message component
+        this.stringeeService.changeSelectConversation(parti.userId);
+        break;
+      }
+    }
   }
 
   /**
@@ -138,7 +148,11 @@ export class ListConversationsComponent implements OnInit {
   getConversations() {
     this.stringeeService.getConversations(15, (status: string, code: string, message: string, convs: any) => {
       this.conversations = convs;
-      console.log(convs);
+      for (let con of convs) {
+        if (con.id == this.currentConvId) {
+          this.onSelect(con); //lấy conversation hiện tại truyền cho message khi khởi tạo
+        }
+      }
     });
   }
 
