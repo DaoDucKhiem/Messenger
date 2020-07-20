@@ -97,7 +97,11 @@ export class MessagesComponent implements OnInit {
    * lấy id trên route lấy dữ liệu service tương ứng
    */
   getConversation(): void {
-    this.userContactId = +this.route.snapshot.paramMap.get('id');
+     this.stringeeService.getMessages(this.route.snapshot.paramMap.get('id'),  (status, code, message, msgs) => {
+        console.log(msgs)
+     });
+
+     this.userContactId = 1;
 
     this.userService.getUser(this.userContactId)
       .subscribe(user => this.userContact = user);

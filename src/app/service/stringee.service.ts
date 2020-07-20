@@ -26,10 +26,10 @@ export class StringeeService {
   connectStringee() {
     //connect đến server stringee
     this.stringeeClient.connect(this.user.token);
+  }
 
-    let _convId = this.connectListenner();
-
-    return _convId;
+  disconnectStringee() {
+    this.stringeeClient.disconnect();
   }
 
   showError(error: string) {
@@ -42,9 +42,7 @@ export class StringeeService {
 
   connectListenner() {
     this.stringeeClient.on('connect', () => {
-      this.getConversations(1, ()=>{
-        //làm gì đó ở đây
-      });
+      
     });
 
     this.authenListenner();
@@ -99,6 +97,13 @@ export class StringeeService {
     this.stringeeChat.getLastConversations(count, isAscending, callback);
   }
 
+  getMessages(convId: string, callback?: any) {
+    var convId = convId;
+    var count = 50;
+    var isAscending = false;
+    this.stringeeChat.getLastMessages(convId, count, isAscending, callback);
+  }
+
   //cập nhật thông tin user trên stringee
   updateUserInfo(id: string, token: string) {
     this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
@@ -115,6 +120,7 @@ export class StringeeService {
         console.log(updateUserData);
         this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
           this.showSuccess("Cập nhật thông tin thành công!");
+          this.disconnectStringee();
         });
       }
     })

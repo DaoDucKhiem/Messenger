@@ -30,6 +30,9 @@ export class ListConversationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPlaceHolder();
+    this.stringeeService.stringeeClient.on('connect', () => {
+      this.getConversations();
+    });
 
     // update message status
     // this.updateLastMessageStatus();
