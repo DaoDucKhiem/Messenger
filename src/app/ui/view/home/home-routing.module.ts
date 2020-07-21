@@ -6,7 +6,7 @@ import { HomeComponent } from './home.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'conversation/conv-vn-1-NO20OWUHMD-1594421845673',
+    redirectTo: 'conversation/1',
     pathMatch: 'full'
   },
   {

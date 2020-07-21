@@ -2,12 +2,12 @@
     <!-- user contact profile -->
     <div class="profile">
         <div class="img-avatar">
-            <img *ngIf="userContact.imageUrl != ''" [src]="userContact.imageUrl" alt="avatar">
-           <ngx-avatar *ngIf="userContact.imageUrl == ''" [name]="userContact.fullName" size="120"></ngx-avatar>
+            <img *ngIf="userContact?.imageUrl != ''" [src]="userContact?.imageUrl" alt="avatar">
+           <ngx-avatar *ngIf="userContact?.imageUrl == ''" [name]="userContact?.fullName" size="120"></ngx-avatar>
         </div>
-        <h2>{{userContact.fullName}}</h2>
-        <p>{{userContact.phone}}</p>
-        <p>{{userContact.email}}</p>
+        <h2>{{userContact?.fullName}}</h2>
+        <p>{{userContact?.phone}}</p>
+        <p>{{userContact?.email}}</p>
         <p class="line"></p>
     </div>
     <!-- user contact profile -->
