@@ -102,7 +102,7 @@ export class StringeeService {
   getMessages(convId: string, callback?: any) {
     var convId = convId;
     var count = 50;
-    var isAscending = false;
+    var isAscending = true;
     this.stringeeChat.getLastMessages(convId, count, isAscending, callback);
   }
 
@@ -166,15 +166,58 @@ export class StringeeService {
     return JSON.parse(jsonPayload);
   }
 
-  //truyền id cho bên list khi route thay đổi
-  @Output() conversationId = new EventEmitter<string>();
-  changeConversation(id: string) {
-    this.conversationId.emit(id);
+  //gửi file 
+  sendFile(convId: string, fName: string, fPath: string, fLenght: number) {
+    var fileMsg = {
+      type: 5,
+      convId: convId,
+      message: {
+        content: 'Đã gửi một file',
+        file: {
+          filePath: fPath,
+          filename: fName,
+          length: fLenght
+        },
+        metadata: {
+          key: 'value'
+        }
+      }
+    };
+
+    this.stringeeChat.sendMessage(fileMsg, function (status: any, code: any, message: any, msg: any) {
+      console.log(status + code + message + "msg result " + JSON.stringify(msg));
+    });
+  }
+
+  //gửi ảnh
+  sendPhoto(convId: string, fPath: string) {
+    var photoMsg = {
+      type: 2,
+      convId: convId,
+      message: {
+        content: 'Đã gửi một ảnh',
+        photo: {
+          filePath: fPath,
+        },
+        metadata: {
+          key: 'value'
+        }
+      }
+    };
+
+    this.stringeeChat.sendMessage(photoMsg, function (status: any, code: any, message: any, msg: any) {
+      console.log(status + code + message + "msg result " + JSON.stringify(msg));
+    });
   }
 
   //truyền contactId cho bên message khi route thay đổi
   @Output() contactId = new EventEmitter<string>();
   changeSelectConversation(id: string) {
     this.contactId.emit(id);
+  }
+
+  @Output() sendMessage = new EventEmitter<boolean>();
+  sendMessageActive() {
+    this.sendMessage.emit(true);
   }
 }

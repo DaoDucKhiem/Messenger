@@ -1,13 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { UserProfileService } from '../../../service/user-profile.service';
-
-import { MessagedetailService } from '../../../service/messagedetail.service';
-import { Message } from '../../../model/message';
 import { StringeeService } from 'src/app/service/stringee.service';
 import { AccountService } from 'src/app/service/account.service';
 import { User } from 'src/app/model/user-login';
+import { FileService } from 'src/app/service/file.service';
+import { windowCount } from 'rxjs/operators';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -22,29 +19,21 @@ class ImageSnippet {
 })
 
 export class MessagesComponent implements OnInit {
-  userContact: User;
-  Messages: [];
-  currentUserId = 10;
-  messageSend: any;
-  userStatus: string;
-  messageFile: Message;
-  userContactId: number;
-  imageId: string;
 
+  @Input() Messages: [];
   currentConversation: any;
   currentConvId: string;
   currentUser: User;
   currentContactId: string;
-  currentUserContact: User;
+  currentContact: User;
 
   showAb = true;
   modalImageSource = false;
 
   constructor(private route: ActivatedRoute,
-    private userService: UserProfileService,
-    private messagedetail: MessagedetailService,
     private stringeeService: StringeeService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private fileService: FileService
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
   }
@@ -53,12 +42,15 @@ export class MessagesComponent implements OnInit {
     this.route.params.subscribe(val => {
 
       this.currentConvId = val['id'];
-      this.stringeeService.changeConversation(val['id']); // gửi id contact (id conversation)
 
       //lấy currentContactId từ bên list truyền sang
       this.getContactUser();
 
-      this.getMessages(); //lấy messages
+      this.stringeeService.stringeeChat.on('onObjectChange', ()=> {
+        this.getMessages();
+      })
+
+      // this.getMessages(); //lấy messages
 
       // this.contactStatus();
     })
@@ -100,8 +92,7 @@ export class MessagesComponent implements OnInit {
   getContactUser() {
     this.stringeeService.contactId.subscribe((data: string) => {
       this.accountService.getById(data).subscribe(val => {
-        this.currentUserContact = val;
-        console.log(this.currentUserContact);
+        this.currentContact = val;
       });
     });
   }
@@ -111,7 +102,7 @@ export class MessagesComponent implements OnInit {
    */
   getMessages(): void {
     this.stringeeService.getMessages(this.currentConvId, (status, code, message, msgs) => {
-      console.log(msgs)
+      this.Messages = msgs;
     });
   }
 
@@ -164,10 +155,10 @@ export class MessagesComponent implements OnInit {
       };
 
       this.stringeeService.stringeeChat.sendMessage(txtMsg, function (status, code, message, msg) {
-        console.log(status + code + message + "msg result " + JSON.stringify(msg));
       });
 
       this.clear();
+      this.stringeeService.sendMessageActive();
     }
     else alert('bạn phải nhập tin nhắn đã!');
   }
@@ -180,7 +171,6 @@ export class MessagesComponent implements OnInit {
 
   processFile(imageInput: any) {
     const file: File = imageInput.files[0];
-    let fileName = imageInput.files[0].name;
     let fileType: number;
     let type_of_file: number;
 
@@ -191,31 +181,31 @@ export class MessagesComponent implements OnInit {
       }
 
       case 'doc': {
-        fileType = 1;
+        fileType = 5;
         type_of_file = 1;
         break;
       }
 
       case 'docx': {
-        fileType = 1;
+        fileType = 5;
         type_of_file = 1;
         break;
       }
 
       case 'pdf': {
-        fileType = 1;
+        fileType = 5;
         type_of_file = 0;
         break;
       }
 
       case 'ppt': case 'pptx': {
-        fileType = 1;
+        fileType = 5;
         type_of_file = 2;
         break;
       }
 
       default: {
-        fileType = 1;
+        fileType = 5;
         type_of_file = 2;
         break;
       }
@@ -226,19 +216,32 @@ export class MessagesComponent implements OnInit {
     read.addEventListener('load', (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       if (this.selectedFile) {
-        let newMess: Message = {
-          id: this.Messages.length + 1,
-          senderId: this.currentUserId,
-          receiverId: 1,
-          content: fileName,
-          type: fileType,
-          typeofFile: type_of_file,
-          time: new Date(),
-          url: this.selectedFile.src.toString()
-        };
+        var formData = new FormData();
+        formData.set('file', file);
 
-        // this.Messages.push(newMess);
-        this.messageFile = newMess;
+        let url: any;
+
+        this.fileService.uploadFile(formData).subscribe(res => {
+          url = res;
+          console.log(url.filename);
+
+          //nếu là gửi ảnh
+          if(fileType == 2) {
+            this.stringeeService.sendPhoto(this.currentConvId, url.filename);
+          }
+
+          //nếu là gửi file
+          if(fileType == 5) {
+            this.stringeeService.sendFile(
+              this.currentConvId, 
+              this.selectedFile.file.name, 
+              url.filename,
+              file.size
+              );
+          }
+
+          this.stringeeService.sendMessageActive();
+        });
       }
     });
 
@@ -255,7 +258,7 @@ export class MessagesComponent implements OnInit {
    */
   showModal(id: string) {
     document.getElementById(id).style.display = 'flex';
-    this.imageId = id;
+    // this.imageId = id;
   }
 
   /**
@@ -266,8 +269,12 @@ export class MessagesComponent implements OnInit {
     document.getElementById(id).style.display = 'none';
   }
 
+  openFile(url: string) {
+    window.open(url, '');
+  }
+
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    this.hideModal(this.imageId);
+    // this.hideModal(this.imageId);
   }
 
 }

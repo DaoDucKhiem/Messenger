@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <div class="content">
-    <app-list-conversations></app-list-conversations>
+    <app-list-conversations [conversations] = "conversations"></app-list-conversations>
     <div>
-        <router-outlet></router-outlet>
+        <app-messages [Messages] = "messages"></app-messages>
     </div>
 </div>

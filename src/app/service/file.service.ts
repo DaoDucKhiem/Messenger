@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Message } from '../model/message';
-import { Observable, of } from 'rxjs';
-import { listFileShared } from '../model/mock-message-file';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -9,11 +8,16 @@ import { listFileShared } from '../model/mock-message-file';
 })
 export class FileService {
 
-  messageFile: Message[];
+  messageFile: [];
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getListMessageFile(id: number):Observable<Message[]> {
-    return of(listFileShared.filter(mess => ((mess.senderId === id) || (mess.receiverId === id))));
+  uploadFile(file: FormData):Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'X-STRINGEE-AUTH': JSON.parse(localStorage.getItem('user')).token,
+      })
+    };
+    return this.http.post(`https://api.stringee.com/v1/file/upload?uploadType=multipart`, file, httpOptions);
   }
 }

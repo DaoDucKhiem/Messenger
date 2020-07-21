@@ -15,13 +15,13 @@
         <div class="carousel-inner">
             <!-- list conversation -->
             <div class="list-content carousel-item active">
-                <div class="conversation" *ngFor="let conversation of conversations"
-                (click)="onSelect(conversation)"
-                [ngClass]="{'selected': conversation.id === currentConvId}"
-                routerLink='conversation/{{conversation.id}}'>
+                <div class="conversation" *ngFor="let conv of conversations"
+                (click)="onSelect(conv)"
+                [ngClass]="{'selected': conv.id === currentConvId}"
+                routerLink = "/home/conversation/{{conv.id}}">
                     <!-- border when conversation is selected -->
-                    <div class="space" [ngClass]="{'border-selected': conversation.id === currentConvId}"></div>
-                    <div *ngFor="let parti of conversation.participants"
+                    <div class="space" [ngClass]="{'border-selected': conv.id === currentConvId}"></div>
+                    <div *ngFor="let parti of conv.participants"
                         [ngClass]="{'style-conversation': parti.userId != currentUserId}">
                         <div class="conversation-content" *ngIf="parti.userId != currentUserId">
                             <div class="avatar">
@@ -42,29 +42,30 @@
                         'online-and-not-seen': conversation.status === 1 && conversation.lastMessageStatus === 0,
                         'not-seen': conversation.lastMessageStatus === 1,
                         'seen': conversation.lastMessageStatus === 1}" -->
-                                    <p class="message-last" *ngIf = "conversation.lastMessage.content.content == null">
+
+                                    <p class="message-last" *ngIf = "conv.lastMessage.content.content == null">
                                         #bắt đầu cuộc trò chuyện!
                                     </p>
-                                    <p class="message-last" *ngIf = "conversation.lastMessage.content.content">
-                                        {{conversation.lastMessage.content.content}}
+                                    <p class="message-last" *ngIf = "conv.lastMessage.content.content">
+                                       <span *ngIf="conv.lastMessage.type != 1 && conv.lastMessage.sender == currentUserId">Bạn: </span>{{conv.lastMessage.content.content}}
                                     </p>
                                 </div>
 
                                 <div class="time-and-new-mess"
-                                    [ngClass]="{'status-seen': conversation.unreadCount == 0}">
+                                    [ngClass]="{'status-seen': conv.unreadCount == 0}">
                                     <div class="time">
-                                        <p *ngIf="forMatTime(conversation.lastMessage.createdAt) === 0">
-                                            {{conversation.lastMessage.createdAt | date: 'HH:MM'}}</p>
-                                        <p *ngIf="forMatTime(conversation.lastMessage.createdAt) === 1">
-                                            {{conversation.lastMessage.createdAt | date: 'EEE'}}</p>
-                                        <p *ngIf="forMatTime(conversation.lastMessage.createdAt) === 2">
-                                            {{conversation.lastMessage.createdAt | date: 'd MMM' }}
+                                        <p *ngIf="forMatTime(conv.lastMessage.createdAt) === 0">
+                                            {{conv.lastMessage.createdAt | date: 'HH:MM'}}</p>
+                                        <p *ngIf="forMatTime(conv.lastMessage.createdAt) === 1">
+                                            {{conv.lastMessage.createdAt | date: 'EEE'}}</p>
+                                        <p *ngIf="forMatTime(conv.lastMessage.createdAt) === 2">
+                                            {{conv.lastMessage.createdAt | date: 'd MMM' }}
                                         </p>
                                     </div>
 
-                                    <div class="new-message" *ngIf="conversation.unreadCount != 0">
+                                    <div class="new-message" *ngIf="conv.unreadCount != 0">
                                         <span>
-                                            <p class="amount">{{conversation.unreadCount}}</p>
+                                            <p class="amount">{{conv.unreadCount}}</p>
                                         </span>
                                     </div>
                                 </div>

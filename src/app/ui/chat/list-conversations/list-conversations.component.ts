@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { AccountService } from 'src/app/service/account.service';
 import { User } from 'src/app/model/user-login';
 import { StringeeService } from 'src/app/service/stringee.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-list-conversations',
@@ -11,7 +12,7 @@ import { StringeeService } from 'src/app/service/stringee.service';
 })
 export class ListConversationsComponent implements OnInit {
 
-  conversations: any;
+  @Input() conversations: any;
   contacts: User[];
 
   findContact: boolean;
@@ -22,7 +23,8 @@ export class ListConversationsComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private stringeeService: StringeeService
+    private stringeeService: StringeeService,
+    private route: ActivatedRoute
   ) {
     this.findContact = false; //ban đầu sẽ hiển thị danh sách các cuộc hội thoại
     this.currentUserId = this.accountService.userValue.id; //id của người đã đăng nhập lấy từ account Service
@@ -33,13 +35,17 @@ export class ListConversationsComponent implements OnInit {
 
     this.getConversationId();
 
-    this.stringeeService.stringeeClient.on('connect', () => {
-      console.log("+++connected");
+    // this.stringeeService.stringeeClient.on('connect', () => {
+    //   console.log("+++connected");
+    //   this.getConversations();
+    // });
+    // this.getConversations();
+
+    //cập nhật last message khi người dùng gửi tin nhắn
+    this.stringeeService.sendMessage.subscribe(data => {
       this.getConversations();
     });
 
-    // update message status
-    // this.updateLastMessageStatus();
   }
 
   /**
@@ -54,9 +60,9 @@ export class ListConversationsComponent implements OnInit {
    * cập nhật khi id thay đổi
    */
   getConversationId() {
-    this.stringeeService.conversationId.subscribe((data: string) => {
-       this.currentConvId = data;
-    })
+    this.route.params.subscribe(val => {
+      this.currentConvId = val['id'];
+    });
   }
 
   /**
@@ -66,20 +72,16 @@ export class ListConversationsComponent implements OnInit {
     this.accountService.getAll().subscribe(contacts => { this.contacts = contacts; })
   }
 
-  /**
-   * update last message status lhi load vào lần đầu
-   */
-  // updateLastMessageStatus() {
-  //   const found = this.conversations.find(item => item.contactId == this.onSelectConversationId);
-  //   let index = this.conversations.indexOf(found);
-  //   this.conversations[index].lastMessageStatus = 1;
-  // }
 
   /**
    * update last message của conversation khi click
    * @param conversation 
    */
   onSelect(conv: any) {
+    
+    this.stringeeService.stringeeChat.markConversationAsRead(conv.id);
+    conv.unreadCount = 0;
+
     for(let parti of conv.participants) {
       if(parti.userId != this.currentUserId) {
         //nếu không phải là id của contact, truyền sang cho message component

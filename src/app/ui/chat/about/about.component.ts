@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 
-import { Message } from 'src/app/model/message';
 import { FileService } from 'src/app/service/file.service';
 import { User } from 'src/app/model/user-login';
 
@@ -12,15 +11,15 @@ import { User } from 'src/app/model/user-login';
 export class AboutComponent implements OnInit, OnChanges {
 
   contactId: number;
-  file: Message[];
-  messageImage: Message[];
-  messageFile: Message[];
+  file: [];
+  messageImage: [];
+  messageFile: [];
   showImg = true;
   showFile = true;
   imageId: string;
 
   @Input() userContact: User;
-  @Input() newMessageFile: Message; //thêm tin nhắn dạng file
+  @Input() newMessageFile: any; //thêm tin nhắn dạng file
 
   constructor(private filesShared: FileService) {
   }
@@ -38,33 +37,33 @@ export class AboutComponent implements OnInit, OnChanges {
 
 
   getData() {
-    this.filesShared.getListMessageFile(this.contactId)
-    .subscribe(msf => this.file = msf);
+    // this.filesShared.getListMessageFile(this.contactId)
+    // .subscribe(msf => this.file = msf);
 
 
-    //tin nhắn mới là file
-    if(this.newMessageFile) {
-      this.file.push(this.newMessageFile);
-    }
+    // //tin nhắn mới là file
+    // if(this.newMessageFile) {
+    //   this.file.push(this.newMessageFile);
+    // }
 
 
-    this.messageFile = this.getMessageFile();
-    this.messageImage = this.getMessageImage();
+    // this.messageFile = this.getMessageFile();
+    // this.messageImage = this.getMessageImage();
   }
 
   /**
    * lọc message là file trong list message file
    */
-  getMessageFile() {
-    return this.file.filter(mess => ((mess.type === 1)));
-  }
+  // getMessageFile() {
+  //   return this.file.filter(mess => ((mess.type === 1)));
+  // }
 
   /**
    * lọc message là image trong list message file
    */
-  getMessageImage() {
-    return this.file.filter(mess => ((mess.type === 2)));
-  }
+  // getMessageImage() {
+  //   return this.file.filter(mess => ((mess.type === 2)));
+  // }
 
   /**
    * hiển thị danh sách image đã chia sẻ

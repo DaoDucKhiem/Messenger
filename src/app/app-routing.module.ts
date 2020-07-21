@@ -6,9 +6,9 @@ import { AuthGuard } from './helpers/auth.grand';
 
 const routes: Routes = [
 
+  { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '', loadChildren: () => import('./ui/view/account/account.module').then(m => m.AccountModule)},
   { path: 'home', loadChildren: () => import('./ui/view/home/home.module').then(m => m.HomeModule), canActivate: [AuthGuard] },
-  { path: '', redirectTo: '', pathMatch: 'full' }
 
 ];
 

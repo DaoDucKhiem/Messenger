@@ -28,7 +28,7 @@ import { HomeRoutingModule } from './ui/view/home/home-routing.module';
     AppRoutingModule,
     CoreModule,
     HomeRoutingModule,
-    ShareModule
+    ShareModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

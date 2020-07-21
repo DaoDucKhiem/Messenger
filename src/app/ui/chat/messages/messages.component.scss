@@ -163,11 +163,13 @@ p {
 .message-file a {
     color: #ffffff;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .message-image {
     padding: 0;
     background-color: #ffffff;
+    cursor: pointer;
     .img-mess {
         height: 100%;
         max-height: 350px;
