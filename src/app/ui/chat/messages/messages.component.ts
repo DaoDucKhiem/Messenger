@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StringeeService } from 'src/app/service/stringee.service';
-import { AccountService } from 'src/app/service/account.service';
+
 import { User } from 'src/app/model/user-login';
 import { FileService } from 'src/app/service/file.service';
-import { windowCount } from 'rxjs/operators';
+import { UsersService } from 'src/app/service/users.service';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -32,7 +32,7 @@ export class MessagesComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private stringeeService: StringeeService,
-    private accountService: AccountService,
+    private usersService: UsersService,
     private fileService: FileService
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
@@ -91,7 +91,7 @@ export class MessagesComponent implements OnInit {
   //lấy conversation từ list truyền sang
   getContactUser() {
     this.stringeeService.contactId.subscribe((data: string) => {
-      this.accountService.getById(data).subscribe(val => {
+      this.usersService.getById(data).subscribe(val => {
         this.currentContact = val;
       });
     });

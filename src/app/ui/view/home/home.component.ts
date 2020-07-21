@@ -34,6 +34,10 @@ export class HomeComponent implements OnInit {
 
       this.conversations = convs;
 
+      //cập nhật đã xem cho last message
+      this.conversations[0].unreadCount = 0;
+      this.stringeeService.stringeeChat.markConversationAsRead(convs[0].id);
+      
       //lấy conversation đầu tiên
       for (let parti of convs[0].participants) {
         if (parti.userId != this.currentUserId) {

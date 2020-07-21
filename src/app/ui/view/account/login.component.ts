@@ -6,7 +6,6 @@ import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 import { AccountService } from 'src/app/service/account.service';
-import { StringeeService } from 'src/app/service/stringee.service';
 
 @Component({ templateUrl: './login.component.html', styleUrls: ['./login.component.scss'] })
 export class LoginComponent implements OnInit {

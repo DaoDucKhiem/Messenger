@@ -4,6 +4,7 @@ import { AccountService } from 'src/app/service/account.service';
 import { User } from 'src/app/model/user-login';
 import { StringeeService } from 'src/app/service/stringee.service';
 import { ActivatedRoute } from '@angular/router';
+import { UsersService } from 'src/app/service/users.service';
 
 @Component({
   selector: 'app-list-conversations',
@@ -23,6 +24,7 @@ export class ListConversationsComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
+    private usersService: UsersService,
     private stringeeService: StringeeService,
     private route: ActivatedRoute
   ) {
@@ -69,7 +71,7 @@ export class ListConversationsComponent implements OnInit {
    * lấy danh sách user trên server
    */
   getContactList() {
-    this.accountService.getAll().subscribe(contacts => { this.contacts = contacts; })
+    this.usersService.getAll().subscribe(contacts => { this.contacts = contacts; })
   }
 
 

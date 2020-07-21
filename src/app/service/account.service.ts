@@ -45,14 +45,6 @@ export class AccountService {
         return this.http.post<string>(`${environment.apiUrl}/register`, user);
     }
 
-    getAll():Observable<User[]> {    
-        return this.http.get<User[]>(`${environment.apiUrlUser}`);
-    }
-
-    getById(id: string){
-        return this.http.get<User>(`${environment.apiUrlUser}/${id}`);
-    }
-
     update(id, params) {
         return this.http.put(`${environment.apiUrlUser}/${id}`, params)
             .pipe(map(x => {
