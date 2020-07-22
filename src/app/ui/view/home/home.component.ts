@@ -11,10 +11,11 @@ export class HomeComponent implements OnInit {
 
   conversations: any;
   convId: string;
-  messages: any;
-  currentUserId = JSON.parse(localStorage.getItem('user')).userId;
+  currentUserId: string;
 
-  constructor(private stringeeService: StringeeService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private stringeeService: StringeeService, private route: ActivatedRoute, private router: Router) { 
+    this.currentUserId = JSON.parse(localStorage.getItem('user')).id;
+  }
 
   ngOnInit(): void {
 
@@ -37,35 +38,20 @@ export class HomeComponent implements OnInit {
       //cập nhật đã xem cho last message
       this.conversations[0].unreadCount = 0;
       this.stringeeService.stringeeChat.markConversationAsRead(convs[0].id);
-      
+
       //lấy conversation đầu tiên
       for (let parti of convs[0].participants) {
         if (parti.userId != this.currentUserId) {
 
           //lấy id của conversation đầu tiên để đẩy lên route
-          this.router.navigate(['/home/conversation/' + convs[0].id]).then(()=>{
-            //nếu thành công thì sẽ thực hiện lấy messages
-            this.getMessages();
-          });
+          this.router.navigate(['/home/conversation/' + convs[0].id]).then(() => {
 
-          //bắn user id của contact cho message
-          this.stringeeService.changeSelectConversation(parti.userId);
+            //bắn user id của contact cho message
+            this.stringeeService.changeSelectConversation(parti.userId);
+          });
           break;
         }
       }
-    });
-  }
-
-  /**
-   * lấy danh sách các message của 1 conversation được chọn
-   */
-  getMessages() {
-    //lấy id conversation trên url
-    this.convId = this.route.snapshot.paramMap.get('id');
-
-    //gọi service lấy danh sách message
-    this.stringeeService.getMessages(this.convId, (status, code, message, smsg) => {
-      this.messages = smsg;
     });
   }
 }

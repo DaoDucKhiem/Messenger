@@ -2,6 +2,7 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { StringeeClient, StringeeChat } from "stringee-chat-js-sdk";
 
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class StringeeService {
   // global
   stringeeChat: StringeeChat;
 
-  constructor(private toastr: ToastrService,) {
+  constructor(private toastr: ToastrService, private router: Router) {
     this.stringeeChat = new StringeeChat(this.stringeeClient);
     // this.lastConvId = this.getConversations(1)[0].ConvId;
     // console.log(this.lastConvId);
@@ -84,7 +85,7 @@ export class StringeeService {
 
     this.stringeeChat.createConversation([id], options, (status: string, code: string, message: string, conv: any) => {
       localStorage.setItem('ConvId', conv.id);
-      this.showSuccess("Tạo cuộc trò chuyện thành công");
+      this.router.navigate(['/home/conversation/' + conv.id]);
     });
   }
 
@@ -101,7 +102,7 @@ export class StringeeService {
 
   getMessages(convId: string, callback?: any) {
     var convId = convId;
-    var count = 50;
+    var count = 15;
     var isAscending = true;
     this.stringeeChat.getLastMessages(convId, count, isAscending, callback);
   }
@@ -119,7 +120,7 @@ export class StringeeService {
           avatar_url: avatar,
           email: email,
         }
-        console.log(updateUserData);
+        
         this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
           if (res.message == 'Success') {
             this.showSuccess("Cập nhật thông tin thành công!");

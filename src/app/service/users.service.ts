@@ -20,6 +20,6 @@ export class UsersService {
   }
 
   getUsersByName(name: string): Observable<User[]> {
-    return this.http.get<User[]>(`${environment.apiUrlUser}/${'?'+name}`);
+    return this.http.get<User[]>(`${environment.apiUrlUser}/${'search?name='+name}`);
   }
 }

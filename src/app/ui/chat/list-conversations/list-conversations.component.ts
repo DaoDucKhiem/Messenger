@@ -15,6 +15,7 @@ export class ListConversationsComponent implements OnInit {
 
   @Input() conversations: any;
   contacts: User[];
+  contactsCopy: User[];
 
   findContact: boolean;
   placeHolderSearch: string;
@@ -33,7 +34,6 @@ export class ListConversationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPlaceHolder();
 
     this.getConversationId();
 
@@ -51,13 +51,6 @@ export class ListConversationsComponent implements OnInit {
   }
 
   /**
-   * chuyển đổi placeholder trên thanh tìm kiếm cho đúng mục đích
-   */
-  getPlaceHolder() {
-    this.placeHolderSearch = this.findContact ? "Tìm kiếm danh bạ" : "Tìm kiếm cuộc trò chuyện";
-  }
-
-  /**
    * lấy id của route để add focus conversation
    * cập nhật khi id thay đổi
    */
@@ -71,7 +64,7 @@ export class ListConversationsComponent implements OnInit {
    * lấy danh sách user trên server
    */
   getContactList() {
-    this.usersService.getAll().subscribe(contacts => { this.contacts = contacts; })
+    this.usersService.getAll().subscribe(contacts => { this.contacts = contacts; this.contactsCopy = contacts })
   }
 
 
@@ -80,12 +73,12 @@ export class ListConversationsComponent implements OnInit {
    * @param conversation 
    */
   onSelect(conv: any) {
-    
+
     this.stringeeService.stringeeChat.markConversationAsRead(conv.id);
     conv.unreadCount = 0;
 
-    for(let parti of conv.participants) {
-      if(parti.userId != this.currentUserId) {
+    for (let parti of conv.participants) {
+      if (parti.userId != this.currentUserId) {
         //nếu không phải là id của contact, truyền sang cho message component
         this.stringeeService.changeSelectConversation(parti.userId);
         break;
@@ -93,12 +86,15 @@ export class ListConversationsComponent implements OnInit {
     }
   }
 
+  openContacts() {
+    this.selectedContacts();
+  }
+
   /**
    * nếu người dùng chọn lấy danh sách cuộc trò chuyện
    */
   selectedConversations() {
     this.findContact = false;
-    this.getPlaceHolder();
   }
 
   /**
@@ -106,26 +102,21 @@ export class ListConversationsComponent implements OnInit {
    */
   selectedContacts() {
     this.findContact = true;
-    this.getPlaceHolder();
     this.getContactList();
   }
 
   /**
-   * nếu ở cuộc trò chuyện => tìm kiếm conversation
-   * không thì sẽ tìm kiếm contact trong danh bạ
+   * tìm kiếm conversation
+   * 
    */
   searchTerm: any;
 
   search(): void {
     let term = this.searchTerm;
-    if (!this.findContact) {
-      // this.conversations = this.conversationsCopy.filter(function (tag) {
-      //   return tag.contactName.toLowerCase().indexOf(term.toLowerCase()) >= 0;
-      // });
+    if (term == '') {
+      this.contacts = this.contactsCopy;
     }
-    else {
-      //tìm kiếm người trò chuyện
-    }
+    else this.usersService.getUsersByName(term).subscribe(data => this.contacts = data);
   }
 
   /**
@@ -144,6 +135,11 @@ export class ListConversationsComponent implements OnInit {
    */
   createConversation(id: string, name: string) {
     this.stringeeService.createConversation(id, name);
+
+    //truyền id người được chọn để lấy dữ liệu
+    this.stringeeService.changeSelectConversation(id);
+
+    this.selectedConversations();
   }
 
   /**
@@ -160,11 +156,11 @@ export class ListConversationsComponent implements OnInit {
     });
   }
 
-   /**
-   * trả về loại định dạng thời gian để hiển thị 
-   * 0:giờ chênh lệch, 1:ngày chênh lệch, 2: ngày 
-   * @param data thời gian tạo tin nhắn
-   */
+  /**
+  * trả về loại định dạng thời gian để hiển thị 
+  * 0:giờ chênh lệch, 1:ngày chênh lệch, 2: ngày 
+  * @param data thời gian tạo tin nhắn
+  */
   forMatTime(data: number) {
     let diff = this.calculateDiff(data);
     if (diff < 1) {

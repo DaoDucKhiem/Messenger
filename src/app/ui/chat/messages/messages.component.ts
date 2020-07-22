@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StringeeService } from 'src/app/service/stringee.service';
 
@@ -20,7 +20,7 @@ class ImageSnippet {
 
 export class MessagesComponent implements OnInit {
 
-  @Input() Messages: [];
+  Messages: [];
   currentConversation: any;
   currentConvId: string;
   currentUser: User;
@@ -46,13 +46,10 @@ export class MessagesComponent implements OnInit {
       //lấy currentContactId từ bên list truyền sang
       this.getContactUser();
 
+      //lắm nghe khi người dùng gửi tin nhắn
       this.stringeeService.stringeeChat.on('onObjectChange', ()=> {
         this.getMessages();
       })
-
-      // this.getMessages(); //lấy messages
-
-      // this.contactStatus();
     })
   }
 
@@ -88,11 +85,13 @@ export class MessagesComponent implements OnInit {
     this.showAb = !this.showAb;
   }
 
-  //lấy conversation từ list truyền sang
+  //lấy contact user id truyền sang từ list conversation đồng thời gọi lên server để lấy thông tin
+  //lấy thông tin xong sẽ lấy messages đối với contact này
   getContactUser() {
     this.stringeeService.contactId.subscribe((data: string) => {
       this.usersService.getById(data).subscribe(val => {
         this.currentContact = val;
+        this.getMessages();
       });
     });
   }
@@ -158,7 +157,6 @@ export class MessagesComponent implements OnInit {
       });
 
       this.clear();
-      this.stringeeService.sendMessageActive();
     }
     else alert('bạn phải nhập tin nhắn đã!');
   }
