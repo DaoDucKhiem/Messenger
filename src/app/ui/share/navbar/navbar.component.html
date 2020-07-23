@@ -15,9 +15,102 @@
                     <ngx-avatar *ngIf="user.imageUrl == ''" size="34" name="{{user.fullName}}"></ngx-avatar>
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li class="dropdown-item">Cập nhật hồ sơ</li>
+                    <li class="dropdown-item" (click)="showUpdateProfile()">Cập nhật hồ sơ</li>
+                    <li class="dropdown-item" (click)="showUpdatePassword()">Đổi mật khẩu</li>
                     <li class="dropdown-item" (click)="logout()">Đăng xuất</li>
                 </ul>
+                <div id="modal-update-profile" class="modal">
+                    <div class="card">
+                        <h4 class="card-header">Cập nhật hồ sơ</h4>
+                        <div class="card-body">
+                            <form [formGroup]="form" (ngSubmit)="onUpdateProfile()">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="text" formControlName="email" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                        <div *ngIf="f.email.errors.required">Email không được bỏ trống</div>
+                                        <div *ngIf="f.email.errors.pattern">Email không hợp lệ</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fullName">Họ và Tên</label>
+                                    <input type="text" formControlName="fullName" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.fullName.errors }" />
+                                    <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback">
+                                        <div *ngIf="f.fullName.errors.required">Họ và Tên không được bỏ trống</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Số điện thoại</label>
+                                    <input type="text" formControlName="phone" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
+                                    <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                                        <div *ngIf="f.phone.errors.required">Số điện thoại không được bỏ trống</div>
+                                        <div *ngIf="f.phone.errors.pattern">Số điện thoại không hợp lệ</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imageUrl">
+                                        <input #imageInput type="file" accept="image/*" (change)="processFile(imageInput)">
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary">
+                                        Cập nhật
+                                    </button>
+                                    <button class="btn btn-danger" (click)="hideUpdateProfile()">
+                                        Hủy
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="modal-update-password" class="modal">
+                    <div class="card">
+                        <h4 class="card-header">Thay mật khẩu</h4>
+                        <div class="card-body">
+                            <form [formGroup]="formPass" (ngSubmit)="onUpdateProfile()">
+                                <div class="form-group">
+                                    <label for="oldPass">Mật khẩu cũ</label>
+                                    <input type="password" formControlName="oldPass" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.oldPass.errors }" />
+                                    <div *ngIf="submitted && f.oldPass.errors" class="invalid-feedback">
+                                        <div *ngIf="f.oldPass.errors.required">Mật khẩu cũ không được bỏ trống</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPass">Mật khẩu mới</label>
+                                    <input type="password" formControlName="newPass" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.newPass.errors }" />
+                                    <div *ngIf="submitted && f.newPass.errors" class="invalid-feedback">
+                                        <div *ngIf="f.newPass.errors.required">Mật khẩu mới không được bỏ trống</div>
+                                        <div *ngIf="f.newPass.errors.pattern">Mật khẩu phải chứa ít nhất một chữ in hoa, một chữ thường, một số và một ký
+                                            tự đặc biệt dài từ 8-15 ký tự</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reNewPass">Nhắc lại mật khẩu mới</label>
+                                    <input type="password" formControlName="reNewPass" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.reNewPass.errors }" />
+                                    <div *ngIf="submitted && f.reNewPass.errors" class="invalid-feedback">
+                                        <div *ngIf="f.reNewPass.errors.required">Nhắc lại mật khẩu mới không được bỏ trống</div>
+                                        <div *ngIf="f.reNewPass.errors.confirmedValidator">Mật khẩu mới và Nhắc lại mật khẩu mới không khớp nhau</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary">
+                                        Cập nhật
+                                    </button>
+                                    <button class="btn btn-danger" (click)="hideUpdatePassword()">
+                                        Hủy
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

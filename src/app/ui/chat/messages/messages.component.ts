@@ -43,6 +43,8 @@ export class MessagesComponent implements OnInit {
 
       this.currentConvId = val['id'];
 
+      this.getMessages();
+
       //lấy currentContactId từ bên list truyền sang
       this.getContactUser();
 
@@ -87,7 +89,6 @@ export class MessagesComponent implements OnInit {
   }
 
   //lấy contact user id truyền sang từ list conversation đồng thời gọi lên server để lấy thông tin
-  //lấy thông tin xong sẽ lấy messages đối với contact này
   getContactUser() {
     this.stringeeService.contactId.subscribe((data: string) => {
       this.usersService.getById(data).subscribe(val => {
@@ -95,7 +96,7 @@ export class MessagesComponent implements OnInit {
         this.currentContact = val;
 
         //đồng thời lấy message của conversation
-        this.getMessages();
+        // this.getMessages();
       });
     });
   }
@@ -239,8 +240,6 @@ export class MessagesComponent implements OnInit {
               type_of_file
               );
           }
-
-          this.stringeeService.sendMessageActive();
         });
       }
     });

@@ -6,6 +6,7 @@ import { map, windowCount } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { User } from '../model/user-login';
+import { Profile } from '../model/profile';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -47,8 +48,8 @@ export class AccountService {
         return this.http.post<string>(`${environment.apiUrl}/register`, user);
     }
 
-    update(id, params) {
-        return this.http.put(`${environment.apiUrlUser}/${id}`, params)
+    update(id: string, params: Profile) {
+        return this.http.put(`${environment.apiUrl}/${id}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id == this.userValue.id) {

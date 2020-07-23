@@ -30,9 +30,9 @@ export class AboutComponent implements OnInit {
       this.getData();
     });
 
-    this.stringeeService.sendMessage.subscribe(() => {
-      this.getData();
-    });
+    // this.stringeeService.sendMessage.subscribe(() => {
+    //   this.getData();
+    // });
   }
 
 

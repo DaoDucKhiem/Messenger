@@ -4,6 +4,7 @@ import { StringeeClient, StringeeChat } from "stringee-chat-js-sdk";
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FileService } from './file.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class StringeeService {
   stringeeClient = new StringeeClient();
   user: any;
   selectedConvId: string;
+  private sendMgSubject: BehaviorSubject<boolean>;
 
   // global
   stringeeChat: StringeeChat;

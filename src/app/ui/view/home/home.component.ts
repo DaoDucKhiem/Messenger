@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   convId: string;
   currentUserId: string;
 
-  constructor(private stringeeService: StringeeService, private route: ActivatedRoute, private router: Router) { 
+  constructor(private stringeeService: StringeeService, private route: ActivatedRoute, private router: Router) {
     this.currentUserId = JSON.parse(localStorage.getItem('user')).id;
   }
 
@@ -31,27 +31,49 @@ export class HomeComponent implements OnInit {
    * lấy danh sách các conversation
    */
   getConversations() {
-    this.stringeeService.getConversations(15, (status, code, message, convs) => {
+    this.convId = this.route.snapshot.paramMap.get('id');
+    if (this.convId == '1') {
+      this.stringeeService.getConversations(15, (status, code, message, convs) => {
 
-      this.conversations = convs;
+        this.conversations = convs;
 
-      //cập nhật đã xem cho last message
-      this.stringeeService.stringeeChat.markConversationAsRead(convs[0].id);
-      this.conversations[0].unreadCount = 0;
+        //cập nhật đã xem cho last message
+        this.stringeeService.stringeeChat.markConversationAsRead(convs[0].id);
+        this.conversations[0].unreadCount = 0;
 
-      //lấy conversation đầu tiên
-      for (let parti of convs[0].participants) {
-        if (parti.userId != this.currentUserId) {
+        //lấy conversation đầu tiên
+        for (let parti of convs[0].participants) {
+          if (parti.userId != this.currentUserId) {
 
-          //lấy id của conversation đầu tiên để đẩy lên route
-          this.router.navigate(['/home/conversation/' + convs[0].id]).then(() => {
+            //lấy id của conversation đầu tiên để đẩy lên route
+            this.router.navigate(['/home/conversation/' + convs[0].id]).then(() => {
 
-            //bắn user id của contact cho message
-            this.stringeeService.changeSelectConversation(parti.userId);
-          });
-          break;
+              //bắn user id của contact cho message
+              this.stringeeService.changeSelectConversation(parti.userId);
+            });
+            break;
+          }
         }
-      }
-    });
+      });
+    }
+    else {
+      //cập nhật thông tin last message của conversation trước khi lấy về sau khi reload
+      this.stringeeService.stringeeChat.markConversationAsRead(this.convId);
+      this.stringeeService.getConversations(15, (status, code, message, convs) => {
+        this.conversations = convs;
+
+        // lấy conversation hiện tại
+        var currentConv = convs.filter(c => c.id == this.convId);
+
+        //lấy contact id
+        for (let parti of currentConv[0].participants) {
+          if (parti.userId != this.currentUserId) {
+              //bắn user id của contact cho message
+              this.stringeeService.changeSelectConversation(parti.userId);
+            break;
+          }
+        }
+      })
+    }
   }
 }
