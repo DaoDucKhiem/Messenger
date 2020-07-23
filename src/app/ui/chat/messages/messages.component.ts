@@ -49,6 +49,7 @@ export class MessagesComponent implements OnInit {
       //lắm nghe khi người dùng gửi tin nhắn
       this.stringeeService.stringeeChat.on('onObjectChange', ()=> {
         this.getMessages();
+        // this.stringeeService.sendMessageActive();  //update lastmessage nhưng đang bị lag
       })
     })
   }
@@ -90,7 +91,10 @@ export class MessagesComponent implements OnInit {
   getContactUser() {
     this.stringeeService.contactId.subscribe((data: string) => {
       this.usersService.getById(data).subscribe(val => {
+        //lấy thông tin contact
         this.currentContact = val;
+
+        //đồng thời lấy message của conversation
         this.getMessages();
       });
     });
@@ -158,7 +162,6 @@ export class MessagesComponent implements OnInit {
 
       this.clear();
     }
-    else alert('bạn phải nhập tin nhắn đã!');
   }
 
   /**
@@ -221,8 +224,6 @@ export class MessagesComponent implements OnInit {
 
         this.fileService.uploadFile(formData).subscribe(res => {
           url = res;
-          console.log(url.filename);
-
           //nếu là gửi ảnh
           if(fileType == 2) {
             this.stringeeService.sendPhoto(this.currentConvId, url.filename);
@@ -234,7 +235,8 @@ export class MessagesComponent implements OnInit {
               this.currentConvId, 
               this.selectedFile.file.name, 
               url.filename,
-              file.size
+              file.size,
+              type_of_file
               );
           }
 

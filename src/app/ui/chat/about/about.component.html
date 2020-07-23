@@ -50,12 +50,12 @@
         <div *ngIf="showImg" class="img-share">
             <div class="item1" *ngFor="let image of messageImage">
 
-                <img class="img-grid" [src]="image.url" alt="image" (click)="showModal(image.id)">
+                <img class="img-grid" [src]="image.filePath" alt="image" (click)="showModal(image.id)">
 
                  <!-- display modal image when click -->
                 <div [id]="image.id" class="modal" (click)="hideModal(image.id)">
                     <div class="modal-image">
-                        <img [src]="image.url" alt="image">
+                        <img [src]="image.filePath" alt="image">
                     </div>
                 </div>
 

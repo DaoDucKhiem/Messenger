@@ -44,7 +44,7 @@ export class ListConversationsComponent implements OnInit {
     // this.getConversations();
 
     //cập nhật last message khi người dùng gửi tin nhắn
-    this.stringeeService.sendMessage.subscribe(data => {
+    this.stringeeService.sendMessage.subscribe(() => {
       this.getConversations();
     });
 

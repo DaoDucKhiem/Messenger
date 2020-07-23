@@ -3,6 +3,7 @@ import { StringeeClient, StringeeChat } from "stringee-chat-js-sdk";
 
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { FileService } from './file.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class StringeeService {
   // global
   stringeeChat: StringeeChat;
 
-  constructor(private toastr: ToastrService, private router: Router) {
+  constructor(private toastr: ToastrService, private router: Router, private fileService: FileService) {
     this.stringeeChat = new StringeeChat(this.stringeeClient);
     // this.lastConvId = this.getConversations(1)[0].ConvId;
     // console.log(this.lastConvId);
@@ -84,7 +85,7 @@ export class StringeeService {
     };
 
     this.stringeeChat.createConversation([id], options, (status: string, code: string, message: string, conv: any) => {
-      localStorage.setItem('ConvId', conv.id);
+      // localStorage.setItem('ConvId', conv.id);
       this.router.navigate(['/home/conversation/' + conv.id]);
     });
   }
@@ -120,6 +121,8 @@ export class StringeeService {
           avatar_url: avatar,
           email: email,
         }
+        
+        console.log(updateUserData)
         
         this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
           if (res.message == 'Success') {
@@ -168,7 +171,7 @@ export class StringeeService {
   }
 
   //gửi file 
-  sendFile(convId: string, fName: string, fPath: string, fLenght: number) {
+  sendFile(convId: string, fName: string, fPath: string, fLenght: number, typeofFile: number) {
     var fileMsg = {
       type: 5,
       convId: convId,
@@ -186,8 +189,21 @@ export class StringeeService {
     };
 
     this.stringeeChat.sendMessage(fileMsg, function (status: any, code: any, message: any, msg: any) {
-      console.log(status + code + message + "msg result " + JSON.stringify(msg));
+      // console.log(status + code + message + "msg result " + JSON.stringify(msg));
     });
+
+    var fileInfo = {
+      type: 5,
+      convId: convId,
+      filePath: fPath,
+      content: fName,
+      typeofFile: typeofFile,
+    }
+
+    this.fileService.uploadFileServer(fileInfo).subscribe(data => {
+      //console.log(data)
+    })
+
   }
 
   //gửi ảnh
@@ -207,8 +223,19 @@ export class StringeeService {
     };
 
     this.stringeeChat.sendMessage(photoMsg, function (status: any, code: any, message: any, msg: any) {
-      console.log(status + code + message + "msg result " + JSON.stringify(msg));
+     
     });
+
+    //gửi ảnh info lên server
+    var photoInfo = {
+      type: 2,
+      convId: convId,
+      filePath: fPath,
+    }
+
+    this.fileService.uploadFileServer(photoInfo).subscribe(data => {
+      //console.log(data)
+    })
   }
 
   //truyền contactId cho bên message khi route thay đổi
