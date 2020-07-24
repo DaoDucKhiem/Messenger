@@ -1,4 +1,4 @@
-<div class="message-view">
+<div class="message-view" *ngIf="currentContact">
 
     <!-- header conversation detail -->
     <div class="header">
@@ -45,7 +45,8 @@
                     <div class="bubbleWrapper" *ngIf="mess.sender != currentUser.id">
                         <div class="inlineContainer">
                             <!-- display avatar user contact -->
-                            <img *ngIf="(currentContact?.imageUrl != '')" [src]="currentContact?.imageUrl" alt="avatar">
+                            <img class="avatar-main-mess" *ngIf="(currentContact?.imageUrl != '')"
+                                [src]="currentContact?.imageUrl" alt="avatar">
                             <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName"
                                 size="32"></ngx-avatar>
 
@@ -56,11 +57,12 @@
                                 <div *ngIf="mess.type == 1">{{mess.content.content}}</div>
 
                                 <div class="message-file" *ngIf="mess.type == 5">
-                                    <a (click)="openFile(mess.content.file.filePath)" target="_blank">{{mess.content}}</a>
+                                    <a (click)="openFile(mess.content.file.filePath)"
+                                        target="_blank">{{mess.content}}</a>
                                 </div>
 
-                                <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.content.photo.filePath" alt="img message"
-                                    (click)="showModal(mess.id)">
+                                <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.content.photo.filePath"
+                                    alt="img message" (click)="showModal(mess.id)">
                                 <!-- display modal if type is image -->
                                 <div *ngIf="mess.type === 2" [id]="mess.id" class="modal" (click)="hideModal(mess.id)">
                                     <div class="modal-image">
@@ -77,9 +79,10 @@
                     <div class="bubbleWrapper" *ngIf="mess.sender == currentUser.id">
                         <div class="inlineContainer own">
                             <!-- display avatar current user -->
-                            <img *ngIf="(currentUser.imageUrl != '')" [src]="currentUser.imageUrl" alt="avatar">
-                            <ngx-avatar *ngIf="currentUser.imageUrl == ''" [name]="currentUser.fullName"
-                                size="32"></ngx-avatar>
+                            <img class="avatar-main-mess" *ngIf="(currentUser.imageUrl != '')"
+                                [src]="currentUser.imageUrl" alt="avatar">
+                            <ngx-avatar *ngIf="currentUser.imageUrl == ''" [name]="currentUser.fullName" size="32">
+                            </ngx-avatar>
 
                             <!-- display content message of current user -->
                             <div class="ownBubble own" [ngClass]="{'message-image' : mess.type === 2}">
@@ -87,11 +90,12 @@
                                 <div *ngIf="mess.type === 1">{{mess.content.content}}</div>
 
                                 <div class="message-file" *ngIf="mess.type === 5">
-                                    <a (click)="openFile(mess.content.file.filePath)" target="_blank">{{mess.content.file.filename}}</a>
+                                    <a (click)="openFile(mess.content.file.filePath)"
+                                        target="_blank">{{mess.content.file.filename}}</a>
                                 </div>
 
-                                <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.content.photo.filePath" alt="img message"
-                                    (click)="showModal(mess.id)">
+                                <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.content.photo.filePath"
+                                    alt="img message" (click)="showModal(mess.id)">
                                 <!-- display modal if type is image -->
                                 <div *ngIf="mess.type === 2" [id]="mess.id" class="modal" (click)="hideModal(mess.id)">
                                     <div class="modal-image">
@@ -147,4 +151,11 @@
 
     </div>
     <!-- content conversation detail -->
+</div>
+<div *ngIf="currentContact == null" class="start">
+    <div class="first-view">
+            <h1>Xin chào, {{currentUser.fullName}}</h1>
+            <h3>Chào mừng bạn đến với webchat của chúng tôi!!!</h3>
+            <img src="../../../../assets/images/more-icon.png" alt="load">
+    </div>
 </div>

@@ -64,7 +64,10 @@ export class ListConversationsComponent implements OnInit {
    * lấy danh sách user trên server
    */
   getContactList() {
-    this.usersService.getAll().subscribe(contacts => { this.contacts = contacts; this.contactsCopy = contacts })
+    this.usersService.getAll().subscribe(contacts => {
+      this.contacts = contacts.filter(z => z.id != this.currentUserId);
+      this.contactsCopy = this.contacts
+    })
   }
 
 
@@ -138,6 +141,8 @@ export class ListConversationsComponent implements OnInit {
 
     //truyền id người được chọn để lấy dữ liệu
     this.stringeeService.changeSelectConversation(id);
+
+    this.getConversations();
 
     this.selectedConversations();
   }

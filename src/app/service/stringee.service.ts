@@ -67,11 +67,22 @@ export class StringeeService {
     });
   }
 
-  //connect stringee khi người dùng vừa đăng ký thực hiện update profile
+  //connect stringee khi người dùng thực hiện update profile
   connectStringeeToUpdate(token: any) {
     this.stringeeClient.connect(token);
     this.stringeeClient.on('connect', () => {
       this.updateUserInfo(this.getCurrentIdFromAccessToken(token), token);
+    });
+    this.authenListenner();
+
+    this.disconnectListenner();
+  }
+
+  //connect khi người dùng thực hiện đăng ký tài khoản
+  connectStringeeToRegister(token: any) {
+    this.stringeeClient.connect(token);
+    this.stringeeClient.on('connect', () => {
+      this.updateUserRegister(this.getCurrentIdFromAccessToken(token), token);
     });
     this.authenListenner();
 
@@ -111,6 +122,30 @@ export class StringeeService {
   }
 
   //cập nhật thông tin user trên stringee
+  updateUserRegister(id: string, token: string) {
+    this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
+      let _user = users[0];
+      if (!_user) {
+        let username = this.getCurrentUsernameFromAccessToken(token);
+        let avatar = this.getCurrentUserAvatarFromAccessToken(token);
+        let email = this.getCurrentEmailFromAccessToken(token)
+        let updateUserData = {
+          display_name: username,
+          avatar_url: avatar,
+          email: email,
+        }
+        
+        this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
+          if (res.message == 'Success') {
+            this.showSuccess("Cập nhật thông tin thành công!");
+          }
+          else this.showError("Cập nhật thông tin thất bại!");
+          this.disconnectStringee();
+        });
+      }
+    })
+  }
+
   updateUserInfo(id: string, token: string) {
     this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
       let _user = users[0];
@@ -124,14 +159,10 @@ export class StringeeService {
           email: email,
         }
         
-        console.log(updateUserData)
-        
         this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
           if (res.message == 'Success') {
-            this.showSuccess("Cập nhật thông tin thành công!");
           }
           else this.showError("Cập nhật thông tin thất bại!");
-          this.disconnectStringee();
         });
       }
     })

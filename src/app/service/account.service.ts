@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable} from 'rxjs';
-import { map, windowCount } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { User } from '../model/user-login';
@@ -48,11 +48,12 @@ export class AccountService {
         return this.http.post<string>(`${environment.apiUrl}/register`, user);
     }
 
-    update(id: string, params: Profile) {
-        return this.http.put(`${environment.apiUrl}/${id}`, params)
+    updateProfile(params: Profile) {
+        return this.http.put(`${environment.apiUrl}/updateProfile`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
-                if (id == this.userValue.id) {
+                if (params.id == this.userValue.id) {
+                    
                     // update local storage
                     const user = { ...this.userValue, ...params };
                     localStorage.setItem('user', JSON.stringify(user));

@@ -153,7 +153,13 @@ p {
 }
 
 .own {
-	align-self: flex-end;
+    align-self: flex-end;
+}
+
+.avatar-main-mess {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
 }
 
 .other {
@@ -245,4 +251,27 @@ label input {
     margin-right: 16px;
     margin-left: auto;
     order: 2;
+}
+
+.start {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.first-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #ffffff;
+    h1, h3, img {
+        margin: 0 auto;
+        padding-bottom: 15px;
+    }
+    img {
+        width: 80px;
+        height: 80px;
+    }
 }

@@ -64,7 +64,7 @@ export class MessagesComponent implements OnInit {
   private items = [];
 
   ngAfterViewInit() {
-    this.scrollContainer = this.scrollFrame.nativeElement;
+    this.scrollContainer = this.scrollFrame?.nativeElement;
     this.itemElements.changes.subscribe(_ => this.scrollToBottom());
 
     // Add a new item every 2 seconds
@@ -74,7 +74,7 @@ export class MessagesComponent implements OnInit {
   }
 
   private scrollToBottom(): void {
-    this.scrollContainer.scroll({
+    this.scrollContainer?.scroll({
       top: this.scrollContainer.scrollHeight,
       left: 0,
       behavior: 'smooth'

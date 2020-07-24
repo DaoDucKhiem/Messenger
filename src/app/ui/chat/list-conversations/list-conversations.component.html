@@ -14,7 +14,7 @@
     <div id="carouselExampleFade" class="carousel slide list-sidebar" data-ride="carousel" data-interval="false" data-wrap="false">
         <div class="carousel-inner">
             <!-- list conversation -->
-            <div class="list-content carousel-item active">
+            <div class="carousel-item active">
                 <div class="conversation" *ngFor="let conv of conversations"
                 (click)="onSelect(conv)"
                 [ngClass]="{'selected': conv.id === currentConvId}"
@@ -74,10 +74,18 @@
                     </div>
                 </div>
                 <!-- list conversation -->
+
+                <div *ngIf="conversations?.length == 0" class="start">
+                    <div class="first-view">
+                        <div class="item-1"><img src="../../../../assets/images/message-icon.png" alt="messenger.png"></div>
+                        <div class="item-1"><p>Nhấn tìm kiếm</p></div>
+                        <div class="item-1"><p>để bắt đầu cuộc trò chuyện</p></div>
+                    </div>
+                </div>
             </div>
 
             <!-- contact list -->
-            <div class="list-content carousel-item">
+            <div class="carousel-item">
                 <div class="conversation" *ngFor="let contact of contacts"
                     (click)="createConversation(contact.id, contact.fullName)"
                     href="#carouselExampleFade" data-slide="prev">

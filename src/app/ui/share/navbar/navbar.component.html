@@ -51,17 +51,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="imageUrl">
-                                        <input #imageInput type="file" accept="image/*" (change)="processFile(imageInput)">
+                                    <!-- <label class="imageInput" for="imageUrl">
+                                        <input #imageInput type="file" name="imageUrl" accept="image/*" (change)="processFile(imageInput)">Chọn ảnh
+                                    </label> -->
+                                    <label class="imageInput">
+                                        <img src="../../../assets/icons/IconAppChat/9.svg" alt="upload image">
+                                        <input #imageInput type="file" (change)="processFile(imageInput)"> Chọn ảnh
                                     </label>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary">
                                         Cập nhật
                                     </button>
-                                    <button class="btn btn-danger" (click)="hideUpdateProfile()">
+                                    <a class="btn btn-danger" (click)="hideUpdateProfile()">
                                         Hủy
-                                    </button>
+                                    </a>
                                 </div>
                             </form>
                         </div>
@@ -71,41 +75,41 @@
                     <div class="card">
                         <h4 class="card-header">Thay mật khẩu</h4>
                         <div class="card-body">
-                            <form [formGroup]="formPass" (ngSubmit)="onUpdateProfile()">
+                            <form [formGroup]="formPass" (ngSubmit)="onchangePass()">
                                 <div class="form-group">
                                     <label for="oldPass">Mật khẩu cũ</label>
                                     <input type="password" formControlName="oldPass" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.oldPass.errors }" />
-                                    <div *ngIf="submitted && f.oldPass.errors" class="invalid-feedback">
-                                        <div *ngIf="f.oldPass.errors.required">Mật khẩu cũ không được bỏ trống</div>
+                                        [ngClass]="{ 'is-invalid': submitted && p.oldPass.errors }" />
+                                    <div *ngIf="submitted && p.oldPass.errors" class="invalid-feedback">
+                                        <div *ngIf="p.oldPass.errors.required">Mật khẩu cũ không được bỏ trống</div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="newPass">Mật khẩu mới</label>
                                     <input type="password" formControlName="newPass" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.newPass.errors }" />
-                                    <div *ngIf="submitted && f.newPass.errors" class="invalid-feedback">
-                                        <div *ngIf="f.newPass.errors.required">Mật khẩu mới không được bỏ trống</div>
-                                        <div *ngIf="f.newPass.errors.pattern">Mật khẩu phải chứa ít nhất một chữ in hoa, một chữ thường, một số và một ký
+                                        [ngClass]="{ 'is-invalid': submitted && p.newPass.errors }" />
+                                    <div *ngIf="submitted && p.newPass.errors" class="invalid-feedback">
+                                        <div *ngIf="p.newPass.errors.required">Mật khẩu mới không được bỏ trống</div>
+                                        <div *ngIf="p.newPass.errors.pattern">Mật khẩu phải chứa ít nhất một chữ in hoa, một chữ thường, một số và một ký
                                             tự đặc biệt dài từ 8-15 ký tự</div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="reNewPass">Nhắc lại mật khẩu mới</label>
                                     <input type="password" formControlName="reNewPass" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.reNewPass.errors }" />
-                                    <div *ngIf="submitted && f.reNewPass.errors" class="invalid-feedback">
-                                        <div *ngIf="f.reNewPass.errors.required">Nhắc lại mật khẩu mới không được bỏ trống</div>
-                                        <div *ngIf="f.reNewPass.errors.confirmedValidator">Mật khẩu mới và Nhắc lại mật khẩu mới không khớp nhau</div>
+                                        [ngClass]="{ 'is-invalid': submitted && p.reNewPass.errors }" />
+                                    <div *ngIf="submitted && p.reNewPass.errors" class="invalid-feedback">
+                                        <div *ngIf="p.reNewPass.errors.required">Nhắc lại mật khẩu mới không được bỏ trống</div>
+                                        <div *ngIf="p.reNewPass.errors.confirmedValidator">Mật khẩu mới và Nhắc lại mật khẩu mới không khớp nhau</div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary">
                                         Cập nhật
                                     </button>
-                                    <button class="btn btn-danger" (click)="hideUpdatePassword()">
+                                    <a class="btn btn-danger" (click)="hideUpdatePassword()">
                                         Hủy
-                                    </button>
+                                    </a>
                                 </div>
                             </form>
                         </div>

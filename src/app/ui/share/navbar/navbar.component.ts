@@ -6,6 +6,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FileService } from 'src/app/service/file.service';
 import { Profile } from 'src/app/model/profile';
 import { ConfirmedValidator } from 'src/app/helpers/confirmed.validator';
+import { first } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -26,12 +28,15 @@ export class NavbarComponent implements OnInit {
   submitted = false;
   file: any;
   profileUpdate: Profile
+  showProfile = false;
+  showChangePass = false;
 
   constructor(
     private accountService: AccountService,
     private stringeeService: StringeeService,
     private formBuilder: FormBuilder,
     private fileService: FileService,
+    private toastr: ToastrService,
 
   ) {
     this.user = accountService.userValue;
@@ -39,16 +44,20 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.validate();
+    this.validateFormPass();
   }
 
   validate() {
     this.form = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      fullName: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern("((09|03|07|08|05)+([0-9]{8}))")]],
-      imageUrl: [''],
+      email: [this.user.email, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+      fullName: [this.user.fullName, Validators.required],
+      phone: [this.user.phone, [Validators.required, Validators.pattern("((09|03|07|08|05)+([0-9]{8}))")]],
+      imageUrl: [this.user.imageUrl],
     });
-    
+
+  }
+
+  validateFormPass() {
     this.formPass = this.formBuilder.group({
       oldPass: ['', Validators.required],
       newPass: ['', Validators.required],
@@ -61,6 +70,7 @@ export class NavbarComponent implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
+  get p() { return this.formPass.controls; }
 
   selectedFile: ImageSnippet;
 
@@ -69,12 +79,14 @@ export class NavbarComponent implements OnInit {
 
     const read = new FileReader();
 
-    read.addEventListener('load', (event: any) => {
-      this.selectedFile = new ImageSnippet(event.target.result, file);
-      if (this.selectedFile) {
-        this.file = file;
-      }
-    });
+    if (this.showProfile) {
+      read.addEventListener('load', (event: any) => {
+        this.selectedFile = new ImageSnippet(event.target.result, file);
+        if (this.selectedFile) {
+          this.file = file;
+        }
+      });
+    }
 
     read.readAsDataURL(file);
   }
@@ -88,6 +100,7 @@ export class NavbarComponent implements OnInit {
     }
 
     this.profileUpdate = this.form.value;
+    this.profileUpdate.id = this.user.id;
 
     if (this.file != null) {
       var formData = new FormData();
@@ -95,30 +108,60 @@ export class NavbarComponent implements OnInit {
 
       this.fileService.uploadFile(formData).subscribe(res => {
         this.profileUpdate.imageUrl = res.filename;
-        this.accountService.update(this.user.id, this.profileUpdate);
+        this.accountService.updateProfile(this.profileUpdate).pipe(first()).subscribe(
+          data => {
+            this.showSuccess("Cập nhật thành công!");
+           this.stringeeService.connectStringeeToUpdate(this.user.token);
+          },
+          error => {
+            this.showError(error);
+          }
+        );
       })
     }
     else {
-      this.accountService.update(this.user.id, this.profileUpdate);
+      this.accountService.updateProfile(this.profileUpdate).pipe(first()).subscribe(data => {
+        this.showSuccess("Cập nhật thành công!");
+      },
+        error => {
+          this.showError(error);
+        });
     }
     this.hideUpdateProfile();
+    window.location.reload();
+  }
+
+  showError(error: string) {
+    this.toastr.error(error);
+  }
+
+  showSuccess(success: string) {
+    this.toastr.success(success);
+  }
+
+  onchangePass() {
+
   }
 
   //hiện modal cập nhật thông tin user
   showUpdateProfile() {
+    this.showProfile = true;
     document.getElementById("modal-update-profile").style.display = 'flex';
   }
 
   //ẩn modal cập nhật thông tin user
   hideUpdateProfile() {
+    this.showProfile = false;
     document.getElementById("modal-update-profile").style.display = 'none';
   }
 
   showUpdatePassword() {
+    this.showChangePass = true;
     document.getElementById("modal-update-password").style.display = 'flex';
   }
 
   hideUpdatePassword() {
+    this.showChangePass = false;
     document.getElementById("modal-update-password").style.display = 'none';
   }
 

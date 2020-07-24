@@ -97,6 +97,10 @@
 
 //========= list conversation =======->
 
+.carousel-inner {
+    height: 100%;
+}
+
 .list-sidebar {
     height: calc(100% - 123px);
     overflow: auto;
@@ -286,4 +290,28 @@ p {
     align-items: center;
     color: #ffffff;
     font-size: 16px;
+}
+
+.start {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.first-view {
+    color: #757562;
+    padding-top: 120px;
+    img {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+    }
+
+    .item-1 {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
