@@ -5,7 +5,9 @@ import { MessagesComponent } from './messages/messages.component';
 import { FormsModule } from '@angular/forms';
 import { HomeRoutingModule } from '../view/home/home-routing.module';
 import { AboutComponent } from './about/about.component';
+
 import { AvatarModule } from 'ngx-avatar';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [ListConversationsComponent, MessagesComponent, AboutComponent],
@@ -13,7 +15,8 @@ import { AvatarModule } from 'ngx-avatar';
     HomeRoutingModule,
     CommonModule,
     FormsModule,
-    AvatarModule
+    AvatarModule,
+    InfiniteScrollModule
   ],
   exports: [ListConversationsComponent, MessagesComponent]
 })

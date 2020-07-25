@@ -118,11 +118,20 @@ export class StringeeService {
     this.stringeeChat.getLastConversations(count, isAscending, callback);
   }
 
+  //lấy các tin nhắn của cuộc trò chuyện
   getMessages(convId: string, callback?: any) {
     var convId = convId;
     var count = 15;
     var isAscending = true;
     this.stringeeChat.getLastMessages(convId, count, isAscending, callback);
+  }
+
+  //lấy message khi thực hiện phân trang
+  getMessageBefore(convId: any, sequence: any, callback?: any) {
+    var count = 15;
+    var isAscending = true;
+    var _sequence = sequence;
+    this.stringeeChat.getMessagesBefore(convId, _sequence, count, isAscending, callback);
   }
 
   //cập nhật thông tin user trên stringee

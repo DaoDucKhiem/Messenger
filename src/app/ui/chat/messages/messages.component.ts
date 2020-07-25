@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StringeeService } from 'src/app/service/stringee.service';
 
@@ -31,14 +31,22 @@ export class MessagesComponent implements OnInit {
   modalImageSource = false;
   imageId: string;
 
+  scrollUpDistance = 0.3;
+  scrollThrottle = 150;
+  loading = false;
+
+  sendFile = false;
+  @ViewChild('scroll', { static: true }) scroll: any;
+
   constructor(
     private route: ActivatedRoute,
     private stringeeService: StringeeService,
     private usersService: UsersService,
     private fileService: FileService,
-    private dataTranferService: DataTranferService
+    private dataTranferService: DataTranferService,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
+
     route.params.subscribe(val => {
       this.currentConvId = val['id'];
 
@@ -54,31 +62,31 @@ export class MessagesComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  //auto scroll
+  // Tự động scroll xuống tin nhắn cuối cùng
+
   @ViewChild('scrollframe', { static: false }) scrollFrame: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
 
   private scrollContainer: any;
-  private items = [];
 
   ngAfterViewInit() {
-    this.scrollContainer = this.scrollFrame?.nativeElement;
-    this.itemElements.changes.subscribe(_ => this.scrollToBottom());
+    this.scrollContainer = this.scrollFrame.nativeElement;
+    this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
+  }
 
-    // Add a new item every 2 seconds
-    setInterval(() => {
-      this.items.push({});
-    }, 1000);
+  private onItemElementsChanged(): void {
+    this.scrollToBottom();
   }
 
   private scrollToBottom(): void {
-    this.scrollContainer?.scroll({
+    this.scrollContainer.scroll({
       top: this.scrollContainer.scrollHeight,
       left: 0,
       behavior: 'smooth'
     });
   }
 
+  
   /**
    * hiển thị hoặc ẩn about component
    */
@@ -103,6 +111,8 @@ export class MessagesComponent implements OnInit {
   getMessages(id: string): void {
     this.stringeeService.getMessages(id, (status, code, message, msgs) => {
       this.Messages = msgs;
+
+      //bắn tín hiện để cho bên list cập nhật khi back và truyền user id của contact sang
       this.dataTranferService.sendMessageActive();
     });
   }
@@ -157,10 +167,12 @@ export class MessagesComponent implements OnInit {
 
       //gọi service stringee gửi message file
       this.stringeeService.stringeeChat.sendMessage(txtMsg, (status, code, message, msg) => {
+        //bắn tín hiệu cập nhật lastmessage
         this.dataTranferService.sendMessageActive();
       });
     }
     this.clear();
+    this.sendFile = false;
   }
 
   /**
@@ -222,23 +234,26 @@ export class MessagesComponent implements OnInit {
 
         this.fileService.uploadFile(formData).subscribe(res => {
           //nếu là gửi ảnh
-          if(fileType == 2) {
+          if (fileType == 2) {
             this.stringeeService.sendPhoto(this.currentConvId, res.filename);
           }
 
           //nếu là gửi file
-          if(fileType == 5) {
+          if (fileType == 5) {
             this.stringeeService.sendFile(
-              this.currentConvId, 
-              this.selectedFile.file.name, 
+              this.currentConvId,
+              this.selectedFile.file.name,
               res.filename,
               file.size,
               type_of_file
-              );
+            );
           }
 
           //bắn tín hiệu gửi file cho bên about để cập nhật thông tin
-          this.dataTranferService.sendMessageFileActive();
+          this.sendFile = true;
+
+          //bắn tín hiệu cập nhật lastmessage
+          this.dataTranferService.sendMessageActive();
         });
       }
     });
@@ -246,9 +261,9 @@ export class MessagesComponent implements OnInit {
     read.readAsDataURL(file);
   }
 
-  // onNewLine(val: string): string {
-  //   return val + '\n';
-  // }
+  onNewLine(val: string): string {
+    return val + '\n';
+  }
 
   /**
    * hiện modal message image
@@ -275,6 +290,15 @@ export class MessagesComponent implements OnInit {
   //nghe sự kiện khi nhấn ESC ẩn image modal
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     this.hideModal(this.imageId);
+  }
+
+  onScroll() {
+    this.loading = true;
+    setTimeout(()=>{this.loading = false}, 1000)
+    var sequence = this.Messages[0].sequence;
+    this.stringeeService.getMessageBefore(this.currentConvId, sequence, (status, code, message, msgs) => {
+      this.Messages = msgs.concat(this.Messages);
+    })
   }
 
 }

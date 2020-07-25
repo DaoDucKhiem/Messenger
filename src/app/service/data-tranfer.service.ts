@@ -18,10 +18,4 @@ export class DataTranferService {
   sendMessageActive() {
     this.sendMessage.emit(true);
   }
-
-  //truyền tín hiệu cho bên about để cập nhật thông tin về file
-  @Output() sendMessageFile = new EventEmitter<boolean>();
-  sendMessageFileActive() {
-    this.sendMessage.emit(true);
-  }
 }

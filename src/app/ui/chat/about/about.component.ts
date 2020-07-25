@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 
 import { FileService } from 'src/app/service/file.service';
 import { User } from 'src/app/model/user-login';
@@ -11,7 +11,7 @@ import { DataTranferService } from 'src/app/service/data-tranfer.service';
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent implements OnInit, OnChanges{
   currentConvId: string;
   messageImage: FileModel[];
   messageFile: FileModel[];
@@ -20,6 +20,7 @@ export class AboutComponent implements OnInit {
   imageId: string;
 
   @Input() userContact: User;
+  @Input() sendFile: boolean;
 
   constructor(
     private fileService: FileService,
@@ -27,16 +28,19 @@ export class AboutComponent implements OnInit {
     private dataTranferService: DataTranferService
   ) {}
 
+
+  ngOnChanges(): void {
+    if(this.sendFile == true) {
+      //lắng nghe khi bên gửi tin nhắn là file
+      this.getData();
+    }
+  }
+
   ngOnInit(): void {
 
     //khi route thay đổi thì đồng thời get dữ liệu file theo cuộc trò chuyện tương ứng
     this.route.params.subscribe(val => {
       this.currentConvId = val['id'];
-      this.getData();
-    });
-
-    //lắng nghe khi bên gửi tin nhắn là file
-    this.dataTranferService.sendMessageFile.subscribe(() => {
       this.getData();
     });
   }
