@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -39,7 +39,7 @@ export class AccountService {
         // remove user from local storage and set current user to null
         localStorage.removeItem('user');
         this.userSubject.next(null);
-        this.router.navigate(['/login']).then(()=>{
+        this.router.navigate(['/login']).then(() => {
             window.location.reload();
         })
     }
@@ -48,18 +48,17 @@ export class AccountService {
         return this.http.post<string>(`${environment.apiUrl}/register`, user);
     }
 
-    updateProfile(params: Profile) {
+    updateProfile(params: Profile): Observable<any>{
         return this.http.put(`${environment.apiUrl}/updateProfile`, params)
             .pipe(map(x => {
-                // update stored user if the logged in user updated their own record
-                if (params.id == this.userValue.id) {
-                    
-                    // update local storage
-                    const user = { ...this.userValue, ...params };
-                    localStorage.setItem('user', JSON.stringify(user));
 
-                    // publish updated user to subscribers
-                    this.userSubject.next(user);
+                if(params.id == this.userValue.id) {
+                // update thông tin trong storage
+                const user = { ...this.userValue, ...params };
+                localStorage.setItem('user', JSON.stringify(user));
+
+                // truyền thông tin user đến các subcriber
+                this.userSubject.next(user);
                 }
                 return x;
             }));

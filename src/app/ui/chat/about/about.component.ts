@@ -4,7 +4,7 @@ import { FileService } from 'src/app/service/file.service';
 import { User } from 'src/app/model/user-login';
 import { ActivatedRoute } from '@angular/router';
 import { FileModel } from 'src/app/model/file';
-import { StringeeService } from 'src/app/service/stringee.service';
+import { DataTranferService } from 'src/app/service/data-tranfer.service';
 
 @Component({
   selector: 'app-about',
@@ -13,7 +13,7 @@ import { StringeeService } from 'src/app/service/stringee.service';
 })
 export class AboutComponent implements OnInit {
   currentConvId: string;
-  messageImage: FileModel [];
+  messageImage: FileModel[];
   messageFile: FileModel[];
   showImg = false;
   showFile = false;
@@ -21,18 +21,24 @@ export class AboutComponent implements OnInit {
 
   @Input() userContact: User;
 
-  constructor(private fileService: FileService, private route: ActivatedRoute, private stringeeService: StringeeService) {
-  }
+  constructor(
+    private fileService: FileService,
+    private route: ActivatedRoute,
+    private dataTranferService: DataTranferService
+  ) {}
 
   ngOnInit(): void {
+
+    //khi route thay đổi thì đồng thời get dữ liệu file theo cuộc trò chuyện tương ứng
     this.route.params.subscribe(val => {
       this.currentConvId = val['id'];
       this.getData();
     });
 
-    // this.stringeeService.sendMessage.subscribe(() => {
-    //   this.getData();
-    // });
+    //lắng nghe khi bên gửi tin nhắn là file
+    this.dataTranferService.sendMessageFile.subscribe(() => {
+      this.getData();
+    });
   }
 
 

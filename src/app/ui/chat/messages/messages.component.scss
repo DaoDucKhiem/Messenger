@@ -227,6 +227,9 @@ label input {
     font-size: 13px;
     color: #9e9e9e;
     margin-left: 16px;
+    &:focus {
+        color: #111111;
+    }
 }
 
 .input-message {

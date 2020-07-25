@@ -1,10 +1,10 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { StringeeClient, StringeeChat } from "stringee-chat-js-sdk";
 
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FileService } from './file.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +15,14 @@ export class StringeeService {
   stringeeClient = new StringeeClient();
   user: any;
   selectedConvId: string;
-  private sendMgSubject: BehaviorSubject<boolean>;
 
   // global
   stringeeChat: StringeeChat;
 
+  infoUpdate: object;
+
   constructor(private toastr: ToastrService, private router: Router, private fileService: FileService) {
     this.stringeeChat = new StringeeChat(this.stringeeClient);
-    // this.lastConvId = this.getConversations(1)[0].ConvId;
-    // console.log(this.lastConvId);
   }
 
   connectStringee() {
@@ -67,15 +66,21 @@ export class StringeeService {
     });
   }
 
+  /**
+   * lấy thông tin user trên stringee
+   * @param id id của user
+   */
+  getUInfoStringee(id: string) {
+    let user: any;
+    this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
+      user = users[0];
+    })
+    return user;
+  }
+
   //connect stringee khi người dùng thực hiện update profile
   connectStringeeToUpdate(token: any) {
-    this.stringeeClient.connect(token);
-    this.stringeeClient.on('connect', () => {
-      this.updateUserInfo(this.getCurrentIdFromAccessToken(token), token);
-    });
-    this.authenListenner();
-
-    this.disconnectListenner();
+      this.updateUserProfile(this.getCurrentIdFromAccessToken(token), token);
   }
 
   //connect khi người dùng thực hiện đăng ký tài khoản
@@ -90,15 +95,14 @@ export class StringeeService {
   }
 
   //tạo cuộc trò chuyện
-  createConversation(id: string, _name: string) {
+  createConversation(id: string) {
     var options = {
-      name: _name,
+      name: '',
       isDistinct: true,
       isGroup: false
     };
 
     this.stringeeChat.createConversation([id], options, (status: string, code: string, message: string, conv: any) => {
-      // localStorage.setItem('ConvId', conv.id);
       this.router.navigate(['/home/conversation/' + conv.id]);
     });
   }
@@ -129,15 +133,15 @@ export class StringeeService {
         let username = this.getCurrentUsernameFromAccessToken(token);
         let avatar = this.getCurrentUserAvatarFromAccessToken(token);
         let email = this.getCurrentEmailFromAccessToken(token)
-        let updateUserData = {
+        this.infoUpdate = {
           display_name: username,
           avatar_url: avatar,
           email: email,
         }
         
-        this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
+        this.stringeeChat.updateUserInfo(this.infoUpdate, (res: any) => {
           if (res.message == 'Success') {
-            this.showSuccess("Cập nhật thông tin thành công!");
+            setTimeout(function() {window.location.reload()}, 1000);
           }
           else this.showError("Cập nhật thông tin thất bại!");
           this.disconnectStringee();
@@ -146,21 +150,23 @@ export class StringeeService {
     })
   }
 
-  updateUserInfo(id: string, token: string) {
+  updateUserProfile(id: string, token: string) {
     this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
       let _user = users[0];
       if (!_user) {
         let username = this.getCurrentUsernameFromAccessToken(token);
         let avatar = this.getCurrentUserAvatarFromAccessToken(token);
         let email = this.getCurrentEmailFromAccessToken(token)
-        let updateUserData = {
+        this.infoUpdate = {
           display_name: username,
           avatar_url: avatar,
           email: email,
         }
         
-        this.stringeeChat.updateUserInfo(updateUserData, (res: any) => {
+        this.stringeeChat.updateUserInfo(this.infoUpdate, (res: any) => {
           if (res.message == 'Success') {
+            this.showSuccess("Cập nhật thông tin thành công!");
+            setTimeout(function() {window.location.reload()}, 1000);
           }
           else this.showError("Cập nhật thông tin thất bại!");
         });
@@ -269,16 +275,5 @@ export class StringeeService {
     this.fileService.uploadFileServer(photoInfo).subscribe(data => {
       //console.log(data)
     })
-  }
-
-  //truyền contactId cho bên message khi route thay đổi
-  @Output() contactId = new EventEmitter<string>();
-  changeSelectConversation(id: string) {
-    this.contactId.emit(id);
-  }
-
-  @Output() sendMessage = new EventEmitter<boolean>();
-  sendMessageActive() {
-    this.sendMessage.emit(true);
   }
 }

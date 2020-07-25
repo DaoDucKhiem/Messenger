@@ -2,9 +2,17 @@
     <!-- user contact profile -->
     <div class="profile">
         <div class="img-avatar">
-            <img *ngIf="userContact?.imageUrl != ''" [src]="userContact?.imageUrl" alt="avatar">
-           <ngx-avatar *ngIf="userContact?.imageUrl == ''" [name]="userContact?.fullName" size="120"></ngx-avatar>
+            <img class="avatar-image" *ngIf="userContact?.imageUrl != ''" [src]="userContact?.imageUrl" alt="avatar"
+                (click)="showModal('avatar-contact')">
+            <ngx-avatar *ngIf="userContact?.imageUrl == ''" [name]="userContact?.fullName" size="120"></ngx-avatar>
         </div>
+
+        <div id="avatar-contact" class="modal" (click)="hideModal('avatar-contact')">
+            <div class="modal-image">
+                <img [src]="userContact?.imageUrl" alt="image">
+            </div>
+        </div>
+
         <h2>{{userContact?.fullName}}</h2>
         <p>{{userContact?.phone}}</p>
         <p>{{userContact?.email}}</p>
@@ -25,9 +33,12 @@
             <p *ngFor="let file of messageFile">
                 <!-- 1:icon pdf, 2:icon docx, 3:icon pptx -->
                 <a href="file.url" target="_blank">
-                    <span *ngIf="file.typeofFile === 0"><img src="../../../assets/icons/IconAppChat/pdf-icon.svg" alt="PDF"></span>
-                    <span *ngIf="file.typeofFile === 1"><img src="../../../assets/icons/IconAppChat/docx-icon.svg" alt="DOCX"></span>
-                    <span *ngIf="file.typeofFile === 2"><img src="../../../assets/icons/IconAppChat/pptx-icon.svg" alt="PowerPoint"></span>
+                    <span *ngIf="file.typeofFile === 0"><img src="../../../assets/icons/IconAppChat/pdf-icon.svg"
+                            alt="PDF"></span>
+                    <span *ngIf="file.typeofFile === 1"><img src="../../../assets/icons/IconAppChat/docx-icon.svg"
+                            alt="DOCX"></span>
+                    <span *ngIf="file.typeofFile === 2"><img src="../../../assets/icons/IconAppChat/pptx-icon.svg"
+                            alt="PowerPoint"></span>
                     {{file.content}}
                 </a>
             </p>
@@ -52,7 +63,7 @@
 
                 <img class="img-grid" [src]="image.filePath" alt="image" (click)="showModal(image.id)">
 
-                 <!-- display modal image when click -->
+                <!-- hiện modal khi click -->
                 <div [id]="image.id" class="modal" (click)="hideModal(image.id)">
                     <div class="modal-image">
                         <img [src]="image.filePath" alt="image">
@@ -62,5 +73,5 @@
             </div>
         </div>
     </div>
-     <!-- list image shared -->
+    <!-- list image shared -->
 </div>

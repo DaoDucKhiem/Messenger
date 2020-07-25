@@ -3,7 +3,7 @@
     <div class="search">
         <div class="inpt-search" href="#carouselExampleFade" data-slide="next">
             <img src="../../../assets/icons/IconAppChat/11.svg" alt="search-icon">
-            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" (focus)="openContacts()" [(ngModel)]="searchTerm" (ngModelChange)="search()" />
+            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" (focus)="selectedContacts()" [(ngModel)]="searchTerm" (ngModelChange)="search()" />
         </div>
         <div class="btn-add">
             <img src="../../../assets/icons/IconAppChat/3.svg" alt="add conversation">
@@ -26,8 +26,8 @@
                         <div class="conversation-content" *ngIf="parti.userId != currentUserId">
                             <div class="avatar">
                                 <div>
-                                    <img *ngIf="parti.avatar && (parti.avatar != '')" [src]="parti.avatar" alt="avatar">
-                                    <ngx-avatar *ngIf="parti.avatar || (parti.avatar == '')" name="{{parti.name}}"
+                                    <img class="avatar-image" *ngIf="parti.avatar != ''" [src]="parti.avatar" alt="avatar">
+                                    <ngx-avatar *ngIf="parti.avatar == ''" [name]="parti.name"
                                         size="34"></ngx-avatar>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                     <!-- avatar user contact-->
                     <div class="avatar">
                         <div>
-                            <img *ngIf="contact.imageUrl" [src]="contact.imageUrl" alt="avatar">
+                            <img class="avatar-image" *ngIf="contact.imageUrl" [src]="contact.imageUrl" alt="avatar">
                             <ngx-avatar *ngIf="contact.imageUrl == ''" size="34" name="{{contact.fullName}}">
                             </ngx-avatar>
                         </div>

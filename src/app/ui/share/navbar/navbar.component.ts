@@ -108,10 +108,10 @@ export class NavbarComponent implements OnInit {
 
       this.fileService.uploadFile(formData).subscribe(res => {
         this.profileUpdate.imageUrl = res.filename;
-        this.accountService.updateProfile(this.profileUpdate).pipe(first()).subscribe(
+        this.accountService.updateProfile(this.profileUpdate).subscribe(
           data => {
-            this.showSuccess("Cập nhật thành công!");
-           this.stringeeService.connectStringeeToUpdate(this.user.token);
+            //nếu cập nhật thành công thì cập nhật profile trên server stringee
+           this.stringeeService.connectStringeeToUpdate(data.token);
           },
           error => {
             this.showError(error);
@@ -120,15 +120,15 @@ export class NavbarComponent implements OnInit {
       })
     }
     else {
-      this.accountService.updateProfile(this.profileUpdate).pipe(first()).subscribe(data => {
-        this.showSuccess("Cập nhật thành công!");
+      this.accountService.updateProfile(this.profileUpdate).subscribe(data => {
+        //nếu cập nhật thành công thì cập nhật profile trên server stringee
+        this.stringeeService.connectStringeeToUpdate(this.user.token);
       },
         error => {
           this.showError(error);
         });
     }
     this.hideUpdateProfile();
-    window.location.reload();
   }
 
   showError(error: string) {

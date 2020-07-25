@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, HostListener, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StringeeService } from 'src/app/service/stringee.service';
 
 import { User } from 'src/app/model/user-login';
 import { FileService } from 'src/app/service/file.service';
 import { UsersService } from 'src/app/service/users.service';
+import { DataTranferService } from 'src/app/service/data-tranfer.service';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -20,40 +21,37 @@ class ImageSnippet {
 
 export class MessagesComponent implements OnInit {
 
-  Messages: [];
-  currentConversation: any;
+  @Input() Messages: any; //lưu trữ các tin nhắn của cuộc trò chuyện
+
   currentConvId: string;
   currentUser: User;
-  currentContactId: string;
   currentContact: User;
 
   showAb = true;
   modalImageSource = false;
+  imageId: string;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private stringeeService: StringeeService,
     private usersService: UsersService,
-    private fileService: FileService
+    private fileService: FileService,
+    private dataTranferService: DataTranferService
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
+    route.params.subscribe(val => {
+      this.currentConvId = val['id'];
+
+      //lấy tin nhắn theo url
+      this.getMessages(this.currentConvId);
+
+      //lấy currentContactId từ bên list truyền sang hoặc reload truyền sang đồng thời lấy messages
+      this.getContactUser();
+
+    });
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(val => {
-
-      this.currentConvId = val['id'];
-
-      this.getMessages();
-
-      //lấy currentContactId từ bên list truyền sang
-      this.getContactUser();
-
-      //lắm nghe khi người dùng gửi tin nhắn
-      this.stringeeService.stringeeChat.on('onObjectChange', ()=> {
-        this.getMessages();
-        // this.stringeeService.sendMessageActive();  //update lastmessage nhưng đang bị lag
-      })
-    })
   }
 
   //auto scroll
@@ -70,7 +68,7 @@ export class MessagesComponent implements OnInit {
     // Add a new item every 2 seconds
     setInterval(() => {
       this.items.push({});
-    }, 2000);
+    }, 1000);
   }
 
   private scrollToBottom(): void {
@@ -90,23 +88,22 @@ export class MessagesComponent implements OnInit {
 
   //lấy contact user id truyền sang từ list conversation đồng thời gọi lên server để lấy thông tin
   getContactUser() {
-    this.stringeeService.contactId.subscribe((data: string) => {
+    this.dataTranferService.contactId.subscribe((data: string) => {
       this.usersService.getById(data).subscribe(val => {
         //lấy thông tin contact
         this.currentContact = val;
-
-        //đồng thời lấy message của conversation
-        // this.getMessages();
       });
     });
   }
 
   /**
-   * lấy id trên route lấy dữ liệu service tương ứng
+   * lấy message của cuộc trò chuyện
+   * @param id id của cuộc trò chuyện
    */
-  getMessages(): void {
-    this.stringeeService.getMessages(this.currentConvId, (status, code, message, msgs) => {
+  getMessages(id: string): void {
+    this.stringeeService.getMessages(id, (status, code, message, msgs) => {
       this.Messages = msgs;
+      this.dataTranferService.sendMessageActive();
     });
   }
 
@@ -158,15 +155,17 @@ export class MessagesComponent implements OnInit {
         }
       };
 
-      this.stringeeService.stringeeChat.sendMessage(txtMsg, function (status, code, message, msg) {
+      //gọi service stringee gửi message file
+      this.stringeeService.stringeeChat.sendMessage(txtMsg, (status, code, message, msg) => {
+        this.dataTranferService.sendMessageActive();
       });
-
-      this.clear();
     }
+    this.clear();
   }
 
   /**
    * gửi all file
+   * type: 5_file, 2_ảnh, 
    * @param imageInput 
    */
   selectedFile: ImageSnippet;
@@ -177,7 +176,7 @@ export class MessagesComponent implements OnInit {
     let type_of_file: number;
 
     switch (imageInput.files[0].name.split(".").pop()) {
-      case 'png': case 'jpg': case 'gif': {
+      case 'png': case 'jpg': case 'gif': case 'PNG': case 'JPG': case 'GIF': {
         fileType = 2;
         break;
       }
@@ -221,13 +220,10 @@ export class MessagesComponent implements OnInit {
         var formData = new FormData();
         formData.set('file', file);
 
-        let url: any;
-
         this.fileService.uploadFile(formData).subscribe(res => {
-          url = res;
           //nếu là gửi ảnh
           if(fileType == 2) {
-            this.stringeeService.sendPhoto(this.currentConvId, url.filename);
+            this.stringeeService.sendPhoto(this.currentConvId, res.filename);
           }
 
           //nếu là gửi file
@@ -235,11 +231,14 @@ export class MessagesComponent implements OnInit {
             this.stringeeService.sendFile(
               this.currentConvId, 
               this.selectedFile.file.name, 
-              url.filename,
+              res.filename,
               file.size,
               type_of_file
               );
           }
+
+          //bắn tín hiệu gửi file cho bên about để cập nhật thông tin
+          this.dataTranferService.sendMessageFileActive();
         });
       }
     });
@@ -247,17 +246,17 @@ export class MessagesComponent implements OnInit {
     read.readAsDataURL(file);
   }
 
-  onNewLine(val: string): string {
-    return val + '\n';
-  }
+  // onNewLine(val: string): string {
+  //   return val + '\n';
+  // }
 
   /**
-   * hiện modal
+   * hiện modal message image
    * @param id 
    */
   showModal(id: string) {
     document.getElementById(id).style.display = 'flex';
-    // this.imageId = id;
+    this.imageId = id;
   }
 
   /**
@@ -268,12 +267,14 @@ export class MessagesComponent implements OnInit {
     document.getElementById(id).style.display = 'none';
   }
 
+  //mở file hoặc download file
   openFile(url: string) {
     window.open(url, '');
   }
 
+  //nghe sự kiện khi nhấn ESC ẩn image modal
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    // this.hideModal(this.imageId);
+    this.hideModal(this.imageId);
   }
 
 }

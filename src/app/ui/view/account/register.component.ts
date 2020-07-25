@@ -60,13 +60,11 @@ export class RegisterComponent implements OnInit {
                     //update profile của người dùng trên server stringee
                     this.stringeeService.connectStringeeToRegister(data['token']);
                     this.showSuccess("Đăng ký thành công!");
-                    this.router.navigate(['../login'], { relativeTo: this.route }).then(()=>{
-                        window.location.reload();
-                    });
+                    this.router.navigate(['../login'], { relativeTo: this.route })
 
                 },
                 error => {
-                    this.showError(error.error.message);
+                    this.showError(error);
                     this.loading = false;
                 });
     }

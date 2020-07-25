@@ -5,6 +5,7 @@ import { User } from 'src/app/model/user-login';
 import { StringeeService } from 'src/app/service/stringee.service';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService } from 'src/app/service/users.service';
+import { DataTranferService } from 'src/app/service/data-tranfer.service';
 
 @Component({
   selector: 'app-list-conversations',
@@ -13,13 +14,12 @@ import { UsersService } from 'src/app/service/users.service';
 })
 export class ListConversationsComponent implements OnInit {
 
-  @Input() conversations: any;
+  @Input() conversations: any[];
+
   contacts: User[];
-  contactsCopy: User[];
+  contactsCopy: User[]; //lưu dữ liệu contacts khi tìm kiếm
 
   findContact: boolean;
-  placeHolderSearch: string;
-
   currentConvId: string;
   currentUserId: string;
 
@@ -27,7 +27,8 @@ export class ListConversationsComponent implements OnInit {
     private accountService: AccountService,
     private usersService: UsersService,
     private stringeeService: StringeeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dataTranferService: DataTranferService
   ) {
     this.findContact = false; //ban đầu sẽ hiển thị danh sách các cuộc hội thoại
     this.currentUserId = this.accountService.userValue.id; //id của người đã đăng nhập lấy từ account Service
@@ -37,17 +38,10 @@ export class ListConversationsComponent implements OnInit {
 
     this.getConversationId();
 
-    // this.stringeeService.stringeeClient.on('connect', () => {
-    //   console.log("+++connected");
-    //   this.getConversations();
-    // });
-    // this.getConversations();
-
     //cập nhật last message khi người dùng gửi tin nhắn
-    this.stringeeService.sendMessage.subscribe(() => {
+    this.dataTranferService.sendMessage.subscribe(() => {
       this.getConversations();
     });
-
   }
 
   /**
@@ -77,20 +71,20 @@ export class ListConversationsComponent implements OnInit {
    */
   onSelect(conv: any) {
 
+    //đánh dấu đã xem cho cuộc trò chuyện trên server stringee
     this.stringeeService.stringeeChat.markConversationAsRead(conv.id);
+
+    //đánh dấu tại mảng đã lấy về
     conv.unreadCount = 0;
 
+    //truyền userId sang message để lấy Contact tương ứng
     for (let parti of conv.participants) {
       if (parti.userId != this.currentUserId) {
-        //nếu không phải là id của contact, truyền sang cho message component
-        this.stringeeService.changeSelectConversation(parti.userId);
+        //nếu không phải là id của user, truyền sang cho message component
+        this.dataTranferService.changeSelectConversation(parti.userId);
         break;
       }
     }
-  }
-
-  openContacts() {
-    this.selectedContacts();
   }
 
   /**
@@ -112,12 +106,12 @@ export class ListConversationsComponent implements OnInit {
    * tìm kiếm conversation
    * 
    */
-  searchTerm: any;
+  searchTerm: any; //biến binding hai chiều thay thôi khi người dùng nhập tìm kiếm
 
   search(): void {
-    let term = this.searchTerm;
+    let term = this.searchTerm.trim();
     if (term == '') {
-      this.contacts = this.contactsCopy;
+      this.contacts = this.contactsCopy; //nếu người dùng nhập trống thì trả về full danh sách danh bạ
     }
     else this.usersService.getUsersByName(term).subscribe(data => this.contacts = data);
   }
@@ -127,20 +121,20 @@ export class ListConversationsComponent implements OnInit {
    * status: 0-offline, 1-online
    * @param status 
    */
-  checkOnline(status: number) {
-    return status === 1;
-  }
+  // checkOnline(status: number) {
+  //   return status === 1;
+  // }
 
   /**
-   * hàm tạo cuộc trò chuyện stringee
+   * hàm tạo cuộc trò chuyện stringee hoặc lấy conversation đã tồn tại
    * @param id id của contact đã chọn
    * @param name tên của contact đã chọn hoặc bất kỳ
    */
   createConversation(id: string, name: string) {
-    this.stringeeService.createConversation(id, name);
+    this.stringeeService.createConversation(id);
 
     //truyền id người được chọn để lấy dữ liệu
-    this.stringeeService.changeSelectConversation(id);
+    this.dataTranferService.changeSelectConversation(id);
 
     this.getConversations();
 
