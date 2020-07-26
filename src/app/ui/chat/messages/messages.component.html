@@ -126,6 +126,17 @@
                         <!-- hiện tin nhắn người dùng hiện tại gửi-->
                     </div>
                 </div>
+                <div *ngIf="typing">
+                    <div class="inlineContainer display-typing">
+                        <!-- avatar -->
+                        <img class="avatar-main-mess avatar-image" *ngIf="(currentContact?.imageUrl != '')"
+                            [src]="currentContact?.imageUrl" alt="avatar">
+                        <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName" size="34">
+                        </ngx-avatar>
+                        <!-- avatar -->
+                        <img class="typing" src="../../../../assets/images/typinp.gif" alt="typing">
+                    </div>
+                </div>
             </div>
             <div class="send-container">
 
@@ -151,7 +162,9 @@
                 <!-- nhập tin nhắn -->
                 <div class="send input-message">
                     <textarea type="text" #box (keyup.enter)="onEnter(box.value)" spellcheck="false"
-                        placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên"></textarea>
+                        placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên" 
+                        (focus)="beginType($event)"
+                        (focusout)="endType($event)"></textarea>
 
                     <!-- icon sticker -->
                     <img src="../../../assets/icons/IconAppChat/7.svg" alt="icon">

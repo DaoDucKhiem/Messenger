@@ -35,6 +35,7 @@ export class MessagesComponent implements OnInit {
   loading = false;
 
   sendFile = false;
+  typing = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,11 +56,20 @@ export class MessagesComponent implements OnInit {
       this.getContactUser();
 
       // auto scroll xuống cuối
-      setTimeout(()=>{this.scrollToBottom()}, 500);
+      setTimeout(()=>{this.scrollToBottom()}, 1000);
     });
   }
 
   ngOnInit(): void {
+    //lắng nghe người dùng nhập tin nhắn
+    this.stringeeService.stringeeClient.on("userBeginTypingListener", (msg) =>{
+      this.typing = true;
+    });
+
+    //lắng nghe người dùng dừng nhập tin nhắn
+    this.stringeeService.stringeeClient.on("userEndTypingListener", (msg) => {
+      this.typing = false;
+    });
   }
 
   scrollToBottom() {
@@ -284,4 +294,13 @@ export class MessagesComponent implements OnInit {
     })
   }
 
+  //bắt đầu nhập tin nhắn
+  beginType(event: any) {
+    this.stringeeService.userBeginTyping(this.currentConvId, this.currentUser.id);
+  }
+
+  //dừng nhập tin nhắn
+  endType(event: any) {
+    this.stringeeService.userEndTyping(this.currentConvId, this.currentUser.id);
+  }
 }

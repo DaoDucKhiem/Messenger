@@ -254,4 +254,28 @@ export class StringeeService {
       //console.log(data)
     })
   }
+  
+  //người dùng đang nhập tin nhắn
+  userBeginTyping(_convId: any, _userId: any) {
+    let content = {
+      userId: _userId, 
+      convId: _convId
+    }
+
+    this.stringeeChat.userBeginTyping(content, function (res) { 
+      // console.log(res)
+     });
+  }
+
+  //người dùng dừng nhập tin nhắn
+  userEndTyping(_convId: any, _userId: any) {
+    let content = {
+      userId: _userId, 
+      convId: _convId
+    }
+
+    this.stringeeChat.userEndTyping(content, function (res) { 
+      // console.log(res)
+     });
+  }
 }
