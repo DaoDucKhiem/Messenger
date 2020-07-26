@@ -295,12 +295,12 @@ export class MessagesComponent implements OnInit {
   }
 
   //bắt đầu nhập tin nhắn
-  beginType(event: any) {
+  beginType() {
     this.stringeeService.userBeginTyping(this.currentConvId, this.currentUser.id);
   }
 
   //dừng nhập tin nhắn
-  endType(event: any) {
+  endType() {
     this.stringeeService.userEndTyping(this.currentConvId, this.currentUser.id);
   }
 }
