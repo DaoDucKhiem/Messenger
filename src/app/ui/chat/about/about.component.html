@@ -22,7 +22,7 @@
 
     <!-- list file shared -->
     <div class="share-file">
-        <div class="tittle" (click)="showAllFile()">
+        <div class="tittle" (click)="showFiles()">
             <p>TỆP ĐÃ CHIA SẺ</p>
             <span class="icon-dropdown">
                 <img [src]="showFile ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
@@ -42,6 +42,7 @@
                     {{file.content}}
                 </a>
             </p>
+            <p  class="show-more" *ngIf="messageFile?.length > 0 && !showAllFiles" (click)="showAllFile()">hiện tất cả các file</p>
         </div>
         <p class="line"></p>
     </div>
@@ -50,7 +51,7 @@
     <!-- list image shared -->
     <div class="share-img">
 
-        <div class="tittle" (click)="showAllImg()">
+        <div class="tittle" (click)="showImages()">
             <p>ẢNH ĐÃ CHIA SẺ</p>
             <span class="icon-dropdown">
                 <img [src]="showImg ? '../../../assets/icons/IconAppChat/13.svg' : '../../../assets/icons/IconAppChat/19.svg'"
@@ -72,6 +73,7 @@
 
             </div>
         </div>
+        <p class="show-more" *ngIf="messageImage?.length > 0 && showImg && !showAllImages" (click)="showAllImage()">hiện tất cả các ảnh</p>
     </div>
     <!-- list image shared -->
 </div>

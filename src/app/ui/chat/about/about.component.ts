@@ -18,6 +18,8 @@ export class AboutComponent implements OnInit, OnChanges{
   showImg = false;
   showFile = false;
   imageId: string;
+  showAllFiles = false;
+  showAllImages = false;
 
   @Input() userContact: User;
   @Input() sendFile: boolean;
@@ -26,7 +28,8 @@ export class AboutComponent implements OnInit, OnChanges{
     private fileService: FileService,
     private route: ActivatedRoute,
     private dataTranferService: DataTranferService
-  ) {}
+  ) {
+  }
 
 
   ngOnChanges(): void {
@@ -50,21 +53,34 @@ export class AboutComponent implements OnInit, OnChanges{
    * lấy dữ liệu file và ảnh khi load message
    */
   getData() {
+    if(this.showAllFiles) this.showAllFile();
+    else this.fileService.getSomeFile(this.currentConvId).subscribe(data => this.messageFile = data);
+
+    if(this.showAllImages) this.showAllImage();
+    else this.fileService.getSomeImage(this.currentConvId).subscribe(data => this.messageImage = data);
+  }
+
+  showAllFile() {
+    this.showAllFiles = true;
     this.fileService.getAllFile(this.currentConvId).subscribe(data => this.messageFile = data);
+  }
+
+  showAllImage() {
+    this.showAllImages = true;
     this.fileService.getAllImage(this.currentConvId).subscribe(data => this.messageImage = data);
   }
 
   /**
    * hiển thị danh sách image đã chia sẻ
    */
-  showAllImg() {
+  showImages() {
     this.showImg = !this.showImg;
   }
 
   /**
    * hiển thị danh sách file đã chia sẻ
    */
-  showAllFile() {
+  showFiles() {
     this.showFile = !this.showFile;
   }
 

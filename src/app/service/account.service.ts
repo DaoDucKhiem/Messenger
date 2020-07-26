@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { User } from '../model/user-login';
 import { Profile } from '../model/profile';
+import { UpdatePassword } from '../model/update-password';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -62,6 +63,11 @@ export class AccountService {
                 }
                 return x;
             }));
+    }
+
+    updatePassword(params: UpdatePassword): Observable<any> {
+        console.log(params);
+        return this.http.put(`${environment.apiUrl}/updatePassword`, params);
     }
 
     delete(id: string) {

@@ -39,7 +39,7 @@
     <!-- content conversation detail -->
     <div class="content-message-list">
         <div class="list-message" [ngStyle]="{'width' : showAb ?  'calc(100% - 300px)' : '100%'}">
-            <div class="message" #scrollframe 
+            <div class="message" id="scroll"
             infiniteScroll 
             [infiniteScrollUpDistance]="scrollUpDistance" 
             [infiniteScrollThrottle]="scrollThrottle"
@@ -50,7 +50,7 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                <div #item>
+                <div>
                     <div *ngFor="let mess of Messages">
 
                         <!-- display message of user contact -->

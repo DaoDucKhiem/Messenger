@@ -51,13 +51,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <!-- <label class="imageInput" for="imageUrl">
-                                        <input #imageInput type="file" name="imageUrl" accept="image/*" (change)="processFile(imageInput)">Chọn ảnh
-                                    </label> -->
                                     <label class="imageInput">
-                                        <img src="../../../assets/icons/IconAppChat/9.svg" alt="upload image">
-                                        <input #imageInput type="file" (change)="processFile(imageInput)"> Chọn ảnh
+                                        <img src="../../../assets/images/icon-image.png" alt="upload image">
+                                        <input #imageInput type="file" name="imageUrl" accept="image/*" (change)="processFile(imageInput)"> Chọn ảnh
                                     </label>
+                                    <div class="preview-avatar">
+                                        <img *ngIf="filePath || user?.imageUrl" [src]="filePath || user?.imageUrl" alt="upload image">
+                                        <ngx-avatar *ngIf="filePath == null && user.imageUrl == ''" [name] = "user.fullName" size="100"></ngx-avatar>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary">
@@ -92,6 +93,7 @@
                                         <div *ngIf="p.newPass.errors.required">Mật khẩu mới không được bỏ trống</div>
                                         <div *ngIf="p.newPass.errors.pattern">Mật khẩu phải chứa ít nhất một chữ in hoa, một chữ thường, một số và một ký
                                             tự đặc biệt dài từ 8-15 ký tự</div>
+                                        <div *ngIf="p.newPass.errors.ConfirmedNewPassValidator">Mật khẩu mới không được trùng với mật khẩu cũ</div>
                                     </div>
                                 </div>
                                 <div class="form-group">

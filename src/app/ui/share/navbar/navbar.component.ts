@@ -6,8 +6,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FileService } from 'src/app/service/file.service';
 import { Profile } from 'src/app/model/profile';
 import { ConfirmedValidator } from 'src/app/helpers/confirmed.validator';
-import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmedNewPassValidator } from 'src/app/helpers/confirmedNewPass.validator';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {
@@ -64,7 +64,8 @@ export class NavbarComponent implements OnInit {
       reNewPass: ['', Validators.required]
     },
       {
-        validator: ConfirmedValidator('newPass', 'reNewPass')
+        validator: ConfirmedValidator('newPass', 'reNewPass'),
+        validators: ConfirmedNewPassValidator('oldPass', 'newPass')
       });
   }
 
@@ -73,6 +74,7 @@ export class NavbarComponent implements OnInit {
   get p() { return this.formPass.controls; }
 
   selectedFile: ImageSnippet;
+  filePath: any;
 
   processFile(imageInput: any) {
     const file: File = imageInput.files[0];
@@ -84,6 +86,7 @@ export class NavbarComponent implements OnInit {
         this.selectedFile = new ImageSnippet(event.target.result, file);
         if (this.selectedFile) {
           this.file = file;
+          this.filePath = this.selectedFile.src;
         }
       });
     }
@@ -94,7 +97,7 @@ export class NavbarComponent implements OnInit {
   onUpdateProfile() {
     this.submitted = true;
 
-    // stop here if form is invalid
+    // dừng lại tại đây nếu các trường không hợp lệ
     if (this.form.invalid) {
       return;
     }
@@ -111,7 +114,7 @@ export class NavbarComponent implements OnInit {
         this.accountService.updateProfile(this.profileUpdate).subscribe(
           data => {
             //nếu cập nhật thành công thì cập nhật profile trên server stringee
-           this.stringeeService.connectStringeeToUpdate(data.token);
+            this.stringeeService.connectStringeeToUpdate(data.token);
           },
           error => {
             this.showError(error);
@@ -120,15 +123,17 @@ export class NavbarComponent implements OnInit {
       })
     }
     else {
-      this.accountService.updateProfile(this.profileUpdate).subscribe(data => {
-        //nếu cập nhật thành công thì cập nhật profile trên server stringee
-        this.stringeeService.connectStringeeToUpdate(this.user.token);
-      },
+      this.accountService.updateProfile(this.profileUpdate).subscribe(
+        data => {
+          //nếu cập nhật thành công thì cập nhật profile trên server stringee
+          this.stringeeService.connectStringeeToUpdate(this.user.token);
+          this.hideUpdateProfile();
+          this.submitted = false;
+        },
         error => {
           this.showError(error);
         });
     }
-    this.hideUpdateProfile();
   }
 
   showError(error: string) {
@@ -140,7 +145,28 @@ export class NavbarComponent implements OnInit {
   }
 
   onchangePass() {
+    this.submitted = true;
 
+    // dừng lại tại đây nếu các trường không hợp lệ
+    if (this.formPass.invalid) {
+      return;
+    }
+
+    let updatePass = {
+      oldPass: this.formPass.value.oldPass,
+      newPass: this.formPass.value.newPass,
+      id: this.user.id
+    }
+
+    this.accountService.updatePassword(updatePass).subscribe(
+      data => {
+        //nếu cập nhật thành công
+        this.showSuccess(data.result);
+        this.hideUpdatePassword();
+      },
+      error => {
+        this.showError(error);
+      });
   }
 
   //hiện modal cập nhật thông tin user
@@ -152,6 +178,7 @@ export class NavbarComponent implements OnInit {
   //ẩn modal cập nhật thông tin user
   hideUpdateProfile() {
     this.showProfile = false;
+    this.filePath = null;
     document.getElementById("modal-update-profile").style.display = 'none';
   }
 

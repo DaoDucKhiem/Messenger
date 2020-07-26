@@ -36,7 +36,6 @@ export class MessagesComponent implements OnInit {
   loading = false;
 
   sendFile = false;
-  @ViewChild('scroll', { static: true }) scroll: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,36 +55,17 @@ export class MessagesComponent implements OnInit {
       //lấy currentContactId từ bên list truyền sang hoặc reload truyền sang đồng thời lấy messages
       this.getContactUser();
 
+      setTimeout(()=>{this.scrollToBottom()}, 500);
     });
   }
 
   ngOnInit(): void {
   }
 
-  // Tự động scroll xuống tin nhắn cuối cùng
-
-  @ViewChild('scrollframe', { static: false }) scrollFrame: ElementRef;
-  @ViewChildren('item') itemElements: QueryList<any>;
-
-  private scrollContainer: any;
-
-  ngAfterViewInit() {
-    this.scrollContainer = this.scrollFrame.nativeElement;
-    this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
+  scrollToBottom() {
+    var scroll = document.getElementById('scroll');
+    scroll.scrollTop = scroll.scrollHeight;
   }
-
-  private onItemElementsChanged(): void {
-    this.scrollToBottom();
-  }
-
-  private scrollToBottom(): void {
-    this.scrollContainer.scroll({
-      top: this.scrollContainer.scrollHeight,
-      left: 0,
-      behavior: 'smooth'
-    });
-  }
-
   
   /**
    * hiển thị hoặc ẩn about component

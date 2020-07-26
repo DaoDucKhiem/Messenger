@@ -150,6 +150,7 @@ export class StringeeService {
         
         this.stringeeChat.updateUserInfo(this.infoUpdate, (res: any) => {
           if (res.message == 'Success') {
+            this.showSuccess("Đăng ký thành công!");
             setTimeout(function() {window.location.reload()}, 1000);
           }
           else this.showError("Cập nhật thông tin thất bại!");
