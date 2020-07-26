@@ -39,26 +39,27 @@ export class RegisterComponent implements OnInit {
         });
     }
 
-    // convenience getter for easy access to form fields
+    // truy cập vào các trường trong form dễ dàng hơn
     get f() { return this.form.controls; }
 
     onSubmit() {
         this.submitted = true;
 
-        // stop here if form is invalid
+        // dừng lại tại đây nếu các trường nhập chưa chính xác
         if (this.form.invalid) {
             return;
         }
 
         this.loading = true;
 
-        
         this.accountService.register(this.form.value)
             .pipe(first())
             .subscribe(
                 data => {
-                    //update profile của người dùng trên server stringee
+                    //cập nhật thông tin của người dùng trên server stringee
                     this.stringeeService.connectStringeeToRegister(data['token']);
+
+                    //sau 1s thì đưa người dùng về view login
                     setTimeout(()=>{this.router.navigate(['../login'], { relativeTo: this.route })}, 1000);
                 },
                 error => {
@@ -67,6 +68,7 @@ export class RegisterComponent implements OnInit {
                 });
     }
 
+    //hiên toast thông báo lỗi
     showError(error: string) {
         this.toastr.error(error);
     }

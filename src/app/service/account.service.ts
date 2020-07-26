@@ -29,7 +29,7 @@ export class AccountService {
     login(email: string, password: string) {
         return this.http.post<User>(`${environment.apiUrl}/login`, { email, password })
             .pipe(map(user => {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                // lưu lại thông tin của người dùng hiện tại khi reload thì auto đăng nhập
                 localStorage.setItem('user', JSON.stringify(user));
                 this.userSubject.next(user);
                 return user;
@@ -37,18 +37,24 @@ export class AccountService {
     }
 
     logout() {
-        // remove user from local storage and set current user to null
+        // xóa người dùng khỏi local storage
         localStorage.removeItem('user');
+
+        //thông báo người dùng rỗng
         this.userSubject.next(null);
+
+        //đưa đến trang login
         this.router.navigate(['/login']).then(() => {
-            window.location.reload();
+            window.location.reload(); //xử lý để reconnect vs stringee
         })
     }
 
+    //đăng nhập tài khoản
     register(user: User) {
         return this.http.post<string>(`${environment.apiUrl}/register`, user);
     }
 
+    //cập nhật thông tin tài khoản
     updateProfile(params: Profile): Observable<any>{
         return this.http.put(`${environment.apiUrl}/updateProfile`, params)
             .pipe(map(x => {
@@ -65,11 +71,14 @@ export class AccountService {
             }));
     }
 
+    //thay password
     updatePassword(params: UpdatePassword): Observable<any> {
         console.log(params);
         return this.http.put(`${environment.apiUrl}/updatePassword`, params);
     }
 
+    //chưa dùng tới
+    // xóa người dùng
     delete(id: string) {
         return this.http.delete(`${environment.apiUrl}/${id}`)
             .pipe(map(x => {

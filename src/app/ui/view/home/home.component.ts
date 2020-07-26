@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
       //lắm nghe khi người dùng gửi tin nhắn
       this.stringeeService.stringeeChat.on('onObjectChange', () => {
         this.getMessages();
+        this.getConvs();
       })
     });
   }
@@ -49,8 +50,21 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  //khi thay đổi tin nhắn
+  getConvs() {
+    this.stringeeService.getConversations(15, (status, code, message, convs) => {
+      this.conversations = convs;
+
+      // //cập nhật đã xem cho last message trên serve đang bị lag
+      // this.stringeeService.stringeeChat.markConversationAsRead(convs[0].id);
+
+      // //cập nhật đã xem cho lastMessage của conversation đầu tiên
+      this.conversations[0].unreadCount = 0;
+    });
+  }
+
   /**
-   * lấy danh sách các cuộc trò chuyện
+   * lấy danh sách các cuộc trò chuyện khi bắt đầu hoặc reload
    */
   getConversations() {
     //lấy conversation id từ trên url

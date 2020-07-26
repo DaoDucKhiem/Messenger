@@ -4,7 +4,6 @@ import { StringeeClient, StringeeChat } from "stringee-chat-js-sdk";
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FileService } from './file.service';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -38,20 +37,14 @@ export class StringeeService {
     this.stringeeClient.disconnect();
   }
 
+  //thông báo lỗi
   showError(error: string) {
     this.toastr.error(error);
   }
 
+  //thông báo thành công
   showSuccess(success: string) {
     this.toastr.success(success);
-  }
-
-  connectListenner() {
-    this.stringeeClient.on('connect', () => {
-    });
-
-    this.authenListenner();
-    this.disconnectListenner();
   }
 
   authenListenner() {
@@ -76,112 +69,6 @@ export class StringeeService {
       user = users[0];
     })
     return user;
-  }
-
-  //connect stringee khi người dùng thực hiện update profile
-  connectStringeeToUpdate(token: any) {
-      this.updateUserProfile(this.getCurrentIdFromAccessToken(token), token);
-  }
-
-  //connect khi người dùng thực hiện đăng ký tài khoản
-  connectStringeeToRegister(token: any) {
-    this.stringeeClient.connect(token);
-    this.stringeeClient.on('connect', () => {
-      this.updateUserRegister(this.getCurrentIdFromAccessToken(token), token);
-    });
-    this.authenListenner();
-
-    this.disconnectListenner();
-  }
-
-  //tạo cuộc trò chuyện
-  createConversation(id: string) {
-    var options = {
-      name: '',
-      isDistinct: true,
-      isGroup: false
-    };
-
-    this.stringeeChat.createConversation([id], options, (status: string, code: string, message: string, conv: any) => {
-      this.router.navigate(['/home/conversation/' + conv.id]);
-    });
-  }
-
-  /**
-   * lấy danh sách các cuộc trò chuyện
-   * @param amount số lượng cuộc trò chuyện cần lấy
-   * @param callback làm gì đó sau khi lấy xong.
-   */
-  getConversations(amount: any, callback?: any) {
-    var count = amount;
-    var isAscending = false;
-    this.stringeeChat.getLastConversations(count, isAscending, callback);
-  }
-
-  //lấy các tin nhắn của cuộc trò chuyện
-  getMessages(convId: string, callback?: any) {
-    var convId = convId;
-    var count = 15;
-    var isAscending = true;
-    this.stringeeChat.getLastMessages(convId, count, isAscending, callback);
-  }
-
-  //lấy message khi thực hiện phân trang
-  getMessageBefore(convId: any, sequence: any, callback?: any) {
-    var count = 15;
-    var isAscending = true;
-    var _sequence = sequence;
-    this.stringeeChat.getMessagesBefore(convId, _sequence, count, isAscending, callback);
-  }
-
-  //cập nhật thông tin user trên stringee
-  updateUserRegister(id: string, token: string) {
-    this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
-      let _user = users[0];
-      if (!_user) {
-        let username = this.getCurrentUsernameFromAccessToken(token);
-        let avatar = this.getCurrentUserAvatarFromAccessToken(token);
-        let email = this.getCurrentEmailFromAccessToken(token)
-        this.infoUpdate = {
-          display_name: username,
-          avatar_url: avatar,
-          email: email,
-        }
-        
-        this.stringeeChat.updateUserInfo(this.infoUpdate, (res: any) => {
-          if (res.message == 'Success') {
-            this.showSuccess("Đăng ký thành công!");
-            setTimeout(function() {window.location.reload()}, 1000);
-          }
-          else this.showError("Cập nhật thông tin thất bại!");
-          this.disconnectStringee();
-        });
-      }
-    })
-  }
-
-  updateUserProfile(id: string, token: string) {
-    this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
-      let _user = users[0];
-      if (!_user) {
-        let username = this.getCurrentUsernameFromAccessToken(token);
-        let avatar = this.getCurrentUserAvatarFromAccessToken(token);
-        let email = this.getCurrentEmailFromAccessToken(token)
-        this.infoUpdate = {
-          display_name: username,
-          avatar_url: avatar,
-          email: email,
-        }
-        
-        this.stringeeChat.updateUserInfo(this.infoUpdate, (res: any) => {
-          if (res.message == 'Success') {
-            this.showSuccess("Cập nhật thông tin thành công!");
-            setTimeout(function() {window.location.reload()}, 1000);
-          }
-          else this.showError("Cập nhật thông tin thất bại!");
-        });
-      }
-    })
   }
 
   //lấy id từ token
@@ -219,7 +106,88 @@ export class StringeeService {
     return JSON.parse(jsonPayload);
   }
 
-  //gửi file 
+  //connect stringee khi người dùng thực hiện update profile
+  connectStringeeToUpdate(token: any) {
+      this.updateUserInfor(this.getCurrentIdFromAccessToken(token), token, "Cập nhật thông tin thành công!");
+  }
+
+  //connect khi người dùng thực hiện đăng ký tài khoản
+  connectStringeeToRegister(token: any) {
+    this.stringeeClient.connect(token);
+    this.stringeeClient.on('connect', () => {
+      this.updateUserInfor(this.getCurrentIdFromAccessToken(token), token, "Đăng ký thành công!");
+    });
+    this.authenListenner();
+
+    this.disconnectListenner();
+  }
+
+  //cập nhật thông tin khi người dùng thực hiện cập nhật
+  updateUserInfor(id: string, token: string, message: string) {
+    this.stringeeChat.getUsersInfo([id], (_status: any, _code: any, _msg: any, users: any[]) => {
+      let _user = users[0];
+      if (!_user) {
+        let username = this.getCurrentUsernameFromAccessToken(token);
+        let avatar = this.getCurrentUserAvatarFromAccessToken(token);
+        let email = this.getCurrentEmailFromAccessToken(token)
+        this.infoUpdate = {
+          display_name: username,
+          avatar_url: avatar,
+          email: email,
+        }
+        
+        this.stringeeChat.updateUserInfo(this.infoUpdate, (res: any) => {
+          if (res.message == 'Success') {
+            this.showSuccess(message);
+            setTimeout(function() {window.location.reload()}, 1000);
+          }
+          else this.showError("Cập nhật thông tin thất bại!");
+        });
+      }
+    })
+  }
+
+  //tạo cuộc trò chuyện
+  createConversation(id: string) {
+    var options = {
+      name: '',
+      isDistinct: true,
+      isGroup: false
+    };
+
+    this.stringeeChat.createConversation([id], options, (status: string, code: string, message: string, conv: any) => {
+      this.router.navigate(['/home/conversation/' + conv.id]);
+    });
+  }
+
+  /**
+   * lấy danh sách các cuộc trò chuyện
+   * @param amount số lượng cuộc trò chuyện cần lấy
+   * @param callback làm gì đó sau khi lấy xong.
+   */
+  getConversations(amount: any, callback?: any) {
+    var count = amount;
+    var isAscending = false;
+    this.stringeeChat.getLastConversations(count, isAscending, callback);
+  }
+
+  //lấy các tin nhắn của cuộc trò chuyện
+  getMessages(convId: string, callback?: any) {
+    var convId = convId;
+    var count = 15;
+    var isAscending = true;
+    this.stringeeChat.getLastMessages(convId, count, isAscending, callback);
+  }
+
+  //lấy các tn nhắn cũ hơn khi thực hiện phân trang
+  getMessageBefore(convId: any, sequence: any, callback?: any) {
+    var count = 15;
+    var isAscending = true;
+    var _sequence = sequence;
+    this.stringeeChat.getMessagesBefore(convId, _sequence, count, isAscending, callback);
+  }
+
+  //gửi file lên server_stringee và server
   sendFile(convId: string, fName: string, fPath: string, fLenght: number, typeofFile: number) {
     var fileMsg = {
       type: 5,

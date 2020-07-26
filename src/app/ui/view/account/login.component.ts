@@ -29,22 +29,21 @@ export class LoginComponent implements OnInit {
             password: ['', Validators.required]
         });
 
-        // get return url from route parameters or default to '/'
+        // trở lại đường cũ nếu sai hoặc đưa vào home nếu đúng.
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
     }
 
-    // focus() {
-    //     var _focusForm = document.getElementsByClassName('form-control')[0];
-    //     _focusForm.focus();
+    // focusNext(name: string) {
+    //     document.getElementsByName(name).focus();
     // }
 
-    // convenience getter for easy access to form fields
+    // truy cập các trường dễ dàng hơn
     get f() { return this.form.controls; }
 
     onSubmit() {
         this.submitted = true;
 
-        // stop here if form is invalid
+        // dừng lại ở đây nếu các trường chưa hợp lệ
         if (this.form.invalid) {
             return;
         }
@@ -62,6 +61,7 @@ export class LoginComponent implements OnInit {
                 });
     }
 
+    //thống báo toast cho người dùng lỗi
     showError(error: string) {
         this.toastr.error(error);
     }

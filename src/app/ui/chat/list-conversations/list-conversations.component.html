@@ -1,61 +1,73 @@
 <div class="list-conversation-container">
-    <!-- search conversation -->
+    <!-- tìm kiếm cuộc trò chuyện-->
     <div class="search">
         <div class="inpt-search" href="#carouselExampleFade" data-slide="next">
             <img src="../../../assets/icons/IconAppChat/11.svg" alt="search-icon">
-            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" (focus)="selectedContacts()" [(ngModel)]="searchTerm" (ngModelChange)="search()" />
+            <input type="text" placeholder="Tìm kiếm cuộc trò chuyện" (focus)="selectedContacts()"
+                [(ngModel)]="searchTerm" (ngModelChange)="search()" />
         </div>
         <div class="btn-add">
             <img src="../../../assets/icons/IconAppChat/3.svg" alt="add conversation">
         </div>
     </div>
-    <!-- search conversation -->
+    <!-- tìm kiếm cuộc trò chuyện -->
 
-    <div id="carouselExampleFade" class="carousel slide list-sidebar" data-ride="carousel" data-interval="false" data-wrap="false">
+    <div id="carouselExampleFade" class="carousel slide list-sidebar" data-ride="carousel" data-interval="false"
+        data-wrap="false">
         <div class="carousel-inner">
-            <!-- list conversation -->
+            <!-- các cuộc trò chuyện -->
             <div class="carousel-item active">
-                <div class="conversation" *ngFor="let conv of conversations"
-                (click)="onSelect(conv)"
-                [ngClass]="{'selected': conv.id === currentConvId}"
-                routerLink = "/home/conversation/{{conv.id}}">
-                    <!-- border when conversation is selected -->
+                <div class="conversation" *ngFor="let conv of conversations" (click)="onSelect(conv)"
+                    [ngClass]="{'selected': conv.id === currentConvId}" routerLink="/home/conversation/{{conv.id}}">
+
+                    <!-- border cuộc trò chuyện khi được chọn -->
                     <div class="space" [ngClass]="{'border-selected': conv.id === currentConvId}"></div>
+
                     <div *ngFor="let parti of conv.participants"
                         [ngClass]="{'style-conversation': parti.userId != currentUserId}">
                         <div class="conversation-content" *ngIf="parti.userId != currentUserId">
+                            <!-- avatar -->
                             <div class="avatar">
                                 <div>
-                                    <img class="avatar-image" *ngIf="parti.avatar != ''" [src]="parti.avatar" alt="avatar">
-                                    <ngx-avatar *ngIf="parti.avatar == ''" [name]="parti.name"
-                                        size="34"></ngx-avatar>
+                                    <img class="avatar-image" *ngIf="parti.avatar != ''" [src]="parti.avatar"
+                                        alt="avatar">
+                                    <ngx-avatar *ngIf="parti.avatar == ''" [name]="parti.name" size="34"></ngx-avatar>
                                 </div>
                             </div>
+                            <!-- avatar -->
 
+                            <!-- username, lastmessage, thời gian và unreadCount -->
                             <div class="content">
                                 <div class="name-and-last-mess">
-                                    <p class="name-conversation">
+
+                                    <p class="name-conversation" [ngClass]="{
+                                        'title-selected': conv.id == currentConvId}">
                                         {{parti.name}}
                                     </p>
 
-                                    <!-- [ngClass]="{
-                        'online-and-not-seen': conversation.status === 1 && conversation.lastMessageStatus === 0,
-                        'not-seen': conversation.lastMessageStatus === 1,
-                        'seen': conversation.lastMessageStatus === 1}" -->
-
-                                    <p class="message-last" *ngIf = "conv.lastMessage.content.content == null">
+                                    <!-- lastMessage khi bắt đầu cuộc trò chuyện -->
+                                    <p class="message-last" *ngIf="conv.lastMessage.content.content == null" [ngClass]="{
+                                        'not-seen': conv.unreadCount != 0,
+                                        'seen': conv.unreadCount == 0}">
                                         #bắt đầu cuộc trò chuyện!
                                     </p>
-                                    <p class="message-last" *ngIf = "conv.lastMessage.content.content">
-                                       <span *ngIf="conv.lastMessage.type != 1 && conv.lastMessage.sender == currentUserId">Bạn: </span>{{conv.lastMessage.content.content}}
+                                    <!-- lastMessage khi bắt đầu cuộc trò chuyện -->
+
+                                    <p class="message-last" *ngIf="conv.lastMessage.content.content" [ngClass]="{
+                                        'not-seen': conv.unreadCount != 0,
+                                        'seen': conv.unreadCount == 0}">
+                                        <span
+                                            *ngIf="conv.lastMessage.type != 1 && conv.lastMessage.sender == currentUserId">Bạn:
+                                        </span>
+                                        {{conv.lastMessage.content.content}}
                                     </p>
                                 </div>
 
-                                <div class="time-and-new-mess"
-                                    [ngClass]="{'status-seen': conv.unreadCount == 0}">
+                                <div class="time-and-new-mess" [ngClass]="{'status-seen': conv.unreadCount == 0}">
+
                                     <div class="time">
                                         <p *ngIf="forMatTime(conv.lastMessage.createdAt) === 0">
-                                            {{conv.lastMessage.createdAt | date: 'HH:MM'}}</p>
+                                            {{conv.lastMessage.createdAt | date: 'HH:mm'}}</p>
                                         <p *ngIf="forMatTime(conv.lastMessage.createdAt) === 1">
                                             {{conv.lastMessage.createdAt | date: 'EEE'}}</p>
                                         <p *ngIf="forMatTime(conv.lastMessage.createdAt) === 2">
@@ -68,31 +80,41 @@
                                             <p class="amount">{{conv.unreadCount}}</p>
                                         </span>
                                     </div>
+                                    
                                 </div>
                             </div>
+                            <!-- username, lastmessage, thời gian và unreadCount -->
+
                         </div>
                     </div>
                 </div>
-                <!-- list conversation -->
+                
 
+                <!-- màn bắt đầu khi chưa có cuộc trò chuyện nào -->
                 <div *ngIf="conversations?.length == 0" class="start">
                     <div class="first-view">
-                        <div class="item-1"><img src="../../../../assets/images/message-icon.png" alt="messenger.png"></div>
-                        <div class="item-1"><p>Nhấn tìm kiếm</p></div>
-                        <div class="item-1"><p>để bắt đầu cuộc trò chuyện</p></div>
+                        <div class="item-1"><img src="../../../../assets/images/message-icon.png" alt="messenger.png">
+                        </div>
+                        <div class="item-1">
+                            <p>Nhấn tìm kiếm</p>
+                        </div>
+                        <div class="item-1">
+                            <p>để bắt đầu cuộc trò chuyện</p>
+                        </div>
                     </div>
                 </div>
+                <!-- màn bắt đầu khi chưa có cuộc trò chuyện nào -->
             </div>
+            <!-- các cuộc trò chuyện -->
 
-            <!-- contact list -->
+            <!-- danh bạ -->
             <div class="carousel-item">
                 <div class="conversation" *ngFor="let contact of contacts"
-                    (click)="createConversation(contact.id, contact.fullName)"
-                    href="#carouselExampleFade" data-slide="prev">
-                    <!-- border when conversation is selected -->
-                    <div class="space"></div>
+                    (click)="createConversation(contact.id, contact.fullName)" 
+                    href="#carouselExampleFade"
+                    data-slide="prev">
 
-                    <!-- avatar user contact-->
+                    <!-- avatar-->
                     <div class="avatar">
                         <div>
                             <img class="avatar-image" *ngIf="contact.imageUrl" [src]="contact.imageUrl" alt="avatar">
@@ -100,16 +122,18 @@
                             </ngx-avatar>
                         </div>
                     </div>
-                    <!-- avatar user contact-->
+                    <!-- avatar-->
 
+                    <!-- username -->
                     <div class="username">
                         <p class="name">
                             {{contact.fullName}}
                         </p>
                     </div>
+                     <!-- username -->
                 </div>
             </div>
-            <!-- contact list -->
+            <!-- danh bạ -->
         </div>
     </div>
     <!-- tab menu -->

@@ -18,6 +18,8 @@
     position: relative;
 }
 
+//============ about =======>
+
 .about-container {
     position: relative;
     background-color: #f8f8f8;
@@ -61,8 +63,8 @@ p {
 }
 
 .avatar img {
-    height: 32px;
-    width: 32px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
 }
 
@@ -157,8 +159,8 @@ p {
 }
 
 .avatar-main-mess {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
 }
 
@@ -256,6 +258,8 @@ label input {
     order: 2;
 }
 
+
+//============= first view when started =======>
 .start {
     height: 100%;
     display: flex;

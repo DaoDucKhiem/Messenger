@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, Input, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StringeeService } from 'src/app/service/stringee.service';
 
@@ -11,7 +11,6 @@ class ImageSnippet {
   constructor(public src: string, public file: File) {
   }
 }
-
 
 @Component({
   selector: 'app-messages',
@@ -55,6 +54,7 @@ export class MessagesComponent implements OnInit {
       //lấy currentContactId từ bên list truyền sang hoặc reload truyền sang đồng thời lấy messages
       this.getContactUser();
 
+      // auto scroll xuống cuối
       setTimeout(()=>{this.scrollToBottom()}, 500);
     });
   }
@@ -272,9 +272,12 @@ export class MessagesComponent implements OnInit {
     this.hideModal(this.imageId);
   }
 
+  //xử lý paging khi người dùng cuộn lên trên
   onScroll() {
+
     this.loading = true;
     setTimeout(()=>{this.loading = false}, 1000)
+
     var sequence = this.Messages[0].sequence;
     this.stringeeService.getMessageBefore(this.currentConvId, sequence, (status, code, message, msgs) => {
       this.Messages = msgs.concat(this.Messages);

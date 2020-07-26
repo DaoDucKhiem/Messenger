@@ -1,4 +1,5 @@
 <div class="nav-header">
+
     <div class="nav-left">
         <div><img src="../../../assets/icons/IconAppChat/20.svg" alt="more-app-icon"></div>
         <div><img src="../../../assets/icons/IconAppChat/18.svg" alt="message-icon"></div>
@@ -6,24 +7,37 @@
             <h3>Nhắn tin</h3>
         </div>
     </div>
+
     <div class="nav-right">
         <div class="avatar">
+            <!-- dropdown menu -->
             <div class="dropdown dropleft">
+
+                <!-- avatar -->
                 <div id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <img *ngIf="user.imageUrl" [src]="user.imageUrl" alt="message-icon">
                     <ngx-avatar *ngIf="user.imageUrl == ''" size="34" name="{{user.fullName}}"></ngx-avatar>
                 </div>
+                <!-- avatar -->
+
+                <!-- menu item -->
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li class="dropdown-item" (click)="showUpdateProfile()">Cập nhật hồ sơ</li>
                     <li class="dropdown-item" (click)="showUpdatePassword()">Đổi mật khẩu</li>
                     <li class="dropdown-item" (click)="logout()">Đăng xuất</li>
                 </ul>
+                 <!-- menu item -->
+
+                <!-- modal cập nhật thông tin người dùng -->
                 <div id="modal-update-profile" class="modal">
                     <div class="card">
+                        <!-- tiêu đề của modal -->
                         <h4 class="card-header">Cập nhật hồ sơ</h4>
+
                         <div class="card-body">
                             <form [formGroup]="form" (ngSubmit)="onUpdateProfile()">
+
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="text" formControlName="email" class="form-control"
@@ -33,6 +47,7 @@
                                         <div *ngIf="f.email.errors.pattern">Email không hợp lệ</div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="fullName">Họ và Tên</label>
                                     <input type="text" formControlName="fullName" class="form-control"
@@ -41,6 +56,7 @@
                                         <div *ngIf="f.fullName.errors.required">Họ và Tên không được bỏ trống</div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="phone">Số điện thoại</label>
                                     <input type="text" formControlName="phone" class="form-control"
@@ -50,16 +66,23 @@
                                         <div *ngIf="f.phone.errors.pattern">Số điện thoại không hợp lệ</div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
+                                    <!-- chọn ảnh -->
                                     <label class="imageInput">
                                         <img src="../../../assets/images/icon-image.png" alt="upload image">
                                         <input #imageInput type="file" name="imageUrl" accept="image/*" (change)="processFile(imageInput)"> Chọn ảnh
                                     </label>
+                                    <!-- chọn ảnh -->
+
+                                    <!-- ảnh xem trước -->
                                     <div class="preview-avatar">
                                         <img *ngIf="filePath || user?.imageUrl" [src]="filePath || user?.imageUrl" alt="upload image">
                                         <ngx-avatar *ngIf="filePath == null && user.imageUrl == ''" [name] = "user.fullName" size="100"></ngx-avatar>
                                     </div>
+                                    <!-- ảnh xem trước -->
                                 </div>
+
                                 <div class="form-group">
                                     <button class="btn btn-primary">
                                         Cập nhật
@@ -68,15 +91,22 @@
                                         Hủy
                                     </a>
                                 </div>
+
                             </form>
                         </div>
                     </div>
                 </div>
+                <!-- modal cập nhật thông tin người dùng -->
+
+                <!-- modal thay mật khẩu -->
                 <div id="modal-update-password" class="modal">
                     <div class="card">
+                        <!-- tiêu đều của modal -->
                         <h4 class="card-header">Thay mật khẩu</h4>
+
                         <div class="card-body">
                             <form [formGroup]="formPass" (ngSubmit)="onchangePass()">
+
                                 <div class="form-group">
                                     <label for="oldPass">Mật khẩu cũ</label>
                                     <input type="password" formControlName="oldPass" class="form-control"
@@ -85,6 +115,7 @@
                                         <div *ngIf="p.oldPass.errors.required">Mật khẩu cũ không được bỏ trống</div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="newPass">Mật khẩu mới</label>
                                     <input type="password" formControlName="newPass" class="form-control"
@@ -96,6 +127,7 @@
                                         <div *ngIf="p.newPass.errors.ConfirmedNewPassValidator">Mật khẩu mới không được trùng với mật khẩu cũ</div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="reNewPass">Nhắc lại mật khẩu mới</label>
                                     <input type="password" formControlName="reNewPass" class="form-control"
@@ -105,6 +137,7 @@
                                         <div *ngIf="p.reNewPass.errors.confirmedValidator">Mật khẩu mới và Nhắc lại mật khẩu mới không khớp nhau</div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <button class="btn btn-primary">
                                         Cập nhật
@@ -113,11 +146,15 @@
                                         Hủy
                                     </a>
                                 </div>
+
                             </form>
                         </div>
                     </div>
                 </div>
+                <!-- modal thay mật khẩu -->
+
             </div>
+             <!-- dropdown menu -->
         </div>
     </div>
 </div>

@@ -1,15 +1,15 @@
 <div class="message-view" *ngIf="currentContact">
 
-    <!-- header conversation detail -->
+    <!-- phần navbar của nội dung cuộc trò chuyện -->
     <div class="header">
 
-        <!-- user contact avatar, name and status -->
+        <!-- avatar và trạng thái hoạt động -->
         <div class="head-left">
 
             <div class="avatar">
                 <img class="avatar-image" *ngIf="(currentContact?.imageUrl != '')" [src]="currentContact?.imageUrl"
                     alt="avatar">
-                <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName" size="32">
+                <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName" size="40">
                 </ngx-avatar>
             </div>
 
@@ -18,9 +18,9 @@
                 <p class="active">hoạt động 12 phút trước</p>
             </div>
         </div>
-        <!-- user contact avatar, name and status -->
+        <!-- avatar và trạng thái hoạt động -->
 
-        <!-- header icon -->
+        <!-- các menu icon -->
         <div class="head-right">
             <div><img src="../../../assets/icons/IconboxChat/8.svg" alt="search-icon"></div>
 
@@ -31,20 +31,16 @@
 
             <div><img src="../../../assets/icons/IconAppChat/2.svg" alt="more-icon"></div>
         </div>
-        <!-- header icon -->
+        <!-- các menu icon -->
 
     </div>
-    <!-- header conversation detail -->
+    <!-- phần navbar của nội dung cuộc trò chuyện -->
 
-    <!-- content conversation detail -->
+    <!-- phần nội dung cuộc trò chuyện -->
     <div class="content-message-list">
         <div class="list-message" [ngStyle]="{'width' : showAb ?  'calc(100% - 300px)' : '100%'}">
-            <div class="message" id="scroll"
-            infiniteScroll 
-            [infiniteScrollUpDistance]="scrollUpDistance" 
-            [infiniteScrollThrottle]="scrollThrottle"
-            (scrolledUp)="onScroll()" 
-            [scrollWindow]="false">
+            <div class="message" id="scroll" infiniteScroll [infiniteScrollUpDistance]="scrollUpDistance"
+                [infiniteScrollThrottle]="scrollThrottle" (scrolledUp)="onScroll()" [scrollWindow]="false">
                 <div *ngIf="loading" class="d-flex justify-content-center">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">Loading...</span>
@@ -53,29 +49,32 @@
                 <div>
                     <div *ngFor="let mess of Messages">
 
-                        <!-- display message of user contact -->
+                        <!-- hiện tin nhắn người tham gia gửi -->
                         <div class="bubbleWrapper" *ngIf="mess.sender != currentUser.id">
                             <div class="inlineContainer">
-                                <!-- display avatar user contact -->
+                                <!-- avatar -->
                                 <img class="avatar-main-mess avatar-image" *ngIf="(currentContact?.imageUrl != '')"
                                     [src]="currentContact?.imageUrl" alt="avatar">
                                 <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName"
-                                    size="32"></ngx-avatar>
+                                    size="34"></ngx-avatar>
+                                <!-- avatar -->
 
-                                <!-- display content message of user contact -->
-                                <!-- " -->
+                                <!-- hiện nội dung tin nhắn người tham gia gửi -->
                                 <div class="otherBubble other" [ngClass]="{'message-image' : mess.type == 2}">
 
+                                    <!-- dạng text -->
                                     <div *ngIf="mess.type == 1">{{mess.content.content}}</div>
 
+                                    <!-- dạng file -->
                                     <div class="message-file" *ngIf="mess.type == 5">
                                         <a (click)="openFile(mess.content.file.filePath)"
                                             target="_blank">{{mess.content}}</a>
                                     </div>
 
+                                    <!-- dạng hình ảnh -->
                                     <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.content.photo.filePath"
                                         alt="img message" (click)="showModal(mess.id)">
-                                    <!-- display modal if type is image -->
+                                    <!-- hiện modal để xem hình ảnh -->
                                     <div *ngIf="mess.type === 2" [id]="mess.id" class="modal"
                                         (click)="hideModal(mess.id)">
                                         <div class="modal-image">
@@ -86,30 +85,33 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- display message of user contact -->
+                        <!-- hiện tin nhắn người tham gia gửi-->
 
-                        <!-- display message of current user -->
+                        <!-- hiện tin nhắn người dùng hiện tại gửi-->
                         <div class="bubbleWrapper" *ngIf="mess.sender == currentUser.id">
                             <div class="inlineContainer own">
-                                <!-- display avatar current user -->
+                                <!-- avatar người dùng hiện tại-->
                                 <img class="avatar-main-mess avatar-image" *ngIf="(currentUser.imageUrl != '')"
                                     [src]="currentUser.imageUrl" alt="avatar">
-                                <ngx-avatar *ngIf="currentUser.imageUrl == ''" [name]="currentUser.fullName" size="32">
+                                <ngx-avatar *ngIf="currentUser.imageUrl == ''" [name]="currentUser.fullName" size="34">
                                 </ngx-avatar>
 
-                                <!-- display content message of current user -->
+                                <!-- nội dung tin nhắn -->
                                 <div class="ownBubble own" [ngClass]="{'message-image' : mess.type === 2}">
 
+                                    <!-- dạng text -->
                                     <div *ngIf="mess.type === 1">{{mess.content.content}}</div>
 
+                                    <!-- dạng file -->
                                     <div class="message-file" *ngIf="mess.type === 5">
                                         <a (click)="openFile(mess.content.file.filePath)"
                                             target="_blank">{{mess.content.file.filename}}</a>
                                     </div>
 
+                                    <!-- dạng hình ảnh -->
                                     <img class="img-mess" *ngIf="mess.type === 2" [src]="mess.content.photo.filePath"
                                         alt="img message" (click)="showModal(mess.id)">
-                                    <!-- display modal if type is image -->
+                                    <!-- hiện modal để xem hình ảnh -->
                                     <div *ngIf="mess.type === 2" [id]="mess.id" class="modal"
                                         (click)="hideModal(mess.id)">
                                         <div class="modal-image">
@@ -118,10 +120,10 @@
                                     </div>
 
                                 </div>
-                                <!-- display content message of current user -->
+                                <!-- nội dung tin nhắn -->
                             </div>
                         </div>
-                        <!-- display message of current user -->
+                        <!-- hiện tin nhắn người dùng hiện tại gửi-->
                     </div>
                 </div>
             </div>
@@ -146,7 +148,7 @@
                     </span>
                 </label>
 
-                <!-- input text message -->
+                <!-- nhập tin nhắn -->
                 <div class="send input-message">
                     <textarea type="text" #box (keyup.enter)="onEnter(box.value)" spellcheck="false"
                         placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên"></textarea>
@@ -154,19 +156,21 @@
                     <!-- icon sticker -->
                     <img src="../../../assets/icons/IconAppChat/7.svg" alt="icon">
                 </div>
-                <!-- input text message -->
+                <!-- nhập tin nhắn -->
 
             </div>
         </div>
 
-        <!-- about infor user contact -->
+        <!-- thông tin về người trò chuyện -->
         <app-about class="about-container" [userContact]="currentContact" [sendFile]="sendFile" *ngIf="showAb">
         </app-about>
-        <!-- about infor user contact -->
+        <!-- thông tin về người trò chuyện -->
 
     </div>
-    <!-- content conversation detail -->
+    <!-- phần nội dung cuộc trò chuyện -->
 </div>
+
+<!-- phần mở đầu khi chưa có cuộc trò chuyện nào -->
 <div *ngIf="currentContact == null" class="start">
     <div class="first-view">
         <h1>Xin chào, {{currentUser.fullName}}</h1>
@@ -174,3 +178,4 @@
         <img src="../../../../assets/images/more-icon.png" alt="load">
     </div>
 </div>
+<!-- phần mở đầu khi chưa có cuộc trò chuyện nào -->

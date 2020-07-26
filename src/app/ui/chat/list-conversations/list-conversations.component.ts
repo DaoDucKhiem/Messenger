@@ -74,7 +74,7 @@ export class ListConversationsComponent implements OnInit {
     //đánh dấu đã xem cho cuộc trò chuyện trên server stringee
     this.stringeeService.stringeeChat.markConversationAsRead(conv.id);
 
-    //đánh dấu tại mảng đã lấy về
+    //đánh dấu tại mảng giá trị đã lấy về
     conv.unreadCount = 0;
 
     //truyền userId sang message để lấy Contact tương ứng

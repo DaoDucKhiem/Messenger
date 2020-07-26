@@ -12,6 +12,7 @@ export class FileService {
 
   constructor(private http: HttpClient) { }
 
+  //upload file lên serve stringee
   uploadFile(file: FormData):Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({

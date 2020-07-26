@@ -99,10 +99,6 @@
 
 .carousel-inner {
     height: 100%;
-}
-
-.list-sidebar {
-    height: calc(100% - 123px);
     overflow: auto;
     &::-webkit-scrollbar {
         width: 8px;
@@ -111,6 +107,12 @@
     &::-webkit-scrollbar-thumb {
         background-color: rgba(0, 0, 0, 0.3);
     };
+}
+
+.list-sidebar {
+    height: calc(100% - 138px);
+    overflow: auto;
+    margin-bottom: 15px;
     .conversation {
         margin: 7px 0;
         height: 50px;
@@ -125,6 +127,7 @@
         }
     }
 }
+
 .space {
     display: inline-block;
     height: 100%;
@@ -154,8 +157,8 @@
         margin-left: 18px;
 
         > img{
-            height: 28px;
-            width: 28px;
+            height: 34px;
+            width: 34px;
             border-radius: 50%;
         }
         
@@ -167,18 +170,18 @@
     }
 }
 
-
 p {
     margin: 0;
     padding: 1.5px;
 }
 
+//responsive
 @media only screen and (max-width: 1240px) {
     .list-conversation-container {
         width: auto;
     }
 
-    .search, .tab-menu {
+    .search, .tab-menu, .username {
       display: none;
     }
 
@@ -204,9 +207,19 @@ p {
     }
 }
 
+//chấm xanh online
 .green-sphere {
     height: 12px;
     width: 12px;
+}
+
+//=========== username, time, unreadCount ==========>
+.username {
+    display: flex;
+    flex: 5;
+    align-items: center;
+    color: #ffffff;
+    font-size: 16px;
 }
 
 .name-and-last-mess, .time-and-new-mess {
@@ -273,6 +286,7 @@ p {
     color: #ffffff;
     overflow: hidden;
 }
+//=========== username, time, unreadCount ==========>
 
 //======selected=====->
 .selected {
@@ -283,15 +297,7 @@ p {
     background-color: #2196f3;
 }
 
-//========contact menu========>
-.username {
-    display: flex;
-    flex: 5;
-    align-items: center;
-    color: #ffffff;
-    font-size: 16px;
-}
-
+//========start view========>
 .start {
     height: 100%;
     display: flex;
@@ -315,3 +321,4 @@ p {
         justify-content: center;
     }
 }
+//========start view========>
