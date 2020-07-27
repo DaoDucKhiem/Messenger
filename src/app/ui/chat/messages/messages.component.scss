@@ -169,9 +169,14 @@ p {
 }
 
 .message-file a {
-    color: #ffffff;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.own {
+    .message-file a{
+        color: #ffffff;
+    }
 }
 
 .message-image {
@@ -185,6 +190,12 @@ p {
     }
 }
 
+.message-text {
+    white-space: pre-line;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
 //======Send input==============->
 
 .send-container {
@@ -193,8 +204,6 @@ p {
     align-items: center;
     background-color: #f8f8f8;
     width: 100%;
-    position: absolute;
-    bottom: 0;
 }
 
 .send {
@@ -285,14 +294,13 @@ label input {
 //========typing=========>
 
 .display-typing {
-    position: absolute;
-    bottom: 0;
+    bottom: 60px;
     display: flex;
     align-items: center;
     padding-left: 10px;
 }
 
 .typing {
-    width: 66px;
-    height: 66px;
+    width: 60px;
+    height: 60px;
 }

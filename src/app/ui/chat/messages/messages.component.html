@@ -39,14 +39,20 @@
     <!-- phần nội dung cuộc trò chuyện -->
     <div class="content-message-list">
         <div class="list-message" [ngStyle]="{'width' : showAb ?  'calc(100% - 300px)' : '100%'}">
-            <div class="message" id="scroll" infiniteScroll [infiniteScrollUpDistance]="scrollUpDistance"
-                [infiniteScrollThrottle]="scrollThrottle" (scrolledUp)="onScroll()" [scrollWindow]="false">
+            <div class="message" #scrollframe [scrollTop]="scrollframe.scrollHeight"
+            infiniteScroll 
+            [infiniteScrollUpDistance]="scrollUpDistance"
+            [infiniteScrollThrottle]="scrollThrottle" 
+            (scrolledUp)="onScroll()" 
+            [scrollWindow]="false">
+
                 <div *ngIf="loading" class="d-flex justify-content-center">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                <div>
+
+                <div #item>
                     <div *ngFor="let mess of Messages">
 
                         <!-- hiện tin nhắn người tham gia gửi -->
@@ -54,7 +60,7 @@
                             <div class="inlineContainer">
                                 <!-- avatar -->
                                 <img class="avatar-main-mess avatar-image" *ngIf="(currentContact?.imageUrl != '')"
-                                    [src]="currentContact?.imageUrl" alt="avatar">
+                                    [src]="currentContact?.imageUrl">
                                 <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName"
                                     size="34"></ngx-avatar>
                                 <!-- avatar -->
@@ -63,12 +69,12 @@
                                 <div class="otherBubble other" [ngClass]="{'message-image' : mess.type == 2}">
 
                                     <!-- dạng text -->
-                                    <div *ngIf="mess.type == 1">{{mess.content.content}}</div>
+                                    <div class="message-text" *ngIf="mess.type == 1">{{mess.content.content}}</div>
 
                                     <!-- dạng file -->
                                     <div class="message-file" *ngIf="mess.type == 5">
                                         <a (click)="openFile(mess.content.file.filePath)"
-                                            target="_blank">{{mess.content}}</a>
+                                            target="_blank">{{mess.content.file.filename}}</a>
                                     </div>
 
                                     <!-- dạng hình ảnh -->
@@ -100,7 +106,7 @@
                                 <div class="ownBubble own" [ngClass]="{'message-image' : mess.type === 2}">
 
                                     <!-- dạng text -->
-                                    <div *ngIf="mess.type === 1">{{mess.content.content}}</div>
+                                    <div class="message-text" *ngIf="mess.type === 1">{{mess.content.content}}</div>
 
                                     <!-- dạng file -->
                                     <div class="message-file" *ngIf="mess.type === 5">
@@ -125,16 +131,16 @@
                         </div>
                         <!-- hiện tin nhắn người dùng hiện tại gửi-->
                     </div>
-                </div>
-                <div *ngIf="typing">
-                    <div class="inlineContainer display-typing">
-                        <!-- avatar -->
-                        <img class="avatar-main-mess avatar-image" *ngIf="(currentContact?.imageUrl != '')"
-                            [src]="currentContact?.imageUrl" alt="avatar">
-                        <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName" size="34">
-                        </ngx-avatar>
-                        <!-- avatar -->
-                        <img class="typing" src="../../../../assets/images/typinp.gif" alt="typing">
+                    <div *ngIf="typing" class="display-typing">
+                        <div class="inlineContainer">
+                            <!-- avatar -->
+                            <img class="avatar-main-mess avatar-image" *ngIf="(currentContact?.imageUrl != '')"
+                                [src]="currentContact?.imageUrl" alt="avatar">
+                            <ngx-avatar *ngIf="currentContact?.imageUrl == ''" [name]="currentContact?.fullName" size="34">
+                            </ngx-avatar>
+                            <!-- avatar -->
+                            <img class="typing" src="../../../../assets/images/typinp.gif" alt="typing">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -161,10 +167,10 @@
 
                 <!-- nhập tin nhắn -->
                 <div class="send input-message">
-                    <textarea type="text" #box (keyup.enter)="onEnter(box.value)" spellcheck="false"
-                        placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên" 
-                        (keydown.alt.enter) = "box.value = box.value + '\n'"
-                        (focus)="beginType()"
+                    <textarea type="text" #box (keydown.enter)="onEnter(box.value)" spellcheck="false"
+                        placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên"
+                        (click)="markSeen()"
+                        (keyup.alt.enter)="box.value = box.value + '\n'" (focus)="beginType()"
                         (focusout)="endType()"></textarea>
 
                     <!-- icon sticker -->

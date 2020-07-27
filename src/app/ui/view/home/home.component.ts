@@ -54,12 +54,6 @@ export class HomeComponent implements OnInit {
   getConvs() {
     this.stringeeService.getConversations(15, (status, code, message, convs) => {
       this.conversations = convs;
-
-      // //cập nhật đã xem cho last message trên serve đang bị lag
-      // this.stringeeService.stringeeChat.markConversationAsRead(convs[0].id);
-
-      // //cập nhật đã xem cho lastMessage của conversation đầu tiên
-      this.conversations[0].unreadCount = 0;
     });
   }
 
@@ -78,11 +72,6 @@ export class HomeComponent implements OnInit {
 
         //nếu đã có cuộc trò chuyện
         if (this.conversations.length != 0) {
-
-          //cập nhật đã xem cho last message trên serve
-          this.stringeeService.stringeeChat.markConversationAsRead(convs[0].id);
-          //cập nhật đã xem cho lastMessage của conversation đầu tiên
-          this.conversations[0].unreadCount = 0;
 
           //lấy contac id cuộc trò chuyện đầu tiên
           for (let parti of convs[0].participants) {

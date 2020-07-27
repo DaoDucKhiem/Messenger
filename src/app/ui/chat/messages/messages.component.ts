@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, Input} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input, ViewChildren, QueryList} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StringeeService } from 'src/app/service/stringee.service';
 
@@ -54,9 +54,6 @@ export class MessagesComponent implements OnInit {
 
       //lấy currentContactId từ bên list truyền sang hoặc reload truyền sang đồng thời lấy messages
       this.getContactUser();
-
-      // auto scroll xuống cuối
-      setTimeout(()=>{this.scrollToBottom()}, 1000);
     });
   }
 
@@ -72,10 +69,29 @@ export class MessagesComponent implements OnInit {
     });
   }
 
-  scrollToBottom() {
-    var scroll = document.getElementById('scroll');
-    scroll.scrollTop = scroll.scrollHeight;
-  }
+  
+  // Xử lý Scrollframe
+  // @ViewChild('scrollframe', { static: false }) scrollFrame: ElementRef;
+  // @ViewChildren('item') itemElements: QueryList<any>;
+
+  // private scrollContainer: any;
+
+  // ngAfterViewInit() {
+  //   this.scrollContainer = this.scrollFrame.nativeElement;
+  //   this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
+  // }
+
+  // private onItemElementsChanged(): void {
+  //   this.scrollToBottom();
+  // }
+
+  // private scrollToBottom(): void {
+  //   this.scrollContainer.scroll({
+  //     top: this.scrollContainer.scrollHeight,
+  //     left: 0,
+  //     behavior: 'smooth'
+  //   });
+  // }
   
   /**
    * hiển thị hoặc ẩn about component
@@ -146,6 +162,7 @@ export class MessagesComponent implements OnInit {
    * @param val 
    */
   onEnter(val: string): void {
+    val = val.trim();
     if (val != '') {
       var txtMsg = {
         type: 1,
@@ -163,6 +180,14 @@ export class MessagesComponent implements OnInit {
     }
     this.clear();
     this.sendFile = false;
+  }
+
+  markSeen() {
+     //cập nhật đã xem cho last message trên serve
+     this.stringeeService.stringeeChat.markConversationAsRead(this.currentConvId);
+
+     //cập nhật đã xem cho lastMessage của conversation
+     this.dataTranferService.sendMessageActive();
   }
 
   /**

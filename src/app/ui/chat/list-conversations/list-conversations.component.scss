@@ -99,7 +99,8 @@
 
 .carousel-inner {
     height: 100%;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     &::-webkit-scrollbar {
         width: 8px;
         background: #a9bede;
@@ -111,7 +112,6 @@
 
 .list-sidebar {
     height: calc(100% - 138px);
-    overflow: auto;
     margin-bottom: 15px;
     .conversation {
         margin: 7px 0;
@@ -222,10 +222,8 @@ p {
     font-size: 16px;
 }
 
-.name-and-last-mess, .time-and-new-mess {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+.name-and-last-mess {
+    flex: 3;
 }
 
 .status-seen {
@@ -235,7 +233,11 @@ p {
 }
 
 .time-and-new-mess {
-    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
     font-size: 11px;
 }
 
@@ -247,6 +249,13 @@ p {
 
 .message-last, .new-message {
     margin-top: 2px;
+}
+
+.message-last {
+    max-width: 177px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .name-conversation, .message-last {
@@ -275,7 +284,8 @@ p {
     color: #ffffff;
 }
 
-.new-message span {
+.new-message {
+     span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -285,6 +295,7 @@ p {
     height: 16px;
     color: #ffffff;
     overflow: hidden;
+    }
 }
 //=========== username, time, unreadCount ==========>
 
