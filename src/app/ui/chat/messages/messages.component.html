@@ -170,7 +170,8 @@
                     <textarea type="text" #box (keydown.enter)="onEnter(box.value)" spellcheck="false"
                         placeholder="Nhập nội dung tin nhắn, gõ @tên để nhắc tên"
                         (click)="markSeen()"
-                        (keyup.alt.enter)="box.value = box.value + '\n'" (focus)="beginType()"
+                        (keyup.alt.enter)="box.value = box.value + '\n'" 
+                        (focus)="beginType()"
                         (focusout)="endType()"></textarea>
 
                     <!-- icon sticker -->

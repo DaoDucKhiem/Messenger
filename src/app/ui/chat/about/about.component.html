@@ -35,14 +35,19 @@
                 <a href="file.url" target="_blank">
                     <span *ngIf="file.typeofFile === 0"><img src="../../../assets/icons/IconAppChat/pdf-icon.svg"
                             alt="PDF"></span>
-                    <span *ngIf="file.typeofFile === 1"><img src="../../../assets/icons/IconAppChat/docx-icon.svg"
+                    <span *ngIf="file.typeofFile === 1"><img src="../../../assets/icons/IconAppChat/microsoft-word.svg"
                             alt="DOCX"></span>
-                    <span *ngIf="file.typeofFile === 2"><img src="../../../assets/icons/IconAppChat/pptx-icon.svg"
-                            alt="PowerPoint"></span>
+                    <span *ngIf="file.typeofFile === 2"><img
+                            src="../../../assets/icons/IconAppChat/microsoft-powerpoint.svg" alt="PowerPoint"></span>
+                    <span *ngIf="file.typeofFile === 3"><img src="../../../assets/icons/IconAppChat/microsoft-excel.svg"
+                            alt="Excel"></span>
+                    <span *ngIf="file.typeofFile === 5"><img src="../../../assets/icons/IconAppChat/file-icon.png"
+                            alt="Excel"></span>
                     {{file.content}}
                 </a>
             </p>
-            <p  class="show-more" *ngIf="messageFile?.length > 0 && !showAllFiles" (click)="showAllFile()">hiện tất cả các file</p>
+            <p class="show-more" *ngIf="messageFile?.length > 0 && !showAllFiles" (click)="showAllFile()">hiện tất cả
+                các file</p>
         </div>
         <p class="line"></p>
     </div>
@@ -73,7 +78,8 @@
 
             </div>
         </div>
-        <p class="show-more" *ngIf="messageImage?.length > 0 && showImg && !showAllImages" (click)="showAllImage()">hiện tất cả các ảnh</p>
+        <p class="show-more" *ngIf="messageImage?.length > 0 && showImg && !showAllImages" (click)="showAllImage()">hiện
+            tất cả các ảnh</p>
     </div>
     <!-- list image shared -->
 </div>

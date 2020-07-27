@@ -232,9 +232,15 @@ export class MessagesComponent implements OnInit {
         break;
       }
 
+      case 'xlsx': {
+        fileType = 5;
+        type_of_file = 3;
+        break;
+      }
+
       default: {
         fileType = 5;
-        type_of_file = 2;
+        type_of_file = 5;
         break;
       }
     }
@@ -326,6 +332,7 @@ export class MessagesComponent implements OnInit {
 
   //dừng nhập tin nhắn
   endType() {
+    this.clear()
     this.stringeeService.userEndTyping(this.currentConvId, this.currentUser.id);
   }
 }
